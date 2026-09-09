@@ -20,7 +20,7 @@ jobs:
       - run: npm ci
       - run: npm run check
       - name: Prepare release
-        run: tar --exclude='./node_modules' --exclude='./.git' --exclude='./service-data' --exclude='./dist' -czf ceptlens-${GITHUB_SHA}.tar.gz .
+        run: tar --exclude='./node_modules' --exclude='./.git' --exclude='./service-data' --exclude='./dist' --exclude='./ceptlens-${GITHUB_SHA}.tar.gz' -czf ceptlens-${GITHUB_SHA}.tar.gz .
       - name: Configure SSH
         env:
           DEPLOY_KEY: ${{ secrets.CEPTLENS_DEPLOY_KEY }}
