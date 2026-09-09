@@ -24,7 +24,7 @@ async function prepare() {
   }
   const root = resolve(import.meta.dirname, "..");
   const manifest = JSON.parse(await readFile(resolve(root, "package.json"), "utf8"));
-  const runtime = resolve(root, ".modelpath-runtime");
+  const runtime = resolve(root, ".ceptlens-runtime");
   await mkdir(runtime, { recursive: true });
   const logfile = resolve(runtime, "startup-last.log");
   let log = "";
@@ -71,7 +71,7 @@ async function prepare() {
     throw error;
   } finally {
     await writeFile(logfile, redact(log));
-    console.log("启动检查日志：.modelpath-runtime/startup-last.log；最近失败日志：.modelpath-runtime/startup-failed.log");
+    console.log("启动检查日志：.ceptlens-runtime/startup-last.log；最近失败日志：.ceptlens-runtime/startup-failed.log");
   }
 }
 

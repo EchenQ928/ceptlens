@@ -12,11 +12,11 @@ const agent = { status: () => ({ enabled: false }), learn: vi.fn(async () => { t
 const choice = (id, type = 'single_choice') => ({ id, type, stem: '原题', options: [{ key: 'A', text: '选项一' }, { key: 'B', text: '选项二' }], correctAnswer: type === 'single_choice' ? ['A'] : ['A', 'B'], explanation: '参考解释', taxonomy: { primaryConcept: '概念' } });
 const reference = { resource: 'question:single-0', title: '概念', quote: '原题', prefix: '', suffix: '', start: 0 };
 async function call(path, data, token = a) {
-  const response = await fetch(url + '/api/' + path, { method: data === undefined ? 'GET' : 'POST', headers: { 'content-type': 'application/json', 'x-modelpath-identity': token }, ...(data === undefined ? {} : { body: JSON.stringify(data) }) });
+  const response = await fetch(url + '/api/' + path, { method: data === undefined ? 'GET' : 'POST', headers: { 'content-type': 'application/json', 'x-ceptlens-identity': token }, ...(data === undefined ? {} : { body: JSON.stringify(data) }) });
   return { status: response.status, ...await response.json() };
 }
 beforeEach(async () => {
-  now = 1000000; root = await mkdtemp(join(tmpdir(), 'modelpath-community-test-'));
+  now = 1000000; root = await mkdtemp(join(tmpdir(), 'ceptlens-community-test-'));
   await mkdir(join(root, 'content-libraries/questions'), { recursive: true });
   for (let i = 0; i < 5; i++) for (const type of ['single', 'multi']) await writeFile(join(root, `content-libraries/questions/${type}-${i}.json`), JSON.stringify(choice(`${type}-${i}`, type === 'single' ? 'single_choice' : 'multiple_choice')));
   api = await createLearningApi({ root, clock: () => now, agent });

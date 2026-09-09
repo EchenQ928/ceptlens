@@ -19,7 +19,7 @@ function validateReference(input, requireQuote = false) {
   return { resource: input.resource, title: text(input.title, 240), quote: requireQuote ? text(input.quote, 2400) : String(input.quote ?? '').slice(0, 2400), prefix: String(input.prefix ?? '').slice(-80), suffix: String(input.suffix ?? '').slice(0, 80), start: Number.isSafeInteger(input.start) && input.start >= 0 ? input.start : 0, ...(!requireQuote && typeof input.pageText === 'string' ? { pageText: input.pageText.slice(0, 24000) } : {}) };
 }
 
-export async function createLearningApi({ root, databasePath = resolve(root, 'service-data/modelpath.sqlite'), clock = Date.now, agent: suppliedAgent }) {
+export async function createLearningApi({ root, databasePath = resolve(root, 'service-data/ceptlens.sqlite'), clock = Date.now, agent: suppliedAgent }) {
   const store = openCommunityStore(databasePath);
   const pending = new Set();
   const limits = new Map();
@@ -77,11 +77,11 @@ export async function createLearningApi({ root, databasePath = resolve(root, 'se
         if (limits.size > 5000) for (const [key, value] of limits) if (now - value.at > 60000) limits.delete(key);
         const rate = limits.get(ip); const next = rate && now - rate.at < 60000 ? { at: rate.at, count: rate.count + 1 } : { at: now, count: 1 };
         limits.set(ip, next); if (next.count > 600) throw problem('请求过于频繁，请稍后重试。', 429);
-        const user = store.identity(request.headers['x-modelpath-identity']);
+        const user = store.identity(request.headers['x-ceptlens-identity']);
         const data = request.method === 'GET' ? null : await body(request);
         const send = result => { json(response, 200, { ok: true, ...result }); return true; };
         if (url.pathname === '/api/session') {
-          if (request.method === 'POST' && data.name !== undefined) Object.assign(user, store.identity(request.headers['x-modelpath-identity'], data.name));
+          if (request.method === 'POST' && data.name !== undefined) Object.assign(user, store.identity(request.headers['x-ceptlens-identity'], data.name));
           return send({ user, activeExam: active(user.id)?.id ?? null, agent: agent.status() });
         }
         if (url.pathname.startsWith('/api/discussions')) {

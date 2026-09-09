@@ -16,3 +16,4 @@ service-data/*
 .env.*
 !.env.example
 .deploy/
+dist/

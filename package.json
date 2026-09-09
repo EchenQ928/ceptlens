@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "build:staged": "tsc -b && vite build --outDir .dist-next --emptyOutDir",
     "host": "node server/content-host.mjs --host 127.0.0.1 --port 8765",
-    "host:lan": "node server/content-host.mjs --host 0.0.0.0 --port 8765 --public-host 100.100.40.76",
+    "host:lan": "node server/content-host.mjs --host 0.0.0.0 --port 8765 --public-host 127.0.0.1",
     "preview": "vite preview --host 0.0.0.0 --port 8765",
     "validate": "tsx scripts/validate-content.ts",
     "test": "vitest run",

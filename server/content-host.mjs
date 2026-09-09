@@ -14,7 +14,7 @@ const { version } = JSON.parse(await readFile(resolve(root, "package.json"), "ut
 const questionDirectory = resolve(root, "content-libraries/questions");
 const termDirectory = resolve(root, "content-libraries/terms");
 const templateDirectory = resolve(root, "content-libraries/templates");
-const runtimeDirectory = resolve(root, ".modelpath-runtime");
+const runtimeDirectory = resolve(root, ".ceptlens-runtime");
 const stageDirectory = resolve(runtimeDirectory, "stage");
 const tokenFile = resolve(runtimeDirectory, "content-admin-token.txt");
 const distDirectory = resolve(root, "dist");
@@ -31,11 +31,11 @@ const port = Number(valueAfter("--port", "8765"));
 const publicHost = valueAfter("--public-host", host === "0.0.0.0" ? "127.0.0.1" : host);
 const publicUrl = `http://${publicHost}:${port}/`;
 if (args.includes("--lab")) throw new Error("实验室已拆分为独立项目，请启动独立实验室包中的 start-lab 脚本。");
-delete process.env.VITE_MODELPATH_MODE;
+delete process.env.VITE_CEPTLENS_MODE;
 
 await mkdir(runtimeDirectory, { recursive: true });
 await mkdir(stageDirectory, { recursive: true });
-let adminToken = process.env.MODELPATH_CONTENT_TOKEN?.trim();
+let adminToken = process.env.CEPTLENS_CONTENT_TOKEN?.trim();
 if (!adminToken) {
   try { adminToken = (await readFile(tokenFile, "utf8")).trim(); }
   catch {
@@ -239,7 +239,7 @@ async function serveStatic(request, response, url) {
   }
 }
 
-const learningApi = await createLearningApi({ root, databasePath: process.env.MODELPATH_DATA_DIR ? resolve(process.env.MODELPATH_DATA_DIR, "modelpath.sqlite") : undefined });
+const learningApi = await createLearningApi({ root, databasePath: process.env.CEPTLENS_DATA_DIR ? resolve(process.env.CEPTLENS_DATA_DIR, "ceptlens.sqlite") : undefined });
 const server = createServer(async (request, response) => {
   let ownsPublish = false;
   try {
@@ -295,12 +295,12 @@ const server = createServer(async (request, response) => {
     }
     if (url.pathname === "/api/content/questions/export" && request.method === "GET") {
       const questions = await Promise.all((await readdir(questionDirectory)).filter((file) => file.endsWith(".json")).map(async (file) => JSON.parse(await readFile(resolve(questionDirectory, file), "utf8"))));
-      response.writeHead(200, { "Content-Type": "application/json; charset=utf-8", "Content-Disposition": "attachment; filename=modelpath-question-library.json" });
+      response.writeHead(200, { "Content-Type": "application/json; charset=utf-8", "Content-Disposition": "attachment; filename=ceptlens-question-library.json" });
       return response.end(JSON.stringify({ schemaVersion: "3.0", kind: "question-bundle", exportedAt: new Date().toISOString(), questions }, null, 2));
     }
     if (url.pathname === "/api/content/terms/export" && request.method === "GET") {
       const archive = await zipDirectory(termDirectory, "terms/", includeInRuntimeTermArchive);
-      response.writeHead(200, { "Content-Type": "application/zip", "Content-Disposition": "attachment; filename=modelpath-term-library.zip" });
+      response.writeHead(200, { "Content-Type": "application/zip", "Content-Disposition": "attachment; filename=ceptlens-term-library.zip" });
       return response.end(archive);
     }
     const termExportMatch = url.pathname.match(/^\/api\/content\/terms\/([a-zA-Z0-9][a-zA-Z0-9._-]*)\/export$/);
@@ -329,7 +329,7 @@ server.on("close", () => learningApi.close());
 for (const signal of ["SIGINT", "SIGTERM"]) process.once(signal, () => server.close(() => process.exit(0)));
 
 server.listen(port, host, () => {
-  console.log(`ModelPath ${version}: ${publicUrl}`);
+  console.log(`CeptLens ${version}: ${publicUrl}`);
   console.log(`内容管理口令：${adminToken}`);
   if (host === "0.0.0.0") console.log(`内网访问：${publicUrl}（监听 0.0.0.0:${port}）；导入内容保存到本主机 content-libraries。`);
 });

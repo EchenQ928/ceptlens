@@ -19,8 +19,8 @@ exit /b 0
 :missing_node
 echo 请先安装 Node.js 22.18.0 或更高版本。
 :failed
-echo 启动未完成，请保留上方报错。依赖检查日志位于 .modelpath-runtime\startup-last.log
-echo 最近一次失败会另存为 .modelpath-runtime\startup-failed.log。
+echo 启动未完成，请保留上方报错。依赖检查日志位于 .ceptlens-runtime\startup-last.log
+echo 最近一次失败会另存为 .ceptlens-runtime\startup-failed.log。
 pause
 popd
 exit /b 1
