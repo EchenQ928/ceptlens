@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260304-P4570-Q18",
+  "type": "multiple_choice",
+  "stem": "在常见的[[term:neural-network|神经网络]]架构中，下列哪些都可以作为可复用的结构或计算模块？（多选）",
+  "explanation": "A、B、C、D 均正确。它们承担不同职责：Batch Norm 是指批归一化，用于规范化中间特征，帮助稳定训练过程；Fully Connected Layer 是指全连接层，对全部输入特征进行可学习的线性组合；Attention 是指注意力机制，根据输入内容计算权重并聚合信息；Convolution 是指卷积层，使用共享卷积核提取局部模式。它们都是可复用模块，但具体模型不一定同时包含全部四类。",
+  "taxonomy": {
+    "primaryConcept": "常见神经网络模块及其基本职责",
+    "modelFamily": "G0 通用/跨模型",
+    "learningLevel": "L0 通用基础",
+    "engineeringStage": "E4 模块与算子设计",
+    "priority": "P0",
+    "knowledgeTopics": [
+      "架构模块"
+    ],
+    "runtimeEnvironments": [
+      "硬件无关"
+    ]
+  },
+  "ordering": {
+    "order": 2
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": "[[term:batch-normalization|批归一化（Batch Norm）]]"
+    },
+    {
+      "key": "B",
+      "text": "[[term:fully-connected-layer|全连接层（Fully Connected Layer）]]"
+    },
+    {
+      "key": "C",
+      "text": "[[term:attention-mechanism|注意力机制（Attention）]]"
+    },
+    {
+      "key": "D",
+      "text": "[[term:convolution|卷积层（Convolution）]]"
+    }
+  ],
+  "correctAnswer": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ]
+}

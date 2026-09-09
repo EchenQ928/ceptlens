@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260204-P4567-Q14",
+  "type": "single_choice",
+  "stem": "关于[[term:transformer-architecture-families|GPT、BERT、T5 三种模型的架构]]，哪项描述是正确的？",
+  "explanation": "GPT系列模型使用[[term:transformer|Transformer]]解码器进行自回归生成，BERT使用Transformer编码器进行双向上下文编码，T5采用[[term:transformer-architecture-families|编码器-解码器架构]]处理序列到序列任务。",
+  "taxonomy": {
+    "primaryConcept": "Transformer模型架构范式",
+    "modelFamily": "G4 Transformer与Attention",
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E3 架构选型与整体设计",
+    "priority": "P0",
+    "knowledgeTopics": [
+      "架构模块"
+    ],
+    "taskScenarios": [
+      "序列建模",
+      "生成"
+    ],
+    "runtimeEnvironments": [
+      "硬件无关"
+    ]
+  },
+  "ordering": {
+    "order": 25,
+    "prerequisites": [
+      "HW-AI-20260304-P4570-Q01"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": "GPT是[[term:transformer-architecture-families|encoder-only]]，BERT是[[term:transformer-architecture-families|decoder-only]]，T5是encoder-decoder"
+    },
+    {
+      "key": "B",
+      "text": "GPT是encoder-decoder，BERT是[[term:transformer-architecture-families|decoder-only]]，T5是[[term:transformer-architecture-families|encoder-only]]"
+    },
+    {
+      "key": "C",
+      "text": "GPT是encoder-decoder，BERT是encoder-decoder，T5是[[term:transformer-architecture-families|decoder-only]]"
+    },
+    {
+      "key": "D",
+      "text": "GPT是[[term:transformer-architecture-families|decoder-only]]，BERT是[[term:transformer-architecture-families|encoder-only]]，T5是encoder-decoder"
+    }
+  ],
+  "correctAnswer": [
+    "D"
+  ]
+}

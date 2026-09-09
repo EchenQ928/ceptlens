@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260617-P5119-Q01",
+  "type": "single_choice",
+  "stem": "使用[[term:mlp|多层感知机（MLP）]]对每月的降雨量进行预测，[[term:activation-function|输出层的激活函数]]推荐使用什么？",
+  "explanation": "降雨量预测属于[[term:regression|回归任务]]，[[term:output-layer|输出层]]通常使用线性输出，即不加激活函数。",
+  "taxonomy": {
+    "primaryConcept": "回归任务输出层的激活函数选择",
+    "modelFamily": "G0 通用/跨模型",
+    "learningLevel": "L0 通用基础",
+    "engineeringStage": "E4 模块与算子设计",
+    "priority": "P0",
+    "knowledgeTopics": [
+      "架构模块"
+    ],
+    "taskScenarios": [
+      "回归"
+    ],
+    "runtimeEnvironments": [
+      "硬件无关"
+    ]
+  },
+  "ordering": {
+    "order": 6,
+    "prerequisites": [
+      "HW-AI-20260513-P4937-Q11"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": "ReLU"
+    },
+    {
+      "key": "B",
+      "text": "Tanh"
+    },
+    {
+      "key": "C",
+      "text": "Sigmoid"
+    },
+    {
+      "key": "D",
+      "text": "不使用激活函数"
+    }
+  ],
+  "correctAnswer": [
+    "D"
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260422-P4820-Q07",
+  "type": "single_choice",
+  "stem": "在部署阶段（Inference），将[[term:convolution|卷积层（Convolution）]]与[[term:batch-normalization|批归一化层（Batch Normalization, BN）]]进行融合（Folding）是各大[[term:compiler|编译器]]的标配操作。以下关于 [[term:conv-bn-folding|Conv+BN 融合]]的描述中，最准确的是",
+  "explanation": "[[term:conv-bn-folding|Conv+BN 融合]]是编译期代数变换，将 BN 参数吸收到 Conv 中，减少[[term:runtime|运行时]]开销。",
+  "taxonomy": {
+    "primaryConcept": "Conv+BN推理融合",
+    "modelFamily": "G2 CNN",
+    "learningLevel": "L2 分支深入",
+    "engineeringStage": "E10 编译、算子与内核",
+    "priority": "P0",
+    "secondaryEngineeringStages": [
+      "E9 推理与运行时优化"
+    ],
+    "knowledgeTopics": [
+      "架构模块",
+      "推理系统",
+      "编译硬件"
+    ],
+    "optimizationObjectives": [
+      "时延"
+    ],
+    "runtimeEnvironments": [
+      "硬件无关"
+    ]
+  },
+  "ordering": {
+    "order": 17,
+    "prerequisites": [
+      "HW-AI-20260408-P4728-Q19"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": "融合是为了让 BN 的梯度能更快反向传播到 Conv 层，从而加速[[term:inference|推理]]。"
+    },
+    {
+      "key": "B",
+      "text": "融合是一种纯代数等价变换，在模型编译期（Offline）就将 BN 的缩放和偏移参数直接吸收到 Conv 的权重和偏置中，[[term:runtime|运行时]]完全没有 BN 的开销。"
+    },
+    {
+      "key": "C",
+      "text": "融合是在[[term:runtime|运行时（Runtime）]]将 BN 的均值和方差传入 Conv 的底层算子中并行计算。"
+    },
+    {
+      "key": "D",
+      "text": "[[term:conv-bn-folding|Conv+BN 融合]]会轻微改变模型的输出精度，因为融合后的算子无法使用 Tensor Core 加速。"
+    }
+  ],
+  "correctAnswer": [
+    "B"
+  ]
+}

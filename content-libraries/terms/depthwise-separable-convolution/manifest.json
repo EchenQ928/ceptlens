@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "depthwise-separable-convolution",
+  "title": "深度可分离卷积",
+  "aliases": [
+    "depthwise separable convolution",
+    "深度卷积",
+    "逐通道卷积",
+    "Depthwise Conv",
+    "MobileNet"
+  ],
+  "summary": "深度可分离[[term:convolution|卷积]]把[[term:standard-convolution|标准卷积]]拆成两步：[[term:depthwise-convolution|深度卷积]]先让每个输入通道各自用一个卷积核单独提取空间信息，通道之间互不混合；随后[[term:pointwise-convolution|逐点卷积]]用 1×1 卷积把不同通道的信息重新组合。",
+  "coreConclusion": "先逐通道处理空间，再用 1×1 卷积混合通道，可以显著减少参数量和计算量。",
+  "prerequisites": [
+    "convolution"
+  ]
+}

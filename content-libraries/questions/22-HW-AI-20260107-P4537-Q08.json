@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260107-P4537-Q08",
+  "type": "single_choice",
+  "stem": "[[term:transformer|Transformer]] [[term:positional-encoding|位置编码（Position Encoding）]]主要作用:",
+  "explanation": "[[term:transformer|Transformer]] 的[[term:self-attention|自注意力机制]]本身不包含顺序信息，位置编码用于向模型注入序列中各 [[term:token|token]] 的相对或绝对位置信息；它不用于增强非线性、提升带宽或降低计算量。",
+  "taxonomy": {
+    "primaryConcept": "Transformer位置编码",
+    "modelFamily": "G4 Transformer与Attention",
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E4 模块与算子设计",
+    "priority": "P0",
+    "knowledgeTopics": [
+      "架构模块"
+    ],
+    "taskScenarios": [
+      "序列建模"
+    ],
+    "runtimeEnvironments": [
+      "硬件无关"
+    ]
+  },
+  "ordering": {
+    "order": 22,
+    "prerequisites": [
+      "HW-AI-20260624-P5123-Q07"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": "增强非线性"
+    },
+    {
+      "key": "B",
+      "text": "提供序列位置信息"
+    },
+    {
+      "key": "C",
+      "text": "提升并行带宽"
+    },
+    {
+      "key": "D",
+      "text": "降低模型计算量"
+    }
+  ],
+  "correctAnswer": [
+    "B"
+  ]
+}

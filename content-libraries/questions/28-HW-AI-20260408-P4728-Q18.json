@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260408-P4728-Q18",
+  "type": "multiple_choice",
+  "stem": "在[[term:transformer|Transformer]]的训练中，以下哪些技术用于稳定训练或加速收敛?",
+  "explanation": "四项技术均能稳定训练或加速收敛。预热避免初期震荡，裁剪防[[term:gradient-explosion|梯度爆炸]]，[[term:residual-connection|残差连接]]改善梯度流动，[[term:layer-normalization|层归一化]]稳定激活分布。",
+  "taxonomy": {
+    "primaryConcept": "Transformer训练稳定性技术",
+    "modelFamily": "G4 Transformer与Attention",
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E6 训练稳定性与调优",
+    "priority": "P0",
+    "secondaryEngineeringStages": [
+      "E4 模块与算子设计"
+    ],
+    "knowledgeTopics": [
+      "学习机制",
+      "架构模块"
+    ],
+    "optimizationObjectives": [
+      "稳定性"
+    ],
+    "runtimeEnvironments": [
+      "硬件无关"
+    ]
+  },
+  "ordering": {
+    "order": 28,
+    "prerequisites": [
+      "HW-AI-20260204-P4567-Q02"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": "[[term:learning-rate-warmup|学习率预热]]"
+    },
+    {
+      "key": "B",
+      "text": "[[term:gradient-clipping|梯度裁剪]]"
+    },
+    {
+      "key": "C",
+      "text": "[[term:residual-connection|残差连接]]"
+    },
+    {
+      "key": "D",
+      "text": "[[term:layer-normalization|层归一化]]"
+    }
+  ],
+  "correctAnswer": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ]
+}

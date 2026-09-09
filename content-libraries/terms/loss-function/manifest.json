@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "loss-function",
+  "title": "损失函数",
+  "aliases": [
+    "loss function",
+    "loss",
+    "损失"
+  ],
+  "summary": "损失函数是模型训练时的计分规则：把预测与目标的差别变成一个数，训练据此调整参数，让这个数尽量变小。怎样计分，要由任务决定；不同规则会强调不同的错误。",
+  "coreConclusion": "损失函数把任务目标翻译成训练过程可以优化的数值信号。",
+  "prerequisites": [
+    "neural-network"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "transformer",
+  "title": "Transformer",
+  "aliases": [
+    "Transformer模型",
+    "Transformer 模型"
+  ],
+  "summary": "Transformer 是以 [[term:attention-mechanism|Attention]] 为核心的序列模型架构。它先把输入序列变成一组向量，再用[[term:self-attention|自注意力]]让每个位置按内容从其他位置汇集信息，并用[[term:position-wise-ffn|逐位置前馈网络]]继续变换表示；[[term:residual-connection|残差连接]]和[[term:layer-normalization|归一化]]负责稳定深层堆叠。",
+  "coreConclusion": "Transformer 用 Attention 处理位置之间的信息交换，用前馈网络处理每个位置内部的表示变换。",
+  "prerequisites": [
+    "neural-network"
+  ]
+}

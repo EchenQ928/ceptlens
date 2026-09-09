@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260121-P4546-Q08",
+  "type": "single_choice",
+  "stem": "在深度学习中，[[term:cross-entropy-loss|交叉熵损失函数（Cross-Entropy Loss）]]通常用于？",
+  "explanation": "交叉熵损失函数是[[term:classification|分类任务]]中的常用损失函数，用于衡量模型预测概率分布与真实标签之间的差异。它鼓励模型对正确类别的预测概率接近1。",
+  "taxonomy": {
+    "primaryConcept": "交叉熵损失函数",
+    "modelFamily": "G0 通用/跨模型",
+    "learningLevel": "L0 通用基础",
+    "engineeringStage": "E5 训练目标与训练过程",
+    "priority": "P0",
+    "knowledgeTopics": [
+      "学习机制"
+    ],
+    "taskScenarios": [
+      "分类"
+    ],
+    "optimizationObjectives": [
+      "精度"
+    ],
+    "runtimeEnvironments": [
+      "硬件无关"
+    ]
+  },
+  "ordering": {
+    "order": 9,
+    "prerequisites": [
+      "HW-AI-20260204-P4567-Q06",
+      "HW-AI-20260617-P5119-Q09"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": "增加模型的泛化能力"
+    },
+    {
+      "key": "B",
+      "text": "无监督学习中优化数据分布"
+    },
+    {
+      "key": "C",
+      "text": "[[term:regression|回归任务]]中衡量预测值与真实值的差异"
+    },
+    {
+      "key": "D",
+      "text": "[[term:classification|分类任务]]中衡量预测概率与真实标签的差异"
+    }
+  ],
+  "correctAnswer": [
+    "D"
+  ]
+}

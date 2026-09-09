@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260724-P5183-Q08",
+  "type": "single_choice",
+  "stem": "在[[term:neural-network|深度神经网络（Deep Neural Networks）]]的典型结构中，**[[term:hidden-layer|隐藏层（Hidden Layer）]]**的主要作用是：",
+  "explanation": "[[term:hidden-layer|隐藏层]]利用权重、偏置和[[term:activation-function|激活函数]]逐层提取数据中的复杂特征。",
+  "taxonomy": {
+    "primaryConcept": "隐藏层的非线性特征表示学习",
+    "modelFamily": "G0 通用/跨模型",
+    "learningLevel": "L0 通用基础",
+    "engineeringStage": "E4 模块与算子设计",
+    "priority": "P0",
+    "knowledgeTopics": [
+      "架构模块"
+    ],
+    "runtimeEnvironments": [
+      "硬件无关"
+    ]
+  },
+  "ordering": {
+    "order": 3,
+    "prerequisites": [
+      "HW-AI-20260304-P4570-Q18"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": "负责显示模型的最终预测结果（如分类标签或回归数值）。"
+    },
+    {
+      "key": "B",
+      "text": "接收外部输入的原始数据，并将其直接传递给[[term:output-layer|输出层]]。"
+    },
+    {
+      "key": "C",
+      "text": "通过多层次的非线性变换，从原始特征中自动提取和构造更高阶的特征表示。"
+    },
+    {
+      "key": "D",
+      "text": "存储训练过程中的[[term:loss-function|损失函数]]值，以便计算[[term:gradient|梯度]]的方向。"
+    }
+  ],
+  "correctAnswer": [
+    "C"
+  ]
+}

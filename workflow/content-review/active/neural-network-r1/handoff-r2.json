@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "1.0",
+  "jobId": "neural-network-r1",
+  "revision": 2,
+  "source": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\workflow\\content-review\\active\\neural-network-r1\\baseline\\neural-network-before-r2.zip",
+  "artifacts": [
+    {
+      "kind": "term",
+      "id": "neural-network",
+      "path": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\.modelpath-lab\\content-libraries\\terms\\neural-network",
+      "archive": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\workflow\\content-review\\active\\neural-network-r1\\neural-network-r2.term.zip"
+    }
+  ],
+  "preview": "http://127.0.0.1:8766/#/terms/neural-network",
+  "changes": [
+    "输入用 x1/x2；函数框使用 FA/FB/Fout；结果 hA/hB/y 移至传出箭头。",
+    "蓝色权重与金色偏置同步强调名称、符号、数值；三步演算逐项对齐。",
+    "移除输入滑块与变化摘要，修正文中的残留说明和公式符号。"
+  ],
+  "checks": [
+    {
+      "command": "VITE_MODELPATH_MODE=lab npm run check",
+      "result": "内容校验通过，44 测试通过，构建通过",
+      "log": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\.modelpath-runtime\\neural-network-r2-check.log"
+    },
+    {
+      "command": "当前生产 stageTermZip 函数对最终 ZIP 的暂存校验",
+      "result": "通过，4 个运行文件字节一致；未发布。"
+    },
+    {
+      "command": "Skill quick_validate.py",
+      "result": "两套规范均通过。"
+    }
+  ],
+  "skillChanges": [
+    "运算对象与结果值分开表达，符号贯穿图与演算。",
+    "关键角色名与对应数值共同强调；删除只重复显然结论的控制器。"
+  ],
+  "knownUncertainties": [
+    "教学效果等待用户审阅；原有关联词条缺口仍待后续补全。"
+  ],
+  "archiveSha256": "0a91960c533c75837758f1465526e6c7a7f8e03710ac0cee81becbb797924e91",
+  "scope": "桌面端前向计算返修，仅独立预览版本。"
+}

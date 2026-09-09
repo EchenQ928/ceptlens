@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260304-P4570-Q01",
+  "type": "single_choice",
+  "stem": "[[term:transformer|Transformer 模型]]的核心机制是？",
+  "explanation": "[[term:transformer|Transformer 模型]]完全依赖于[[term:self-attention|自注意力机制]]来建模序列中任意位置之间的依赖关系，这是其区别于[[term:cnn|CNN]]、[[term:rnn|RNN]]等传统序列模型的核心创新。",
+  "taxonomy": {
+    "primaryConcept": "Transformer的自注意力机制",
+    "modelFamily": "G4 Transformer与Attention",
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E4 模块与算子设计",
+    "priority": "P0",
+    "knowledgeTopics": [
+      "架构模块"
+    ],
+    "taskScenarios": [
+      "序列建模"
+    ],
+    "runtimeEnvironments": [
+      "硬件无关"
+    ]
+  },
+  "ordering": {
+    "order": 18,
+    "prerequisites": [
+      "HW-AI-20260304-P4570-Q18"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": "线性回归"
+    },
+    {
+      "key": "B",
+      "text": "卷积神经网络"
+    },
+    {
+      "key": "C",
+      "text": "循环神经网络"
+    },
+    {
+      "key": "D",
+      "text": "[[term:self-attention|自注意力机制]]"
+    }
+  ],
+  "correctAnswer": [
+    "D"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "training-set",
+  "title": "训练集",
+  "aliases": [
+    "训练数据",
+    "Training Set",
+    "训练样本"
+  ],
+  "summary": "训练集是直接参与模型参数学习的数据。模型在这些样本上做前向传播、计算[[term:loss-function|损失]]和[[term:gradient|梯度]]，[[term:optimizer|优化器]]再根据梯度更新权重，因此训练集表现只能说明模型对已用于学习的数据拟合得怎样。",
+  "coreConclusion": "训练集负责让模型学参数，不能单独证明模型对新数据也有效。",
+  "prerequisites": [
+    "loss-function",
+    "backpropagation"
+  ]
+}

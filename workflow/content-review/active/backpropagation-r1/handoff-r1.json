@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "1.0",
+  "jobId": "backpropagation-r1",
+  "revision": 1,
+  "source": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\workflow\\content-review\\active\\backpropagation-r1\\baseline\\backpropagation-before-r1.zip",
+  "design": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\workflow\\content-review\\active\\backpropagation-r1\\design.md",
+  "sourceNote": "用户明确授权同时设计并实现损失函数与反向传播两项；先形成阅读路径、可视化和交互设计，再实现独立教学包。",
+  "artifacts": [
+    {
+      "kind": "term",
+      "id": "backpropagation",
+      "path": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\.modelpath-lab\\content-libraries\\terms\\backpropagation",
+      "archive": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\workflow\\content-review\\active\\backpropagation-r1\\backpropagation-r1.term.zip"
+    }
+  ],
+  "preview": "http://127.0.0.1:8766/#/terms/backpropagation",
+  "changes": [
+    "先用预测的微小变化解释局部梯度，再展示同一个两层网络的前向数值和反向梯度。",
+    "四段反向演算同步强调节点、回传路径和参数；查看步骤不改数值；各段显示上游梯度乘局部变化率。",
+    "随后展开链式法则、分支梯度相加、SGD 更新与 PyTorch backward/step 的对应关系。"
+  ],
+  "checks": [
+    {
+      "command": "实验室 npm run check",
+      "result": "34 题、27 词条校验通过；现有依赖缺口 72 个；16 文件、55 项测试及 TypeScript/Vite 构建通过。",
+      "log": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\.modelpath-runtime\\loss-backprop-check.log"
+    },
+    {
+      "command": "实际运行页面 Python 与数值模型交叉核对",
+      "result": "25 个数值预测输入、99 个分类概率均与 PyTorch 一致；正负 ReLU 分支梯度与 autograd、中心差分一致。页面四个梯度为 [-8,-4,-2,-2]，SGD 后预测 3.125、损失 0.015625。",
+      "log": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\.modelpath-runtime\\pytorch-examples\\training-verification.log"
+    },
+    {
+      "command": "桌面浏览器检查",
+      "result": "从激活函数进入损失函数，从 MLP 进入反向传播；检查数值命中/对称偏差/恢复，分类 10%/90%/恢复，全部反向步骤、公式与代码布局；无 KaTeX 错误、整页或代码横向溢出。"
+    },
+    {
+      "command": "最终 ZIP 经当前 stageTermZip 暂存校验",
+      "result": "6 个运行文件与源码逐字节一致，排除测试文件，未发布。"
+    },
+    {
+      "command": "正式内容 SHA256 基线检查",
+      "result": "115 个正式内容文件未变。"
+    }
+  ],
+  "skillChanges": [],
+  "skillNote": "沿用既有独立性、读者起点、设计前走查、静态先于交互和公式后置规范；本轮无新增通用规则。",
+  "knownUncertainties": [
+    "当前为首版，等待用户从初学者角度试读。优化器仍为平台已登记的待补词条，本页提供最低解释，不越过本轮范围。"
+  ],
+  "sources": [
+    "https://docs.pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html",
+    "https://pytorch.org/blog/overview-of-pytorch-autograd-engine/"
+  ],
+  "archiveSha256": "8548f8caf518b620f2e7ba90bad9b60398dcc599d6f7d66c4adc6bff24ecc4f3"
+}

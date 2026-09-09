@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "self-attention",
+  "title": "自注意力",
+  "aliases": [
+    "self-attention",
+    "Self-Attention",
+    "自注意力机制",
+    "Attention"
+  ],
+  "summary": "自注意力让序列中的每个位置都能查看同一序列的其他位置：当前位置用 [[term:qkv-projection|Query]] 发出检索需求，与所有位置的 Key 计算匹配程度，再用这些权重对 Value 做加权汇总，得到带有上下文的新表示。",
+  "coreConclusion": "自注意力把“当前位置需要什么”与“其他位置提供什么”进行匹配，再按匹配结果汇总信息。",
+  "prerequisites": [
+    "transformer"
+  ]
+}

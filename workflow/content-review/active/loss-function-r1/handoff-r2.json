@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "1.0",
+  "jobId": "loss-function-r1",
+  "revision": 2,
+  "source": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\workflow\\content-review\\active\\loss-function-r1\\baseline\\loss-function-before-r2.zip",
+  "design": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\workflow\\content-review\\active\\loss-function-r1\\design-r2.md",
+  "artifacts": [
+    {
+      "kind": "term",
+      "id": "loss-function",
+      "path": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\.modelpath-lab\\content-libraries\\terms\\loss-function",
+      "archive": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\workflow\\content-review\\active\\loss-function-r1\\loss-function-r2.term.zip"
+    }
+  ],
+  "preview": "http://127.0.0.1:8766/#/terms/loss-function",
+  "changes": [
+    "将数值预测和类别预测并列强调；突出实际计分规则、轴含义和平均损失名称。",
+    "用同一批 A/B/C 样本解释正负偏差抵消的问题，明确图中单样本与批次汇总关系。",
+    "以相同损失、相反斜率说明方向来自梯度，区分预测梯度、批次平均及模型参数梯度。"
+  ],
+  "checks": [
+    {
+      "command": "npm --prefix .modelpath-lab run check",
+      "result": "34 题、27 词条校验通过；16 文件、56 测试通过；TypeScript 与 Vite 构建通过。既有显式依赖缺口 72 个。",
+      "log": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\.modelpath-runtime\\loss-r2-check.log"
+    },
+    {
+      "command": "有限差分及 PyTorch autograd 对照",
+      "result": "平方损失 [4,0,4]，单样本预测梯度 [-4,0,4]；批次平均梯度 [-4/3,0,4/3]；绝对误差在两侧的梯度 [-1,1]。",
+      "log": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\.modelpath-runtime\\loss-r2-pytorch.log"
+    },
+    {
+      "command": "桌面浏览器检查",
+      "result": "检查概览、规则、数值图与分类图坐标、批次表及方向对照。预测 1/5/3/1、概率 10%/90%/60% 联动正常；公式展开后无 KaTeX 错误，无整页横向溢出。轴标题实际字重 700。"
+    },
+    {
+      "command": "最终 ZIP 经当前 stageTermZip 暂存及字节校验",
+      "result": "6 个运行时文件与源码、暂存结果一致；校验脚本最初误用 folder 返回键，改为实际 stage 路径后完成逐字节验证。",
+      "log": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\.modelpath-runtime\\loss-r2-package-check.json"
+    },
+    {
+      "command": "正式内容 SHA256 基线核对",
+      "result": "115 个正式内容文件均未变化。"
+    }
+  ],
+  "skillChanges": [],
+  "skillNote": "应用已有视觉层级、读者疑问闭合及对象对应规则，本轮未新增 Skill 规则。",
+  "knownUncertainties": [
+    "等待用户试读；视觉检查与计算测试不替代初学者理解效果评估。",
+    "优化器为既有待补词条，本轮未扩大范围。"
+  ],
+  "archiveSha256": "f6464468685193af4fba85c1a8a1556dc791e8ed0d1d3f0666b6bb4d5ba07c2a"
+}

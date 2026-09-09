@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0",
+  "jobId": "activation-function-r1",
+  "termId": "activation-function",
+  "revision": 1,
+  "status": "awaiting_human_review",
+  "artifacts": [
+    {
+      "kind": "term",
+      "id": "activation-function",
+      "path": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\.modelpath-lab\\content-libraries\\terms\\activation-function",
+      "archive": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\workflow\\content-review\\active\\activation-function-r1\\activation-function-r1.term.zip"
+    }
+  ],
+  "currentHandoff": "handoff-r1.json"
+}

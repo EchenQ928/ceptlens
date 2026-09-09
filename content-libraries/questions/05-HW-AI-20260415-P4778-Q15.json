@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260415-P4778-Q15",
+  "type": "single_choice",
+  "stem": "[[term:neural-network|神经网络]]相比[[term:linear-model|线性模型]]的优势在于",
+  "explanation": "[[term:neural-network|神经网络]]借助[[term:activation-function|激活函数]]可拟合复杂非线性关系，表达能力强于[[term:linear-model|线性模型]]。",
+  "taxonomy": {
+    "primaryConcept": "神经网络的非线性表示能力",
+    "modelFamily": "G0 通用/跨模型",
+    "learningLevel": "L0 通用基础",
+    "engineeringStage": "E4 模块与算子设计",
+    "priority": "P0",
+    "knowledgeTopics": [
+      "架构模块",
+      "学习机制"
+    ],
+    "runtimeEnvironments": [
+      "硬件无关"
+    ]
+  },
+  "ordering": {
+    "order": 5,
+    "prerequisites": [
+      "HW-AI-20260513-P4937-Q11"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": "参数更少"
+    },
+    {
+      "key": "B",
+      "text": "不需要[[term:activation-function|激活函数]]"
+    },
+    {
+      "key": "C",
+      "text": "计算更简单"
+    },
+    {
+      "key": "D",
+      "text": "可以学习非线性关系"
+    }
+  ],
+  "correctAnswer": [
+    "D"
+  ]
+}

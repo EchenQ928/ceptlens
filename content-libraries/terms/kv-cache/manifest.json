@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "kv-cache",
+  "title": "KV Cache",
+  "aliases": [
+    "K/V Cache",
+    "past_key_values",
+    "键值缓存",
+    "注意力缓存"
+  ],
+  "summary": "KV Cache 在[[term:autoregressive-generation|自回归生成]]中保存每一层历史 [[term:token|Token]] 已经计算好的 Key 和 Value。下一步只为新 Token 计算新的 [[term:qkv-projection|Q、K、V]]，把新 K/V 追加到缓存，再用新 Query 读取全部可见历史 K/V。",
+  "coreConclusion": "缓存复用的是各层历史 K/V 投影结果，避免每一步重新计算旧 Token 的 K/V；它用内存换取更少重复计算。",
+  "prerequisites": [
+    "qkv-projection",
+    "self-attention"
+  ]
+}

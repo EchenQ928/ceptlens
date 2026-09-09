@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260805-P5197-Q13",
+  "type": "single_choice",
+  "stem": "在[[term:runtime-peak-memory|端侧推理]]过程中，以下哪项因素最可能导致实际使用的[[term:runtime-peak-memory|峰值内存]]显著超过模型文件本身的大小？",
+  "explanation": "模型运行时还需保存[[term:intermediate-activation|中间激活]]和临时计算空间，因此[[term:runtime-peak-memory|峰值内存]]可能远大于模型文件。",
+  "taxonomy": {
+    "primaryConcept": "推理运行时峰值内存组成",
+    "modelFamily": "G0 通用/跨模型",
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E11 硬件部署与性能分析",
+    "priority": "P0",
+    "secondaryEngineeringStages": [
+      "E9 推理与运行时优化"
+    ],
+    "knowledgeTopics": [
+      "推理系统"
+    ],
+    "optimizationObjectives": [
+      "峰值内存"
+    ],
+    "runtimeEnvironments": [
+      "端侧/嵌入式"
+    ]
+  },
+  "ordering": {
+    "order": 30,
+    "prerequisites": [
+      "HW-AI-20260304-P4570-Q18"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": "[[term:intermediate-activation|中间激活]]、[[term:operator-workspace|临时 buffer]] 和多分支并发执行"
+    },
+    {
+      "key": "B",
+      "text": "输出类别数固定"
+    },
+    {
+      "key": "C",
+      "text": "训练集规模过大"
+    },
+    {
+      "key": "D",
+      "text": "标签类别过少"
+    }
+  ],
+  "correctAnswer": [
+    "A"
+  ]
+}

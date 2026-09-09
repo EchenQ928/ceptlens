@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0",
+  "jobId": "mlp-r1",
+  "termId": "mlp",
+  "revision": 3,
+  "status": "awaiting_human_review",
+  "artifacts": [
+    {
+      "kind": "term",
+      "id": "mlp",
+      "path": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\.modelpath-lab\\content-libraries\\terms\\mlp",
+      "archive": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\workflow\\content-review\\active\\mlp-r1\\mlp-r3.term.zip"
+    }
+  ],
+  "currentHandoff": "handoff-r3.json"
+}

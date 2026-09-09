@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "dropout",
+  "title": "Dropout",
+  "aliases": [
+    "神经元随机屏蔽",
+    "随机失活",
+    "Dropout正则化"
+  ],
+  "summary": "Dropout 在训练的每次前向中，按概率随机把一部分神经元输出置零，让模型不能长期依赖固定的共适应路径；[[term:inference|推理时]]关闭随机屏蔽，使用完整网络。",
+  "coreConclusion": "训练时不断抽取不同的随机子网络，推理时恢复完整网络；被屏蔽的是本次激活，不是永久删除参数。",
+  "prerequisites": [
+    "regularization",
+    "neural-network"
+  ]
+}

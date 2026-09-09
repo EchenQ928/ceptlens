@@ -1,0 +1,664 @@
+{
+  "schemaVersion": "1.0",
+  "terms": {
+    "activation-function": [
+      {
+        "id": "neural-network",
+        "title": "神经网络",
+        "reason": "词条“激活函数”正文中显式引用。"
+      },
+      {
+        "id": "fully-connected-layer",
+        "title": "全连接层",
+        "reason": "词条“激活函数”正文中显式引用。"
+      },
+      {
+        "id": "loss-function",
+        "title": "损失函数",
+        "reason": "词条“激活函数”正文中显式引用。"
+      },
+      {
+        "id": "softmax",
+        "title": "Softmax",
+        "reason": "词条“激活函数”正文中显式引用。"
+      }
+    ],
+    "backpropagation": [
+      {
+        "id": "neural-network",
+        "title": "神经网络",
+        "reason": "词条“反向传播”正文中显式引用。"
+      },
+      {
+        "id": "loss-function",
+        "title": "损失函数",
+        "reason": "词条“反向传播”正文中显式引用。"
+      },
+      {
+        "id": "model-parameter",
+        "title": "参数",
+        "reason": "词条“反向传播”正文中显式引用。"
+      },
+      {
+        "id": "optimizer",
+        "title": "优化器",
+        "reason": "词条“反向传播”正文中显式引用。"
+      }
+    ],
+    "conv-bn-folding": [
+      {
+        "id": "batch-normalization",
+        "title": "Batch Normalization",
+        "reason": "词条“Conv+BN 融合”正文中显式引用。"
+      },
+      {
+        "id": "convolution",
+        "title": "卷积",
+        "reason": "词条“Conv+BN 融合”正文中显式引用。"
+      },
+      {
+        "id": "runtime",
+        "title": "运行图",
+        "reason": "词条“Conv+BN 融合”正文中显式引用。"
+      }
+    ],
+    "convolution": [
+      {
+        "id": "convolution-kernel",
+        "title": "卷积核",
+        "reason": "词条“卷积”正文中显式引用。"
+      },
+      {
+        "id": "model-parameter",
+        "title": "参数",
+        "reason": "词条“卷积”正文中显式引用。"
+      },
+      {
+        "id": "tensor",
+        "title": "输入张量",
+        "reason": "词条“卷积”正文中显式引用。"
+      }
+    ],
+    "depthwise-separable-convolution": [
+      {
+        "id": "convolution",
+        "title": "卷积",
+        "reason": "词条“深度可分离卷积”正文中显式引用。"
+      },
+      {
+        "id": "standard-convolution",
+        "title": "标准卷积",
+        "reason": "词条“深度可分离卷积”正文中显式引用。"
+      },
+      {
+        "id": "depthwise-convolution",
+        "title": "深度卷积",
+        "reason": "词条“深度可分离卷积”正文中显式引用。"
+      },
+      {
+        "id": "pointwise-convolution",
+        "title": "逐点卷积",
+        "reason": "词条“深度可分离卷积”正文中显式引用。"
+      },
+      {
+        "id": "compiler",
+        "title": "编译器",
+        "reason": "词条“深度可分离卷积”正文中显式引用。"
+      }
+    ],
+    "dropout": [
+      {
+        "id": "inference",
+        "title": "推理时",
+        "reason": "词条“Dropout”正文中显式引用。"
+      },
+      {
+        "id": "fully-connected-layer",
+        "title": "全连接层",
+        "reason": "词条“Dropout”正文中显式引用。"
+      },
+      {
+        "id": "regularization",
+        "title": "正则化",
+        "reason": "词条“Dropout”将其声明为阅读前置。"
+      },
+      {
+        "id": "neural-network",
+        "title": "神经网络",
+        "reason": "词条“Dropout”将其声明为阅读前置。"
+      }
+    ],
+    "fully-connected-layer": [
+      {
+        "id": "mlp",
+        "title": "多层感知机（MLP）",
+        "reason": "词条“全连接层”正文中显式引用。"
+      },
+      {
+        "id": "activation-function",
+        "title": "激活函数",
+        "reason": "词条“全连接层”正文中显式引用。"
+      },
+      {
+        "id": "neural-network",
+        "title": "神经网络",
+        "reason": "词条“全连接层”将其声明为阅读前置。"
+      }
+    ],
+    "kv-cache": [
+      {
+        "id": "autoregressive-generation",
+        "title": "自回归生成",
+        "reason": "词条“KV Cache”正文中显式引用。"
+      },
+      {
+        "id": "token",
+        "title": "Token",
+        "reason": "词条“KV Cache”正文中显式引用。"
+      },
+      {
+        "id": "qkv-projection",
+        "title": "Q、K、V",
+        "reason": "词条“KV Cache”正文中显式引用。"
+      },
+      {
+        "id": "prefill-decode",
+        "title": "Prefill",
+        "reason": "词条“KV Cache”正文中显式引用。"
+      },
+      {
+        "id": "self-attention",
+        "title": "自注意力",
+        "reason": "词条“KV Cache”将其声明为阅读前置。"
+      }
+    ],
+    "layer-normalization": [
+      {
+        "id": "token",
+        "title": "Token",
+        "reason": "词条“LayerNorm”正文中显式引用。"
+      },
+      {
+        "id": "tensor",
+        "title": "张量",
+        "reason": "词条“LayerNorm”正文中显式引用。"
+      },
+      {
+        "id": "batch-normalization",
+        "title": "BatchNorm",
+        "reason": "词条“LayerNorm”正文中显式引用。"
+      },
+      {
+        "id": "neural-network",
+        "title": "神经网络",
+        "reason": "词条“LayerNorm”将其声明为阅读前置。"
+      }
+    ],
+    "loss-function": [
+      {
+        "id": "backpropagation",
+        "title": "反向传播",
+        "reason": "词条“损失函数”正文中显式引用。"
+      },
+      {
+        "id": "optimizer",
+        "title": "优化器",
+        "reason": "词条“损失函数”正文中显式引用。"
+      },
+      {
+        "id": "validation-set",
+        "title": "验证集",
+        "reason": "词条“损失函数”正文中显式引用。"
+      },
+      {
+        "id": "neural-network",
+        "title": "神经网络",
+        "reason": "词条“损失函数”将其声明为阅读前置。"
+      }
+    ],
+    "mlp": [
+      {
+        "id": "neural-network",
+        "title": "神经网络",
+        "reason": "词条“多层感知机（MLP）”正文中显式引用。"
+      },
+      {
+        "id": "fully-connected-layer",
+        "title": "全连接",
+        "reason": "词条“多层感知机（MLP）”正文中显式引用。"
+      },
+      {
+        "id": "activation-function",
+        "title": "激活函数",
+        "reason": "词条“多层感知机（MLP）”正文中显式引用。"
+      },
+      {
+        "id": "loss-function",
+        "title": "损失函数",
+        "reason": "词条“多层感知机（MLP）”正文中显式引用。"
+      },
+      {
+        "id": "backpropagation",
+        "title": "反向传播",
+        "reason": "词条“多层感知机（MLP）”正文中显式引用。"
+      }
+    ],
+    "multi-head-attention": [
+      {
+        "id": "qkv-projection",
+        "title": "Query、Key、Value",
+        "reason": "词条“多头注意力”正文中显式引用。"
+      },
+      {
+        "id": "softmax",
+        "title": "Softmax",
+        "reason": "词条“多头注意力”正文中显式引用。"
+      },
+      {
+        "id": "self-attention",
+        "title": "自注意力",
+        "reason": "词条“多头注意力”将其声明为阅读前置。"
+      }
+    ],
+    "neural-network": [
+      {
+        "id": "mlp",
+        "title": "多层感知机（MLP）",
+        "reason": "词条“神经网络”正文中显式引用。"
+      },
+      {
+        "id": "fully-connected-layer",
+        "title": "全连接",
+        "reason": "词条“神经网络”正文中显式引用。"
+      },
+      {
+        "id": "forward-propagation",
+        "title": "前向传播",
+        "reason": "词条“神经网络”正文中显式引用。"
+      },
+      {
+        "id": "activation-function",
+        "title": "激活函数",
+        "reason": "词条“神经网络”正文中显式引用。"
+      },
+      {
+        "id": "model-parameter",
+        "title": "参数",
+        "reason": "词条“神经网络”正文中显式引用。"
+      },
+      {
+        "id": "loss-function",
+        "title": "损失函数",
+        "reason": "词条“神经网络”正文中显式引用。"
+      },
+      {
+        "id": "backpropagation",
+        "title": "反向传播",
+        "reason": "词条“神经网络”正文中显式引用。"
+      }
+    ],
+    "overfitting": [
+      {
+        "id": "training-set",
+        "title": "训练集",
+        "reason": "词条“过拟合”正文中显式引用。"
+      },
+      {
+        "id": "validation-set",
+        "title": "验证集",
+        "reason": "词条“过拟合”正文中显式引用。"
+      },
+      {
+        "id": "test-set",
+        "title": "测试集",
+        "reason": "词条“过拟合”正文中显式引用。"
+      },
+      {
+        "id": "underfitting",
+        "title": "欠拟合",
+        "reason": "词条“过拟合”正文中显式引用。"
+      },
+      {
+        "id": "regularization",
+        "title": "正则化",
+        "reason": "词条“过拟合”正文中显式引用。"
+      },
+      {
+        "id": "loss-function",
+        "title": "损失函数",
+        "reason": "词条“过拟合”将其声明为阅读前置。"
+      }
+    ],
+    "position-wise-ffn": [
+      {
+        "id": "mlp",
+        "title": "MLP",
+        "reason": "词条“逐位置前馈网络”正文中显式引用。"
+      },
+      {
+        "id": "activation-function",
+        "title": "激活函数",
+        "reason": "词条“逐位置前馈网络”正文中显式引用。"
+      },
+      {
+        "id": "residual-connection",
+        "title": "残差",
+        "reason": "词条“逐位置前馈网络”正文中显式引用。"
+      },
+      {
+        "id": "transformer-block",
+        "title": "Transformer Block",
+        "reason": "词条“逐位置前馈网络”将其声明为阅读前置。"
+      }
+    ],
+    "positional-encoding": [
+      {
+        "id": "self-attention",
+        "title": "自注意力",
+        "reason": "词条“位置编码”正文中显式引用。"
+      },
+      {
+        "id": "qkv-projection",
+        "title": "Q/K/V",
+        "reason": "词条“位置编码”正文中显式引用。"
+      },
+      {
+        "id": "token",
+        "title": "Token",
+        "reason": "词条“位置编码”正文中显式引用。"
+      },
+      {
+        "id": "rope",
+        "title": "RoPE",
+        "reason": "词条“位置编码”正文中显式引用。"
+      }
+    ],
+    "qkv-projection": [
+      {
+        "id": "model-parameter",
+        "title": "可学习",
+        "reason": "词条“QKV 投影”正文中显式引用。"
+      },
+      {
+        "id": "fully-connected-layer",
+        "title": "线性层",
+        "reason": "词条“QKV 投影”正文中显式引用。"
+      },
+      {
+        "id": "self-attention",
+        "title": "自注意力",
+        "reason": "词条“QKV 投影”将其声明为阅读前置。"
+      }
+    ],
+    "quantization": [
+      {
+        "id": "numerical-precision",
+        "title": "浮点",
+        "reason": "词条“模型量化”正文中显式引用。"
+      },
+      {
+        "id": "quantization-scale",
+        "title": "缩放因子",
+        "reason": "词条“模型量化”正文中显式引用。"
+      },
+      {
+        "id": "calibration-set",
+        "title": "校准数据",
+        "reason": "词条“模型量化”正文中显式引用。"
+      }
+    ],
+    "regularization": [
+      {
+        "id": "training-set",
+        "title": "训练数据",
+        "reason": "词条“正则化”正文中显式引用。"
+      },
+      {
+        "id": "overfitting",
+        "title": "过拟合",
+        "reason": "词条“正则化”正文中显式引用。"
+      },
+      {
+        "id": "underfitting",
+        "title": "欠拟合",
+        "reason": "词条“正则化”正文中显式引用。"
+      },
+      {
+        "id": "loss-function",
+        "title": "损失",
+        "reason": "词条“正则化”正文中显式引用。"
+      },
+      {
+        "id": "dropout",
+        "title": "Dropout",
+        "reason": "词条“正则化”正文中显式引用。"
+      }
+    ],
+    "residual-connection": [
+      {
+        "id": "convolution",
+        "title": "卷积",
+        "reason": "词条“残差连接”正文中显式引用。"
+      },
+      {
+        "id": "attention-mechanism",
+        "title": "注意力",
+        "reason": "词条“残差连接”正文中显式引用。"
+      },
+      {
+        "id": "position-wise-ffn",
+        "title": "前馈网络",
+        "reason": "词条“残差连接”正文中显式引用。"
+      },
+      {
+        "id": "backpropagation",
+        "title": "反向传播",
+        "reason": "词条“残差连接”正文中显式引用。"
+      },
+      {
+        "id": "neural-network",
+        "title": "神经网络",
+        "reason": "词条“残差连接”将其声明为阅读前置。"
+      }
+    ],
+    "runtime-peak-memory": [
+      {
+        "id": "intermediate-activation",
+        "title": "中间激活",
+        "reason": "词条“运行时峰值内存”正文中显式引用。"
+      },
+      {
+        "id": "operator-workspace",
+        "title": "算子工作区",
+        "reason": "词条“运行时峰值内存”正文中显式引用。"
+      },
+      {
+        "id": "compiler",
+        "title": "编译",
+        "reason": "词条“运行时峰值内存”正文中显式引用。"
+      },
+      {
+        "id": "kv-cache",
+        "title": "KV Cache",
+        "reason": "词条“运行时峰值内存”正文中显式引用。"
+      }
+    ],
+    "self-attention": [
+      {
+        "id": "qkv-projection",
+        "title": "Query",
+        "reason": "词条“自注意力”正文中显式引用。"
+      },
+      {
+        "id": "softmax",
+        "title": "Softmax",
+        "reason": "词条“自注意力”正文中显式引用。"
+      },
+      {
+        "id": "causal-mask",
+        "title": "Causal Mask",
+        "reason": "词条“自注意力”正文中显式引用。"
+      },
+      {
+        "id": "transformer",
+        "title": "Transformer",
+        "reason": "词条“自注意力”将其声明为阅读前置。"
+      }
+    ],
+    "softmax": [
+      {
+        "id": "probability-distribution",
+        "title": "概率",
+        "reason": "词条“Softmax”正文中显式引用。"
+      },
+      {
+        "id": "logits",
+        "title": "logit",
+        "reason": "词条“Softmax”正文中显式引用。"
+      }
+    ],
+    "training-set": [
+      {
+        "id": "loss-function",
+        "title": "损失",
+        "reason": "词条“训练集”正文中显式引用。"
+      },
+      {
+        "id": "gradient",
+        "title": "梯度",
+        "reason": "词条“训练集”正文中显式引用。"
+      },
+      {
+        "id": "optimizer",
+        "title": "优化器",
+        "reason": "词条“训练集”正文中显式引用。"
+      },
+      {
+        "id": "data-augmentation",
+        "title": "随机增强",
+        "reason": "词条“训练集”正文中显式引用。"
+      },
+      {
+        "id": "validation-set",
+        "title": "验证集",
+        "reason": "词条“训练集”正文中显式引用。"
+      },
+      {
+        "id": "test-set",
+        "title": "测试数据",
+        "reason": "词条“训练集”正文中显式引用。"
+      },
+      {
+        "id": "data-leakage",
+        "title": "数据泄漏",
+        "reason": "词条“训练集”正文中显式引用。"
+      },
+      {
+        "id": "backpropagation",
+        "title": "反向传播",
+        "reason": "词条“训练集”将其声明为阅读前置。"
+      }
+    ],
+    "transformer": [
+      {
+        "id": "attention-mechanism",
+        "title": "Attention",
+        "reason": "词条“Transformer”正文中显式引用。"
+      },
+      {
+        "id": "self-attention",
+        "title": "自注意力",
+        "reason": "词条“Transformer”正文中显式引用。"
+      },
+      {
+        "id": "position-wise-ffn",
+        "title": "逐位置前馈网络",
+        "reason": "词条“Transformer”正文中显式引用。"
+      },
+      {
+        "id": "residual-connection",
+        "title": "残差连接",
+        "reason": "词条“Transformer”正文中显式引用。"
+      },
+      {
+        "id": "layer-normalization",
+        "title": "归一化",
+        "reason": "词条“Transformer”正文中显式引用。"
+      },
+      {
+        "id": "token",
+        "title": "token",
+        "reason": "词条“Transformer”正文中显式引用。"
+      },
+      {
+        "id": "positional-encoding",
+        "title": "位置信息",
+        "reason": "词条“Transformer”正文中显式引用。"
+      },
+      {
+        "id": "neural-network",
+        "title": "神经网络",
+        "reason": "词条“Transformer”将其声明为阅读前置。"
+      }
+    ],
+    "transformer-block": [
+      {
+        "id": "multi-head-attention",
+        "title": "多头注意力",
+        "reason": "词条“Transformer Block”正文中显式引用。"
+      },
+      {
+        "id": "position-wise-ffn",
+        "title": "逐位置前馈网络",
+        "reason": "词条“Transformer Block”正文中显式引用。"
+      },
+      {
+        "id": "residual-connection",
+        "title": "残差连接",
+        "reason": "词条“Transformer Block”正文中显式引用。"
+      },
+      {
+        "id": "layer-normalization",
+        "title": "LayerNorm",
+        "reason": "词条“Transformer Block”正文中显式引用。"
+      },
+      {
+        "id": "self-attention",
+        "title": "Attention",
+        "reason": "词条“Transformer Block”正文中显式引用。"
+      },
+      {
+        "id": "transformer",
+        "title": "Transformer",
+        "reason": "词条“Transformer Block”将其声明为阅读前置。"
+      }
+    ],
+    "validation-set": [
+      {
+        "id": "overfitting",
+        "title": "过拟合",
+        "reason": "词条“验证集”正文中显式引用。"
+      },
+      {
+        "id": "training-set",
+        "title": "训练集",
+        "reason": "词条“验证集”正文中显式引用。"
+      },
+      {
+        "id": "test-set",
+        "title": "测试数据",
+        "reason": "词条“验证集”正文中显式引用。"
+      },
+      {
+        "id": "dropout",
+        "title": "Dropout",
+        "reason": "词条“验证集”正文中显式引用。"
+      },
+      {
+        "id": "batch-normalization",
+        "title": "BatchNorm",
+        "reason": "词条“验证集”正文中显式引用。"
+      }
+    ]
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.0",
+  "jobId": "loss-function-r1",
+  "revision": 1,
+  "source": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\workflow\\content-review\\active\\loss-function-r1\\baseline\\loss-function-before-r1.zip",
+  "design": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\workflow\\content-review\\active\\loss-function-r1\\design.md",
+  "sourceNote": "用户明确授权同时设计并实现损失函数与反向传播两项；先形成阅读路径、可视化和交互设计，再实现独立教学包。",
+  "artifacts": [
+    {
+      "kind": "term",
+      "id": "loss-function",
+      "path": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\.modelpath-lab\\content-libraries\\terms\\loss-function",
+      "archive": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\workflow\\content-review\\active\\loss-function-r1\\loss-function-r1.term.zip"
+    }
+  ],
+  "preview": "http://127.0.0.1:8766/#/terms/loss-function",
+  "changes": [
+    "双输入计分概览；分别解释数值预测和类别预测，避免从训练术语开场。",
+    "绝对误差/平方误差曲线、三个样本明细及平均值同步；分类概率条、交叉熵曲线及损失同步。",
+    "公式在机制之后，PyTorch 代码复现固定初值，明确 CrossEntropyLoss 的 logits 接口。"
+  ],
+  "checks": [
+    {
+      "command": "实验室 npm run check",
+      "result": "34 题、27 词条校验通过；现有依赖缺口 72 个；16 文件、55 项测试及 TypeScript/Vite 构建通过。",
+      "log": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\.modelpath-runtime\\loss-backprop-check.log"
+    },
+    {
+      "command": "实际运行页面 Python 与数值模型交叉核对",
+      "result": "25 个数值预测输入、99 个分类概率均与 PyTorch 一致；正负 ReLU 分支梯度与 autograd、中心差分一致。页面四个梯度为 [-8,-4,-2,-2]，SGD 后预测 3.125、损失 0.015625。",
+      "log": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\.modelpath-runtime\\pytorch-examples\\training-verification.log"
+    },
+    {
+      "command": "桌面浏览器检查",
+      "result": "从激活函数进入损失函数，从 MLP 进入反向传播；检查数值命中/对称偏差/恢复，分类 10%/90%/恢复，全部反向步骤、公式与代码布局；无 KaTeX 错误、整页或代码横向溢出。"
+    },
+    {
+      "command": "最终 ZIP 经当前 stageTermZip 暂存校验",
+      "result": "6 个运行文件与源码逐字节一致，排除测试文件，未发布。"
+    },
+    {
+      "command": "正式内容 SHA256 基线检查",
+      "result": "115 个正式内容文件未变。"
+    }
+  ],
+  "skillChanges": [],
+  "skillNote": "沿用既有独立性、读者起点、设计前走查、静态先于交互和公式后置规范；本轮无新增通用规则。",
+  "knownUncertainties": [
+    "当前为首版，等待用户从初学者角度试读。优化器仍为平台已登记的待补词条，本页提供最低解释，不越过本轮范围。"
+  ],
+  "sources": [
+    "https://docs.pytorch.org/docs/stable/generated/torch.nn.L1Loss.html",
+    "https://docs.pytorch.org/docs/stable/generated/torch.nn.MSELoss.html",
+    "https://docs.pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html"
+  ],
+  "archiveSha256": "f1d3a8fab28d1fba2b1f0ef2224ecb2aaf178aefd8e0307d138e0a6361221cbd"
+}

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "qkv-projection",
+  "title": "QKV 投影",
+  "aliases": [
+    "QKV",
+    "Query、Key、Value",
+    "Query Key Value",
+    "Q、K、V"
+  ],
+  "summary": "Q、K、V 不是三份外部输入，而是同一组序列表示通过三组[[term:model-parameter|可学习]][[term:fully-connected-layer|线性层]]得到的三种角色表示。Q 用来发出查询，K 用来参与匹配，V 是匹配后真正被汇总的内容。",
+  "coreConclusion": "同一个输入向量被三组参数投影成查询、索引和值，分别承担检索过程中的不同角色。",
+  "prerequisites": [
+    "self-attention"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "residual-connection",
+  "title": "残差连接",
+  "aliases": [
+    "Residual Connection",
+    "Shortcut connection",
+    "跳跃连接",
+    "Shortcut"
+  ],
+  "summary": "残差连接让输入同时走两条路径：一条经过[[term:convolution|卷积]]、[[term:attention-mechanism|注意力]]或[[term:position-wise-ffn|前馈网络]]等主变换，另一条作为 shortcut 直接绕过主变换；两路最后逐元素相加。",
+  "coreConclusion": "输出等于主支路变换结果加上原输入，使原信息和梯度都拥有一条较直接的通路。",
+  "prerequisites": [
+    "neural-network"
+  ]
+}

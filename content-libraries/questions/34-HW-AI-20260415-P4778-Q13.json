@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260415-P4778-Q13",
+  "type": "single_choice",
+  "stem": "[[term:smoothquant|SmoothQuant]]是一种常用的大模型[[term:quantization|量化]]方法，它的核心思想是？",
+  "explanation": "[[term:smoothquant|SmoothQuant]]通过等价变换把[[term:quantization|量化]]难度从 activation 迁移到 weight，本质上是将 activation 的 scale 吸收到权重中。",
+  "taxonomy": {
+    "primaryConcept": "SmoothQuant的激活到权重尺度迁移",
+    "modelFamily": "G4 Transformer与Attention",
+    "learningLevel": "L2 分支深入",
+    "engineeringStage": "E8 压缩与轻量化",
+    "priority": "P0",
+    "knowledgeTopics": [
+      "高效模型",
+      "张量与模型计算"
+    ],
+    "optimizationObjectives": [
+      "数值精度"
+    ],
+    "runtimeEnvironments": [
+      "硬件无关"
+    ]
+  },
+  "ordering": {
+    "order": 34,
+    "prerequisites": [
+      "HW-AI-20260509-P4904-Q19",
+      "HW-AI-20260624-P5123-Q05"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": "将权重scale转移到activation"
+    },
+    {
+      "key": "B",
+      "text": "将activation scale转移到权重"
+    },
+    {
+      "key": "C",
+      "text": "减少层数"
+    },
+    {
+      "key": "D",
+      "text": "减少batch"
+    }
+  ],
+  "correctAnswer": [
+    "B"
+  ]
+}

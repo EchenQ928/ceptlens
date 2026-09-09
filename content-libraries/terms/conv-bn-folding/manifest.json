@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "conv-bn-folding",
+  "title": "Conv+BN 融合",
+  "aliases": [
+    "Conv BN Folding",
+    "卷积与BN折叠",
+    "BN融合",
+    "Conv+BN Folding"
+  ],
+  "summary": "Conv+BN 融合是在推理前把 [[term:batch-normalization|Batch Normalization]] 已经固定的缩放和偏移吸收到[[term:convolution|卷积]]权重与偏置中，使[[term:runtime|运行图]]只执行一个等价卷积，不再单独调度 BN。",
+  "coreConclusion": "它是推理态的代数等价改写：改变卷积参数，不改变网络函数，并删除独立 BN 的运行开销。",
+  "prerequisites": [
+    "convolution"
+  ]
+}

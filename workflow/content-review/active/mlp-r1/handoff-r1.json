@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "1.0",
+  "jobId": "mlp-r1",
+  "revision": 1,
+  "source": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\.modelpath-lab\\content-libraries\\terms\\neural-network\\view.tsx",
+  "sourceNote": "用户授权完善神经网络正文的第一个关联词条；MLP 原来只有待补依赖，无原有教学包。独立新建，未修改神经网络或正式词库。",
+  "artifacts": [
+    {
+      "kind": "term",
+      "id": "mlp",
+      "path": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\.modelpath-lab\\content-libraries\\terms\\mlp",
+      "archive": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\workflow\\content-review\\active\\mlp-r1\\mlp-r1.term.zip"
+    }
+  ],
+  "preview": "http://127.0.0.1:8766/#/terms/mlp",
+  "changes": [
+    "以分层、全连接、逐层表示为主线，先直觉和结构，后局部算术、非线性作用与整层矩阵公式。",
+    "2→2→2→1 固定例：图上单元表示函数，输出值标于传出连线。选中单元时同步强调输入连接与三步演算。",
+    "权重和偏置以名称、数值和主平台红色同时强调；沿用宿主设计变量，无装饰图标或多色配色。",
+    "说明隐藏层、前馈方向、宽度和深度的计数，以及训练与输出形式的边界。"
+  ],
+  "checks": [
+    {
+      "command": "VITE_MODELPATH_MODE=lab npm run check",
+      "result": "34 题、26 个词条校验通过；75 个现有依赖缺口；12 个测试文件、46 项测试通过；TypeScript 与 Vite 构建通过。",
+      "log": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\.modelpath-runtime\\mlp-r1-check.log"
+    },
+    {
+      "command": "对最终 ZIP 执行当前正式导入器 stageTermZip",
+      "result": "通过；5 个运行文件与暂存结果字节一致；运行包不含测试源码。"
+    },
+    {
+      "command": "桌面浏览器检查",
+      "result": "首屏、网络图、第二隐藏层选择、三步演算和矩阵公式已实看；公式错误 0，无整页横向溢出；神经网络→MLP 及 MLP→神经网络链接通过。"
+    },
+    {
+      "command": "正式词库基线 SHA256 比对",
+      "result": "115 个文件与原有基线一致；没有发布新包。"
+    }
+  ],
+  "skillChanges": [],
+  "skillNote": "应用现有词条规范，本轮未修改 skill。",
+  "knownUncertainties": [
+    "首版等待用户试读和设计反馈；全连接等其余关联词条仍按现有机制登记待补。"
+  ],
+  "sources": [
+    "https://d2l.ai/chapter_multilayer-perceptrons/mlp.html"
+  ],
+  "archiveSha256": "7c40980ea1861eb3cabd63f25aa9260a4794cdd7509bf5b17b22024ce5ae0f80",
+  "scope": "仅实验室 MLP 独立词条首版；桌面端。"
+}

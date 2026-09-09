@@ -1,0 +1,6 @@
+interface:
+  display_name: "ModelPath 内容监督"
+  short_description: "独立审查题目与词条并给出证据化通过或返修结论"
+  default_prompt: "使用 $modelpath-content-supervisor 独立审查一个 ModelPath 题目或词条交付。"
+policy:
+  allow_implicit_invocation: false

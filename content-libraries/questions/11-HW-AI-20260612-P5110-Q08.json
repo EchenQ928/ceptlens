@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260612-P5110-Q08",
+  "type": "single_choice",
+  "stem": "与[[term:sgd|普通 SGD]]相比，[[term:momentum|Momentum 方法]]的主要作用是什么？",
+  "explanation": "[[term:momentum|Momentum]]累积历史梯度，平滑更新方向，减少震荡并加速收敛。",
+  "taxonomy": {
+    "primaryConcept": "Momentum动量更新与收敛稳定性",
+    "modelFamily": "G0 通用/跨模型",
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E5 训练目标与训练过程",
+    "priority": "P0",
+    "secondaryEngineeringStages": [
+      "E6 训练稳定性与调优"
+    ],
+    "knowledgeTopics": [
+      "学习机制",
+      "训练系统"
+    ],
+    "optimizationObjectives": [
+      "稳定性"
+    ],
+    "runtimeEnvironments": [
+      "硬件无关"
+    ]
+  },
+  "ordering": {
+    "order": 11,
+    "prerequisites": [
+      "HW-AI-20260612-P5110-Q14"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": "保证全局最优解"
+    },
+    {
+      "key": "B",
+      "text": "不再需要设置[[term:learning-rate|学习率]]"
+    },
+    {
+      "key": "C",
+      "text": "引入历史梯度信息，减少震荡并加快收敛"
+    },
+    {
+      "key": "D",
+      "text": "自动减少训练数据噪声"
+    }
+  ],
+  "correctAnswer": [
+    "C"
+  ]
+}

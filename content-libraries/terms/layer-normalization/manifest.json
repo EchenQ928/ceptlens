@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "layer-normalization",
+  "title": "LayerNorm",
+  "aliases": [
+    "Layer Normalization",
+    "层归一化",
+    "LN"
+  ],
+  "summary": "LayerNorm 对单个样本、单个 [[term:token|Token]] 的特征维做归一化：先用这一行特征自己的均值和方差标准化，再用可学习的缩放与偏移恢复合适表示。它不依赖同批次其他样本。",
+  "coreConclusion": "LayerNorm 在每个 Token 内部统一特征尺度，使深层网络中的数值与梯度更容易保持稳定。",
+  "prerequisites": [
+    "neural-network"
+  ]
+}

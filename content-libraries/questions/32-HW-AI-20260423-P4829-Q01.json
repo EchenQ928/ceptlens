@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260423-P4829-Q01",
+  "type": "single_choice",
+  "stem": "[[term:quantization|量化（Quantization）]]技术中，将 [[term:numerical-precision|FP16]] 转为 [[term:numerical-precision|INT8]] 主要压缩了：",
+  "explanation": "量化是把参数由 [[term:numerical-precision|FP16]] 等高精度表示压缩为 [[term:numerical-precision|INT8]] 等低位宽表示，主要减少的是权重存储空间与[[term:memory-bandwidth|带宽占用]]。",
+  "taxonomy": {
+    "primaryConcept": "低比特量化与权重存储位宽",
+    "modelFamily": "G0 通用/跨模型",
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E8 压缩与轻量化",
+    "priority": "P0",
+    "knowledgeTopics": [
+      "高效模型"
+    ],
+    "optimizationObjectives": [
+      "峰值内存",
+      "带宽",
+      "数值精度"
+    ],
+    "runtimeEnvironments": [
+      "硬件无关"
+    ]
+  },
+  "ordering": {
+    "order": 32,
+    "prerequisites": [
+      "HW-AI-20260603-P4996-Q07"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": "注意力机制的头数"
+    },
+    {
+      "key": "B",
+      "text": "模型的层数"
+    },
+    {
+      "key": "C",
+      "text": "权重的[[term:numerical-precision|存储位宽]]"
+    },
+    {
+      "key": "D",
+      "text": "Token 词表的长度"
+    }
+  ],
+  "correctAnswer": [
+    "C"
+  ]
+}

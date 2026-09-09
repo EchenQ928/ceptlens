@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "1.0",
+  "jobId": "fully-connected-layer-r1",
+  "revision": 2,
+  "source": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\workflow\\content-review\\active\\fully-connected-layer-r1\\baseline\\fully-connected-layer-before-r2.zip",
+  "sourceNote": "用户本轮明确要求同时调整全连接层与 MLP 两个词条；仅在实验室制作待审版本。",
+  "artifacts": [
+    {
+      "kind": "term",
+      "id": "fully-connected-layer",
+      "path": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\.modelpath-lab\\content-libraries\\terms\\fully-connected-layer",
+      "archive": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\workflow\\content-review\\active\\fully-connected-layer-r1\\fully-connected-layer-r2.term.zip"
+    }
+  ],
+  "preview": "http://127.0.0.1:8766/#/terms/fully-connected-layer",
+  "changes": [
+    "权重面板标题简化为权重矩阵；六个连接使用不同的小数权重，图示、计算、矩阵与激活结果同步更新。",
+    "压缩为全连接结构、矩阵与参数、PyTorch 实现三节，删除重复解释。",
+    "新增有注释的 Linear(3,2) 与 ReLU 代码，以及可展开的固定参数复现示例。"
+  ],
+  "checks": [
+    {
+      "command": "实验室 npm run check",
+      "result": "34 题、27 词条校验通过；74 个现有依赖缺口；13 个测试文件、47 项测试及 TypeScript/Vite 构建通过。",
+      "log": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\.modelpath-runtime\\linear-mlp-code-check.log"
+    },
+    {
+      "command": "PyTorch 2.9.1 实际运行页面代码",
+      "result": "页面代码直接提取执行；全连接 z=[-0.6,2.6]、ReLU=[0,2.6]；MLP 中间值 [2,0]、[1,4]、输出 2.5。参数数目、批量形状及矩阵方向断言通过。",
+      "log": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\.modelpath-runtime\\pytorch-examples\\verification.log"
+    },
+    {
+      "command": "最终 ZIP 经当前 stageTermZip 校验",
+      "result": "6 个运行文件全部与源文件字节一致，排除测试文件，未发布。"
+    },
+    {
+      "command": "桌面浏览器检查",
+      "result": "权重选择同步连接及乘法项；代码区及参数复现展开正常；两页无 KaTeX 错误、整页和代码区横向溢出。"
+    },
+    {
+      "command": "正式内容 SHA256 基线比较",
+      "result": "115 个正式内容文件未变。"
+    }
+  ],
+  "skillChanges": [],
+  "knownUncertainties": [
+    "等待用户试读本轮页面。"
+  ],
+  "sources": [
+    "https://docs.pytorch.org/docs/stable/generated/torch.nn.Linear.html",
+    "https://docs.pytorch.org/docs/stable/generated/torch.nn.Sequential.html"
+  ],
+  "archiveSha256": "a1f18d7b62dce0ece672c42d009d9babde18848decd65781bc1693d1e3b5bd78"
+}

@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260624-P5123-Q07",
+  "type": "single_choice",
+  "stem": "在[[term:transformer|Transformer 模型]]中，[[term:self-attention|自注意力机制]]的主要作用是什么？",
+  "explanation": "自注意力可以直接建模序列中任意位置之间的关系。",
+  "taxonomy": {
+    "primaryConcept": "自注意力的长距离依赖建模",
+    "modelFamily": "G4 Transformer与Attention",
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E4 模块与算子设计",
+    "priority": "P0",
+    "knowledgeTopics": [
+      "架构模块"
+    ],
+    "runtimeEnvironments": [
+      "硬件无关"
+    ]
+  },
+  "ordering": {
+    "order": 19,
+    "prerequisites": [
+      "HW-AI-20260304-P4570-Q01"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": "对输入序列进行降维处理"
+    },
+    {
+      "key": "B",
+      "text": "生成[[term:embedding|词嵌入]]"
+    },
+    {
+      "key": "C",
+      "text": "捕获序列中的[[term:long-range-dependency|长距离依赖关系]]"
+    },
+    {
+      "key": "D",
+      "text": "将输入序列映射到固定长度向量"
+    }
+  ],
+  "correctAnswer": [
+    "C"
+  ]
+}

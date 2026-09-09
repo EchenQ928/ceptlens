@@ -1,0 +1,13 @@
+.code-block { border-radius: 4px; overflow: hidden; }
+.code-block .code-language { padding: 9px 20px; border-bottom: 1px solid #3b3b3b; background: #252526; color: #ccc; font: 12px/1.5 var(--font-mono, Consolas, monospace); }
+.code-block pre { padding: 20px 22px; background: #1e1e1e; color: #d4d4d4; font: 14px/1.85 var(--font-mono, Consolas, monospace); tab-size: 4; }
+.code-block pre code { font: inherit; white-space: pre; }
+.code-block .hljs-keyword, .code-block .hljs-selector-tag { color: #c586c0; }
+.code-block .hljs-built_in, .code-block .hljs-type, .code-block .hljs-title.class_ { color: #4ec9b0; }
+.code-block .hljs-title.function_ { color: #dcdcaa; }
+.code-block .hljs-number, .code-block .hljs-literal { color: #b5cea8; }
+.code-block .hljs-string, .code-block .hljs-regexp { color: #ce9178; }
+.code-block .hljs-comment, .code-block .hljs-quote { color: #89a876; }
+.code-block .hljs-attr, .code-block .hljs-property, .code-block .hljs-variable { color: #9cdcfe; }
+.code-block .hljs-meta { color: #d7ba7d; }
+.code-block pre ::selection { background: #264f78; }

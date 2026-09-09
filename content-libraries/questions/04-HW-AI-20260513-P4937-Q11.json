@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260513-P4937-Q11",
+  "type": "single_choice",
+  "stem": "[[term:activation-function|激活函数]]的主要作用是",
+  "explanation": "[[term:activation-function|激活函数]]的核心作用是引入非线性，使神经网络能够拟合复杂函数。",
+  "taxonomy": {
+    "primaryConcept": "激活函数引入非线性",
+    "modelFamily": "G0 通用/跨模型",
+    "learningLevel": "L0 通用基础",
+    "engineeringStage": "E4 模块与算子设计",
+    "priority": "P0",
+    "knowledgeTopics": [
+      "架构模块"
+    ],
+    "runtimeEnvironments": [
+      "硬件无关"
+    ]
+  },
+  "ordering": {
+    "order": 4,
+    "prerequisites": [
+      "HW-AI-20260724-P5183-Q08"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": "加快训练"
+    },
+    {
+      "key": "B",
+      "text": "提高模型精度"
+    },
+    {
+      "key": "C",
+      "text": "增加模型参数"
+    },
+    {
+      "key": "D",
+      "text": "引入非线性"
+    }
+  ],
+  "correctAnswer": [
+    "D"
+  ]
+}

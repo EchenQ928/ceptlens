@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0",
+  "jobId": "loss-function-r1",
+  "termId": "loss-function",
+  "revision": 2,
+  "status": "awaiting_human_review",
+  "artifacts": [
+    {
+      "kind": "term",
+      "id": "loss-function",
+      "path": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\.modelpath-lab\\content-libraries\\terms\\loss-function",
+      "archive": "D:\\Desktop\\MODELPATH_BETA4_FULL_PC_DEPLOY_20260904\\workflow\\content-review\\active\\loss-function-r1\\loss-function-r2.term.zip"
+    }
+  ],
+  "currentHandoff": "handoff-r2.json"
+}
