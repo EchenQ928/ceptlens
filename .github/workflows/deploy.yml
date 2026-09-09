@@ -20,7 +20,7 @@ jobs:
       - run: npm ci
       - run: npm run check
       - name: Prepare release
-        run: tar --exclude='./node_modules' --exclude='./.git' --exclude='./service-data' --exclude='./dist' --exclude='./ceptlens-${GITHUB_SHA}.tar.gz' -czf ceptlens-${GITHUB_SHA}.tar.gz .
+        run: tar --exclude='./node_modules' --exclude='./.git' --exclude='./service-data' --exclude='./dist' --exclude='./ceptlens-${GITHUB_SHA}.tar.gz' -czf /tmp/ceptlens-${GITHUB_SHA}.tar.gz .
       - name: Configure SSH
         env:
           DEPLOY_KEY: ${{ secrets.CEPTLENS_DEPLOY_KEY }}
@@ -30,7 +30,7 @@ jobs:
           chmod 600 ~/.ssh/ceptlens_deploy
           ssh-keyscan -H "${{ secrets.CEPTLENS_DEPLOY_HOST }}" >> ~/.ssh/known_hosts
       - name: Upload release
-        run: scp -i ~/.ssh/ceptlens_deploy ceptlens-${GITHUB_SHA}.tar.gz "${{ secrets.CEPTLENS_DEPLOY_USER }}@${{ secrets.CEPTLENS_DEPLOY_HOST }}:/srv/ceptlens/releases/"
+        run: scp -i ~/.ssh/ceptlens_deploy /tmp/ceptlens-${GITHUB_SHA}.tar.gz "${{ secrets.CEPTLENS_DEPLOY_USER }}@${{ secrets.CEPTLENS_DEPLOY_HOST }}:/srv/ceptlens/releases/"
       - name: Activate release and health check
         run: |
           ssh -i ~/.ssh/ceptlens_deploy "${{ secrets.CEPTLENS_DEPLOY_USER }}@${{ secrets.CEPTLENS_DEPLOY_HOST }}" \
