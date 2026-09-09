@@ -17,3 +17,5 @@ service-data/*
 !.env.example
 .deploy/
 dist/
+
+*.pem
