@@ -12,7 +12,7 @@ npm run check
 npm run dev
 ```
 
-浏览器访问 http://127.0.0.1:8765/。生产环境请参阅 `public/docs/DEPLOYMENT.md`。
+浏览器访问 http://127.0.0.1:8765/。生产环境请参阅 [`public/docs/DEPLOYMENT.md`](public/docs/DEPLOYMENT.md)。
 
 ## 项目结构
 
@@ -21,6 +21,7 @@ npm run dev
 - `content-libraries/`：公开题目与词条教学包
 - `public/docs/`：架构、内容开发和部署说明
 - `agent-runtime/`：模型配置模板；真实配置不提交
+- `docs/`：开发、部署与历史记录
 
 ## 当前限制
 
@@ -29,3 +30,10 @@ npm run dev
 ## 参与贡献
 
 请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。
+
+## 文档
+
+- [部署指南](public/docs/DEPLOYMENT.md)
+- [开发指南](public/docs/DEVELOPER_GUIDE.md)
+- [本地环境搭建](docs/operations/LOCAL_SETUP.md)
+- [Node.js 兼容性](docs/operations/node22-compatibility.md)
