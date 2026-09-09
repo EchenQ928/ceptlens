@@ -1,0 +1,37 @@
+name: Deploy
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+concurrency:
+  group: production
+  cancel-in-progress: false
+jobs:
+  deploy:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.18.0
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - name: Prepare release
+        run: tar --exclude='./node_modules' --exclude='./.git' --exclude='./service-data' --exclude='./dist' -czf ceptlens-${GITHUB_SHA}.tar.gz .
+      - name: Configure SSH
+        env:
+          DEPLOY_KEY: ${{ secrets.CEPTLENS_DEPLOY_KEY }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/ceptlens_deploy
+          chmod 600 ~/.ssh/ceptlens_deploy
+          ssh-keyscan -H "${{ secrets.CEPTLENS_DEPLOY_HOST }}" >> ~/.ssh/known_hosts
+      - name: Upload release
+        run: scp -i ~/.ssh/ceptlens_deploy ceptlens-${GITHUB_SHA}.tar.gz "${{ secrets.CEPTLENS_DEPLOY_USER }}@${{ secrets.CEPTLENS_DEPLOY_HOST }}:/srv/ceptlens/releases/"
+      - name: Activate release and health check
+        run: |
+          ssh -i ~/.ssh/ceptlens_deploy "${{ secrets.CEPTLENS_DEPLOY_USER }}@${{ secrets.CEPTLENS_DEPLOY_HOST }}" \
+            "sudo /usr/local/bin/ceptlens-deploy ceptlens-${GITHUB_SHA}.tar.gz ${GITHUB_SHA}"
