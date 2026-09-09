@@ -29,7 +29,7 @@ const valueAfter = (flag, fallback) => args.includes(flag) ? args[args.indexOf(f
 const host = valueAfter("--host", "127.0.0.1");
 const port = Number(valueAfter("--port", "8765"));
 const publicHost = valueAfter("--public-host", host === "0.0.0.0" ? "127.0.0.1" : host);
-const configuredOrigin = process.env.CEPTLENS_PUBLIC_ORIGIN?.trim();
+const configuredOrigin = process.env.CEPTLENS_PUBLIC_ORIGIN?.trim() || undefined;
 if (configuredOrigin && (!/^https?:\/\//.test(configuredOrigin) || new URL(configuredOrigin).origin !== configuredOrigin)) {
   throw new Error("CEPTLENS_PUBLIC_ORIGIN 必须是完整的 HTTP(S) origin，不含路径或末尾斜杠。");
 }
