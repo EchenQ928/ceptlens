@@ -19,8 +19,9 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check
+      - run: npm run test:services
       - name: Prepare release
-        run: tar --exclude='./node_modules' --exclude='./.git' --exclude='./service-data' --exclude='./dist' --exclude='./ceptlens-${GITHUB_SHA}.tar.gz' -czf /tmp/ceptlens-${GITHUB_SHA}.tar.gz .
+        run: git archive --format=tar.gz --output="/tmp/ceptlens-${GITHUB_SHA}.tar.gz" "$GITHUB_SHA"
       - name: Configure SSH
         env:
           DEPLOY_KEY: ${{ secrets.CEPTLENS_DEPLOY_KEY }}

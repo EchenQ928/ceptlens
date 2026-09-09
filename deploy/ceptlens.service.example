@@ -10,6 +10,9 @@ EnvironmentFile=/etc/ceptlens/ceptlens.env
 ExecStart=/usr/bin/node server/content-host.mjs --host 127.0.0.1 --port 8765
 Restart=on-failure
 RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
 
 [Install]
 WantedBy=multi-user.target

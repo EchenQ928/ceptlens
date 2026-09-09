@@ -29,7 +29,11 @@ const valueAfter = (flag, fallback) => args.includes(flag) ? args[args.indexOf(f
 const host = valueAfter("--host", "127.0.0.1");
 const port = Number(valueAfter("--port", "8765"));
 const publicHost = valueAfter("--public-host", host === "0.0.0.0" ? "127.0.0.1" : host);
-const publicUrl = `http://${publicHost}:${port}/`;
+const configuredOrigin = process.env.CEPTLENS_PUBLIC_ORIGIN?.trim();
+if (configuredOrigin && (!/^https?:\/\//.test(configuredOrigin) || new URL(configuredOrigin).origin !== configuredOrigin)) {
+  throw new Error("CEPTLENS_PUBLIC_ORIGIN 必须是完整的 HTTP(S) origin，不含路径或末尾斜杠。");
+}
+const publicUrl = configuredOrigin ? `${configuredOrigin}/` : `http://${publicHost}:${port}/`;
 if (args.includes("--lab")) throw new Error("实验室已拆分为独立项目，请启动独立实验室包中的 start-lab 脚本。");
 delete process.env.VITE_CEPTLENS_MODE;
 
@@ -244,7 +248,7 @@ const server = createServer(async (request, response) => {
   let ownsPublish = false;
   try {
     const url = new URL(request.url ?? "/", `http://${request.headers.host ?? "localhost"}`);
-    if (request.headers.origin && request.headers.origin !== url.origin) return json(response, 403, { ok: false, error: "不允许跨站内容请求" });
+    if (request.headers.origin && request.headers.origin !== (configuredOrigin ?? url.origin)) return json(response, 403, { ok: false, error: "不允许跨站内容请求" });
     if (await learningApi.handle(request, response, url, json)) return;
     if (url.pathname === "/api/content/status" && request.method === "GET") return json(response, 200, { ok: true, ...(await libraryStatus()) });
     if (url.pathname.startsWith("/api/content/") && request.method !== "GET" && !authorized(request)) return json(response, 401, { ok: false, error: "内容管理口令无效" });
@@ -330,6 +334,6 @@ for (const signal of ["SIGINT", "SIGTERM"]) process.once(signal, () => server.cl
 
 server.listen(port, host, () => {
   console.log(`CeptLens ${version}: ${publicUrl}`);
-  console.log(`内容管理口令：${adminToken}`);
+  console.log(process.env.CEPTLENS_CONTENT_TOKEN ? "内容管理口令已从环境配置加载。" : `内容管理口令保存在：${tokenFile}`);
   if (host === "0.0.0.0") console.log(`内网访问：${publicUrl}（监听 0.0.0.0:${port}）；导入内容保存到本主机 content-libraries。`);
 });

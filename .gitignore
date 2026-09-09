@@ -4,6 +4,7 @@ node_modules/
 coverage/
 *.tsbuildinfo
 .modelpath-runtime/
+.ceptlens-runtime/
 .modelpath-lab/
 .dist-next/
 .dist-previous/

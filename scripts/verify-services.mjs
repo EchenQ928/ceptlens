@@ -11,9 +11,9 @@ const data = await mkdtemp(resolve(tmpdir(), 'ceptlens-service-smoke-'));
 const tokenA = 'a'.repeat(48), tokenB = 'b'.repeat(48);
 const socket = createNetServer(); await new Promise(r => socket.listen(0, '127.0.0.1', r)); const port = socket.address().port; await new Promise(r => socket.close(r));
 let child;
-async function start() {
-  child = spawn(process.execPath, ['server/content-host.mjs', '--host', '127.0.0.1', '--port', String(port), '--public-host', '127.0.0.1'], { cwd: root, env: { ...process.env, CEPTLENS_DATA_DIR: data, CEPTLENS_AI_DISABLED: '1' }, stdio: 'ignore' });
-  for (let i = 0; i < 100; i++) { try { if ((await call('/api/content/status')).status === 200) return; } catch { /* startup */ } if (child.exitCode !== null) throw new Error('Host failed to start'); await new Promise(r => setTimeout(r, 100)); }
+async function start(publicOrigin = '') {
+  child = spawn(process.execPath, ['server/content-host.mjs', '--host', '127.0.0.1', '--port', String(port), '--public-host', '127.0.0.1'], { cwd: root, env: { ...process.env, CEPTLENS_DATA_DIR: data, CEPTLENS_AI_DISABLED: '1', CEPTLENS_PUBLIC_ORIGIN: publicOrigin }, stdio: 'ignore' });
+  for (let i = 0; i < 100; i++) { try { if ((await call('/api/content/status', undefined, tokenA, publicOrigin || `http://127.0.0.1:${port}`)).status === 200) return; } catch { /* startup */ } if (child.exitCode !== null) throw new Error('Host failed to start'); await new Promise(r => setTimeout(r, 100)); }
   throw new Error('Host readiness timeout');
 }
 async function stop() { if (!child || child.exitCode !== null) return; const stopped = new Promise(r => child.once('exit', r)); child.kill('SIGTERM'); await stopped; }
@@ -45,5 +45,12 @@ try {
   await stop(); await start();
   assert.equal((await call(`/api/discussions?resource=${reference.resource}`)).value.discussions[0].messages.length, 2);
   assert.equal((await call(`/api/exams/${exam.id}`)).value.attempt.status, 'submitted');
-  console.log(JSON.stringify({ node: process.version, version: status.version, companyHostOrigin: 'PASS', sharedReplies: 'PASS', privateChat: 'PASS', disabledApi: 'PASS', examAndIsolation: 'PASS', restartPersistence: 'PASS', privateDatabaseNotServed: 'PASS' }, null, 2));
+  await stop(); await start('https://ceptlens.example');
+  const httpsStatus = await call('/api/content/status', undefined, tokenA, 'https://ceptlens.example');
+  assert.equal(httpsStatus.status, 200);
+  assert.equal(httpsStatus.value.publicUrl, 'https://ceptlens.example/');
+  assert.equal((await call('/api/session', { name: 'HTTPS test' }, tokenA, 'https://ceptlens.example')).status, 200);
+  assert.equal((await call('/api/session', { name: 'Cross-site' }, tokenA, 'https://other.invalid')).status, 403);
+  assert.equal((await call('/api/content/questions/import', {}, tokenA, 'https://ceptlens.example')).status, 401);
+  console.log(JSON.stringify({ node: process.version, version: status.version, companyHostOrigin: 'PASS', httpsProxyOrigin: 'PASS', contentAuthorization: 'PASS', sharedReplies: 'PASS', privateChat: 'PASS', disabledApi: 'PASS', examAndIsolation: 'PASS', restartPersistence: 'PASS', privateDatabaseNotServed: 'PASS' }, null, 2));
 } finally { await stop(); await rm(data, { recursive: true, force: true }); }
