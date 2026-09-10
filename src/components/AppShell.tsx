@@ -1,55 +1,125 @@
-import { BookOpen, Braces, ClipboardCheck, Home, LibraryBig, Network, PanelLeftClose, PanelLeftOpen } from "lucide-react";
-import { useState, type ReactNode } from "react";
-import { NavLink } from "react-router-dom";
-import { useContent } from "../hooks/useContent";
-import { platformLabel } from "../infrastructure/version";
-import { useLearningSession } from "./LearningSession";
-import { LearningCompanion } from "./LearningCompanion";
+import {
+  BookOpen,
+  CheckSquare,
+  Code2,
+  GitBranch,
+  Languages,
+  LayoutDashboard,
+  Menu,
+  Network,
+  X
+} from "lucide-react";
+import { useState } from "react";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
+import type { LucideIcon } from "lucide-react";
+import { useLocale, useCopy, type CopyKey } from "../i18n";
 
-const navItems = [
-  { to: "/", label: "工作台", icon: Home },
-  { to: "/learn", label: "学习模式", icon: BookOpen },
-  { to: "/exam", label: "考核模式", icon: ClipboardCheck },
-  { to: "/terms", label: "词条库", icon: Network },
-  { to: "/developer", label: "内容管理", icon: Braces }
+const navItems: Array<{ to: string; label: CopyKey; icon: LucideIcon }> = [
+  { to: "/", label: "navOverview", icon: LayoutDashboard },
+  { to: "/learn", label: "navLearn", icon: BookOpen },
+  { to: "/terms", label: "navTerms", icon: Network },
+  { to: "/assessment", label: "navAssess", icon: CheckSquare },
+  { to: "/developers", label: "navDevelopers", icon: Code2 }
 ];
 
-export function AppShell({ children }: { children: ReactNode }) {
-  const [collapsed, setCollapsed] = useState(false);
-  const { questions } = useContent();
-  const { session } = useLearningSession();
+export function AppShell() {
+  const { locale, setLocale } = useLocale();
+  const copy = useCopy();
+  const location = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const pageName =
+    location.pathname === "/"
+      ? copy("navOverview")
+      : location.pathname.startsWith("/terms")
+        ? copy("navTerms")
+        : location.pathname.startsWith("/assessment")
+          ? copy("navAssess")
+          : location.pathname.startsWith("/developers")
+            ? copy("navDevelopers")
+            : copy("navLearn");
+
   return (
-    <div className={`app-frame ${collapsed ? "nav-collapsed" : ""}`}>
-      <header className="topbar">
-        <NavLink to="/" className="brand" aria-label="CeptLens 首页">
-          <span className="brand-mark"><span /></span>
-          <span className="brand-copy"><strong>CeptLens</strong><small>AI 模型工程赋能平台</small></span>
-        </NavLink>
-        <div className="topbar-context">
-          <span className="release-pill">{platformLabel}</span>
-          <span className="topbar-divider" />
-          <span className="topbar-scope">AI 模型工程学习</span>
+    <div className="app-shell">
+      <button
+        className={`mobile-backdrop ${mobileOpen ? "is-visible" : ""}`}
+        onClick={() => setMobileOpen(false)}
+        aria-label={copy("closeMenu")}
+      />
+      <aside className={`sidebar ${mobileOpen ? "is-open" : ""}`}>
+        <div className="brand-lockup">
+          <div className="brand-mark" aria-hidden="true">
+            CL
+          </div>
+          <div>
+            <strong>{copy("appName")}</strong>
+            <span>{copy("tagline")}</span>
+          </div>
         </div>
-        <button className="topbar-user profile-trigger" onClick={() => window.dispatchEvent(new Event("ceptlens-profile"))} aria-label="设置讨论显示名"><span className="avatar">{session?.user.name.slice(0, 1) || "我"}</span><span>{session?.user.name ?? "讨论身份"}</span></button>
-      </header>
-      <aside className="sidebar">
-        <nav aria-label="主导航">
+
+        <nav className="primary-nav" aria-label="Primary navigation">
           {navItems.map(({ to, label, icon: Icon }) => (
-            <NavLink key={to} to={to} end={to === "/"} className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`} title={label}>
-              <Icon size={18} strokeWidth={1.8} /><span>{label}</span>
+            <NavLink
+              key={to}
+              to={to}
+              end={to === "/"}
+              onClick={() => setMobileOpen(false)}
+              className={({ isActive }) => `nav-item ${isActive ? "is-active" : ""}`}
+            >
+              <Icon size={17} strokeWidth={1.8} />
+              <span>{copy(label)}</span>
             </NavLink>
           ))}
         </nav>
-        <div className="sidebar-bottom">
-          <div className="corpus-status"><LibraryBig size={16} /><span><b>{questions.length}</b> 道题目</span></div>
-          <button className="collapse-button" onClick={() => setCollapsed((value) => !value)} aria-label={collapsed ? "展开导航" : "收起导航"}>
-            {collapsed ? <PanelLeftOpen size={17} /> : <PanelLeftClose size={17} />}<span>{collapsed ? "展开" : "收起"}</span>
-          </button>
+
+        <div className="sidebar-footer">
+          <div className="system-status">
+            <span className="status-dot" />
+            <span>Local-first workspace</span>
+          </div>
+          <span className="sidebar-version">v1.0.0</span>
         </div>
       </aside>
-      <nav className="mobile-nav" aria-label="移动端主导航">{navItems.map(({ to, label, icon: Icon }) => <NavLink key={to} to={to} end={to === "/"}><Icon size={18} /><span>{label}</span></NavLink>)}</nav>
-      <main className="main-content">{children}</main>
-      <LearningCompanion />
+
+      <div className="app-main">
+        <header className="topbar">
+          <div className="topbar-leading">
+            <button
+              className="icon-button mobile-menu-button"
+              onClick={() => setMobileOpen((open) => !open)}
+              aria-label={mobileOpen ? copy("closeMenu") : copy("openMenu")}
+              title={mobileOpen ? copy("closeMenu") : copy("openMenu")}
+            >
+              {mobileOpen ? <X size={19} /> : <Menu size={19} />}
+            </button>
+            <span className="topbar-kicker">CEPTLENS / {pageName}</span>
+          </div>
+          <div className="topbar-actions">
+            <button
+              className="locale-switch"
+              onClick={() => setLocale(locale === "en" ? "zh" : "en")}
+              aria-label={`${copy("languageLabel")}: ${locale === "en" ? copy("switchToChinese") : copy("switchToEnglish")}`}
+              title={copy("languageLabel")}
+            >
+              <Languages size={16} />
+              <span>{locale === "en" ? copy("switchToChinese") : copy("switchToEnglish")}</span>
+            </button>
+            <a
+              className="github-link"
+              href="https://github.com/EchenQ928/ceptlens"
+              target="_blank"
+              rel="noreferrer"
+              title="Open CeptLens on GitHub"
+            >
+              <GitBranch size={16} />
+              <span>GitHub</span>
+            </a>
+          </div>
+        </header>
+        <main className="page-content">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 }

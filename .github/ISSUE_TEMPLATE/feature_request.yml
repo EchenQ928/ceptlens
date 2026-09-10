@@ -1,0 +1,19 @@
+name: Feature request
+description: Suggest a focused improvement to CeptLens.
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: What learner, contributor, or operator need does this address?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Describe the smallest useful behavior and any alternatives considered.
+    validations:
+      required: true

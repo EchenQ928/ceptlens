@@ -1,39 +1,73 @@
 # CeptLens
 
-CeptLens 是一个通过可视化、交互式词条和练习题帮助人理解复杂技术概念的开源学习平台。当前版本从 CeptLens beta6 原型整理而来，处于早期 beta 阶段，首个重点方向是 AI 模型工程知识。
+CeptLens is an English-first bilingual learning platform for AI model engineering concepts. It is built for developers who want to understand model architecture, training behavior, and deployment tradeoffs through short lessons and objective questions.
 
-## 本地运行
+The interface and developer documentation are written in English. Learning content is stored with English and Chinese fields so the product can switch language without changing source code.
 
-需要 Node.js 22.18.0 或更高版本：
+## What Is Included
+
+- A React and Vite single-page app.
+- A compact bilingual concept library in `content-libraries/library.json`.
+- Local progress tracking through browser storage.
+- A small Node static host with `/api/content/status` for production health checks.
+- Content validation, unit tests, production build, and service smoke tests.
+
+## Quick Start
 
 ```bash
-npm ci
+npm install
 npm run check
 npm run dev
 ```
 
-浏览器访问 http://127.0.0.1:8765/。生产环境请参阅 [`public/docs/DEPLOYMENT.md`](public/docs/DEPLOYMENT.md)。
+Open `http://127.0.0.1:5173`.
 
-## 项目结构
+## Project Layout
 
-- `src/`：前端应用和学习界面
-- `server/`：内容服务、讨论、助手和考核接口
-- `content-libraries/`：公开题目与词条教学包
-- `public/docs/`：架构、内容开发和部署说明
-- `agent-runtime/`：模型配置模板；真实配置不提交
-- `docs/`：开发、部署与历史记录
+```text
+content-libraries/   Bilingual lessons and questions
+src/                 Frontend application
+server/              Production static host
+scripts/             Validation and smoke-test scripts
+docs/operations/     Deployment notes
+deploy/              Example server deployment files
+```
 
-## 当前限制
+## Content Model
 
-这是早期 beta，不是正式考试系统。模型助手默认关闭；用户数据库、API 密钥和内测数据不属于公开仓库。公司内网内测环境与公开站点使用独立的数据目录和配置。
+The product uses one source of truth: `content-libraries/library.json`.
 
-## 参与贡献
+Each term and question keeps localized values as:
 
-请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。
+```json
+{
+  "en": "English copy",
+  "zh": "中文内容"
+}
+```
 
-## 文档
+Term links use this format inside localized text:
 
-- [部署指南](public/docs/DEPLOYMENT.md)
-- [开发指南](public/docs/DEVELOPER_GUIDE.md)
-- [本地环境搭建](docs/operations/LOCAL_SETUP.md)
-- [Node.js 兼容性](docs/operations/node22-compatibility.md)
+```text
+[[term:transformer|Transformer]]
+```
+
+Run `npm run validate` after editing content. The validator checks duplicate identifiers, answer keys, broken term links, and minimum bilingual coverage.
+
+## Production Host
+
+Build and serve locally:
+
+```bash
+npm run build
+CEPTLENS_PUBLIC_ORIGIN=https://ceptlens.com npm run host
+```
+
+The host exposes:
+
+- `/` for the app.
+- `/api/content/status` for health checks and content counts.
+
+## License
+
+MIT

@@ -1,8 +1,0 @@
-{
-  "schemaVersion": "3.0",
-  "sdkVersion": "1.x",
-  "id": "term-unique-id",
-  "title": "词条名称",
-  "summary": "零前置的一句话定义。",
-  "coreConclusion": "读者最终必须说清的一个核心结论。"
-}

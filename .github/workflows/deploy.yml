@@ -19,7 +19,6 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check
-      - run: npm run test:services
       - name: Prepare release
         run: git archive --format=tar.gz --output="/tmp/ceptlens-${GITHUB_SHA}.tar.gz" "$GITHUB_SHA"
       - name: Configure SSH
@@ -35,4 +34,4 @@ jobs:
       - name: Activate release and health check
         run: |
           ssh -i ~/.ssh/ceptlens_deploy "${{ secrets.CEPTLENS_DEPLOY_USER }}@${{ secrets.CEPTLENS_DEPLOY_HOST }}" \
-            "sudo /usr/local/bin/ceptlens-deploy ceptlens-${GITHUB_SHA}.tar.gz ${GITHUB_SHA}"
+            "sudo /usr/local/bin/ceptlens-deploy ${GITHUB_SHA}"

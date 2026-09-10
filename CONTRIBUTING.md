@@ -1,9 +1,26 @@
-# 贡献指南
+# Contributing to CeptLens
 
-使用 Node.js 22.18.0 或更高版本，在仓库根目录运行 `npm ci`，再运行 `npm run check`。
+CeptLens is intended to be approachable for developers worldwide. Please keep public code, comments, commit messages, issue discussions, pull request titles, and documentation in English.
 
-题目放在 `content-libraries/questions/`，词条教学包放在 `content-libraries/terms/`。请遵循 `public/docs/DEVELOPER_GUIDE.md`，并在提交前完成内容校验。
+Chinese learning content is welcome when it appears as the `zh` value next to the English source. The English version should be treated as the canonical editing copy.
 
-从 `main` 创建短期分支。提交信息使用 `feat`、`fix`、`docs`、`content` 或 `refactor` 前缀。Pull Request 应说明行为变化、测试结果和可能的数据迁移影响。
+## Development Flow
 
-不要提交 API Key、`.env`、真实用户数据、SQLite 数据库、公司内部资料、运行口令或 `node_modules/`。
+1. Install dependencies with `npm install`.
+2. Make focused changes.
+3. Run `npm run check`.
+4. Open a pull request that explains the learning or product behavior changed.
+
+## Content Guidelines
+
+- Keep explanations practical for software engineers.
+- Prefer concrete model behavior over vague analogies.
+- Link terms with `[[term:term-id|label]]` only when the term exists in `content-libraries/library.json`.
+- Keep questions objective and make every option plausible enough to test understanding.
+- Add both English and Chinese text in the same change.
+
+## Code Guidelines
+
+- Keep modules small and easy to read.
+- Prefer browser-native behavior and local state unless a server feature is necessary.
+- Avoid adding dependencies for simple formatting or state helpers.

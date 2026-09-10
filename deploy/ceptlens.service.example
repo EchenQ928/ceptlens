@@ -1,18 +1,16 @@
 [Unit]
-Description=CeptLens web service
+Description=CeptLens content host
 After=network.target
 
 [Service]
 Type=simple
-User=ceptlens
 WorkingDirectory=/srv/ceptlens/current
-EnvironmentFile=/etc/ceptlens/ceptlens.env
-ExecStart=/usr/bin/node server/content-host.mjs --host 127.0.0.1 --port 8765
-Restart=on-failure
+Environment=NODE_ENV=production
+Environment=CEPTLENS_PORT=4173
+Environment=CEPTLENS_PUBLIC_ORIGIN=https://ceptlens.com
+ExecStart=/usr/bin/npm run host
+Restart=always
 RestartSec=5
-UMask=0077
-NoNewPrivileges=true
-PrivateTmp=true
 
 [Install]
 WantedBy=multi-user.target

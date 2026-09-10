@@ -1,0 +1,2964 @@
+{
+  "version": "1.0.0",
+  "title": {
+    "en": "CeptLens",
+    "zh": "CeptLens"
+  },
+  "description": {
+    "en": "A bilingual learning path for AI model engineering.",
+    "zh": "面向 AI 模型工程的双语学习路径。"
+  },
+  "terms": [
+    {
+      "id": "activation-function",
+      "topic": "Foundations",
+      "title": {
+        "en": "Activation Function",
+        "zh": "激活函数"
+      },
+      "summary": {
+        "en": "A function applied after an affine layer to control how signals pass forward.",
+        "zh": "在线性变换层之后使用的函数，用来控制信号如何向前传播。"
+      },
+      "coreIdea": {
+        "en": "Without a nonlinear activation, stacking linear layers is still just one linear transformation. Activations give a network the ability to represent nonlinear relationships.",
+        "zh": "如果没有非线性激活，堆叠多个线性层仍然等价于一个线性变换。激活函数让网络可以表示非线性关系。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "Common choices include ReLU, GELU, sigmoid, and tanh. The choice affects gradient flow, saturation, and the cost of each forward pass.",
+              "zh": "常见选择包括 ReLU、GELU、sigmoid 和 tanh。选择会影响梯度流、饱和特性以及每次前向计算的成本。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "The activation is part of the model definition. Changing it can alter accuracy, convergence behavior, and compatibility with optimized kernels.",
+              "zh": "激活函数是模型定义的一部分。更换激活函数可能改变精度、收敛行为以及与优化算子的兼容性。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "backpropagation",
+      "topic": "Training",
+      "title": {
+        "en": "Backpropagation",
+        "zh": "反向传播"
+      },
+      "summary": {
+        "en": "The chain-rule procedure used to compute gradients through a computation graph.",
+        "zh": "通过计算图的链式法则计算梯度的过程。"
+      },
+      "coreIdea": {
+        "en": "Backpropagation runs the graph in reverse and reuses local derivatives to calculate how each parameter contributed to the loss.",
+        "zh": "反向传播沿计算图反向运行，并复用局部导数来计算每个参数对损失的贡献。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "An automatic differentiation system records the forward operations, then applies the chain rule from the output back to the inputs and parameters.",
+              "zh": "自动微分系统会记录前向操作，然后从输出向输入和参数应用链式法则。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "Memory used for saved activations is often a major training cost. Checkpointing trades extra computation for lower memory use.",
+              "zh": "保存的激活值通常是训练成本的重要来源。检查点技术用额外计算换取更低的内存占用。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "conv-bn-folding",
+      "topic": "Deployment",
+      "title": {
+        "en": "Convolution and Batch-Normalization Folding",
+        "zh": "卷积与批归一化折叠"
+      },
+      "summary": {
+        "en": "A deployment rewrite that absorbs batch-normalization parameters into a preceding convolution.",
+        "zh": "一种部署阶段的重写方法，把批归一化参数吸收到前面的卷积层中。"
+      },
+      "coreIdea": {
+        "en": "When statistics are fixed for inference, the normalization can be represented as a weight scale and bias. Those values can be merged into the convolution without changing the result.",
+        "zh": "推理时统计量固定后，归一化可以表示为权重缩放和偏置。将这些值合并到卷积中不会改变结果。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "The folded weight is scaled by the normalization factor, and the folded bias includes the original convolution bias plus the normalization offset.",
+              "zh": "折叠后的权重乘以归一化因子，折叠后的偏置包含原卷积偏置和归一化偏移。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "Fold only after switching to evaluation statistics. Training behavior is different because batch statistics are still changing.",
+              "zh": "只有在切换到评估统计量之后才能折叠。训练阶段的行为不同，因为批统计量仍在变化。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "convolution",
+      "topic": "CNNs",
+      "title": {
+        "en": "Convolution",
+        "zh": "卷积"
+      },
+      "summary": {
+        "en": "A local, weight-sharing operation that extracts patterns from nearby positions.",
+        "zh": "在相邻位置提取模式的局部权重共享操作。"
+      },
+      "coreIdea": {
+        "en": "A small kernel is reused across a spatial or temporal axis. This creates locality and reduces parameter count compared with a fully connected operation.",
+        "zh": "小型卷积核会沿空间或时间轴重复使用。相比全连接操作，它利用局部性并减少参数量。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "Stride controls how far the kernel moves, padding controls the boundary treatment, and channels determine how features are mixed.",
+              "zh": "步幅控制卷积核移动的距离，填充控制边界处理方式，通道决定特征如何混合。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "The operation is efficient when hardware has optimized kernels for the chosen layout, data type, and channel dimensions.",
+              "zh": "当硬件针对选定的布局、数据类型和通道维度提供优化算子时，卷积计算会更高效。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "depthwise-separable-convolution",
+      "topic": "CNNs",
+      "title": {
+        "en": "Depthwise-Separable Convolution",
+        "zh": "深度可分离卷积"
+      },
+      "summary": {
+        "en": "A convolution factorization that separates spatial filtering from channel mixing.",
+        "zh": "把空间滤波与通道混合分开的卷积分解方式。"
+      },
+      "coreIdea": {
+        "en": "A depthwise convolution applies one spatial kernel per input channel, and a pointwise convolution then mixes channels with 1x1 kernels.",
+        "zh": "深度卷积为每个输入通道应用一个空间卷积核，然后点卷积使用 1x1 卷积核混合通道。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "The factorization can greatly reduce multiply-add operations and parameters, especially when the spatial kernel is larger than 1x1.",
+              "zh": "这种分解可以显著减少乘加操作和参数量，尤其是在空间卷积核大于 1x1 时。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "The theoretical saving is not always the measured speedup. Kernel launch overhead and device support still matter.",
+              "zh": "理论节省不一定等于实际加速。算子启动开销和设备支持情况仍然重要。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dropout",
+      "topic": "Training",
+      "title": {
+        "en": "Dropout",
+        "zh": "随机失活"
+      },
+      "summary": {
+        "en": "A training-time regularization method that randomly masks activations.",
+        "zh": "一种在训练时随机屏蔽激活值的正则化方法。"
+      },
+      "coreIdea": {
+        "en": "Random masks prevent a model from relying too heavily on a small set of pathways, which can improve generalization.",
+        "zh": "随机掩码防止模型过度依赖少量路径，从而可能改善泛化能力。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "During training, activations are dropped with a configured probability and the surviving values are rescaled. During evaluation, the mask is disabled.",
+              "zh": "训练时按设定概率丢弃激活值，并对保留值重新缩放。评估时关闭掩码。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "For large modern models, dropout rates are often small or limited to selected sublayers. Always verify that training and evaluation modes are switched correctly.",
+              "zh": "对大型现代模型，随机失活率通常较小，或只用于特定子层。务必确认训练模式和评估模式切换正确。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fully-connected-layer",
+      "topic": "Foundations",
+      "title": {
+        "en": "Fully Connected Layer",
+        "zh": "全连接层"
+      },
+      "summary": {
+        "en": "A layer in which every output unit combines every input feature through learned weights.",
+        "zh": "每个输出单元都通过学习到的权重组合全部输入特征的层。"
+      },
+      "coreIdea": {
+        "en": "A fully connected layer applies a matrix multiplication and usually a bias. It is expressive but can be expensive when the input is large.",
+        "zh": "全连接层执行矩阵乘法并通常加入偏置。它表达能力强，但输入较大时成本可能很高。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "The output dimension is determined by the number of rows in the weight matrix. Each output can depend on every input coordinate.",
+              "zh": "输出维度由权重矩阵的行数决定。每个输出都可以依赖每个输入坐标。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "Transformers often implement their feed-forward projections with linear layers. Matrix shape and memory layout strongly affect throughput.",
+              "zh": "Transformer 通常用线性层实现前馈投影。矩阵形状和内存布局会显著影响吞吐量。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "kv-cache",
+      "topic": "Deployment",
+      "title": {
+        "en": "KV Cache",
+        "zh": "KV 缓存"
+      },
+      "summary": {
+        "en": "Stored key and value tensors that avoid recomputing previous tokens during autoregressive decoding.",
+        "zh": "保存键和值张量，避免自回归解码时重复计算历史 token。"
+      },
+      "coreIdea": {
+        "en": "At each decoding step, the new query attends to keys and values from the whole prefix. Caching the old keys and values reduces repeated work.",
+        "zh": "每个解码步骤中，新查询会关注整个前缀的键和值。缓存旧的键和值可以减少重复计算。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "The cache grows with sequence length, batch size, number of layers, and the dimensions of the key and value heads.",
+              "zh": "缓存大小会随着序列长度、批大小、层数以及键和值头的维度增长。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "Long contexts can make the KV cache the dominant inference allocation. Paging, quantization, and grouped-query attention are common ways to control it.",
+              "zh": "长上下文可能让 KV 缓存成为推理时最大的内存分配。分页、量化和分组查询注意力是常见的控制手段。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "layer-normalization",
+      "topic": "Transformers",
+      "title": {
+        "en": "Layer Normalization",
+        "zh": "层归一化"
+      },
+      "summary": {
+        "en": "A normalization operation that standardizes features within each token or sample.",
+        "zh": "在每个 token 或样本内部标准化特征的归一化操作。"
+      },
+      "coreIdea": {
+        "en": "Layer normalization reduces sensitivity to activation scale and helps deep networks maintain a usable optimization signal.",
+        "zh": "层归一化降低模型对激活尺度的敏感性，帮助深层网络保持可用的优化信号。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "For each feature vector, the operation computes a mean and variance, normalizes the vector, and applies learned scale and offset parameters.",
+              "zh": "对每个特征向量计算均值和方差，完成标准化，然后应用可学习的缩放和偏移参数。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "Pre-normalization and post-normalization Transformer blocks have different optimization behavior. The chosen placement is part of the architecture contract.",
+              "zh": "归一化前置和后置的 Transformer 模块具有不同的优化行为。归一化位置是架构契约的一部分。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "loss-function",
+      "topic": "Training",
+      "title": {
+        "en": "Loss Function",
+        "zh": "损失函数"
+      },
+      "summary": {
+        "en": "A scalar objective that measures how far a model output is from the desired target.",
+        "zh": "衡量模型输出与目标之间差距的标量目标。"
+      },
+      "coreIdea": {
+        "en": "Training changes parameters to reduce the loss over examples. A useful loss must match the task and provide a meaningful gradient.",
+        "zh": "训练通过修改参数来降低样本上的损失。好的损失函数必须匹配任务，并提供有意义的梯度。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "The loss turns model predictions and labels into a scalar. The optimizer then uses gradients of that scalar to update parameters.",
+              "zh": "损失函数把模型预测和标签转换成一个标量。优化器随后使用该标量的梯度更新参数。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "A lower training loss is not enough evidence of a better model. Track validation behavior and task-specific metrics as well.",
+              "zh": "训练损失更低并不足以证明模型更好。还要跟踪验证集表现和任务相关指标。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mlp",
+      "topic": "Transformers",
+      "title": {
+        "en": "Multilayer Perceptron",
+        "zh": "多层感知机"
+      },
+      "summary": {
+        "en": "A stack of linear projections and nonlinear activations that transforms feature vectors.",
+        "zh": "由线性投影和非线性激活组成、用于变换特征向量的层叠结构。"
+      },
+      "coreIdea": {
+        "en": "An MLP mixes features independently at each sequence position. It complements attention, which mixes information across positions.",
+        "zh": "MLP 在每个序列位置独立混合特征。它补充了跨位置混合信息的注意力机制。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "A typical MLP expands the hidden dimension, applies an activation, then projects back to the model dimension.",
+              "zh": "典型 MLP 先扩大隐藏维度，应用激活函数，再投影回模型维度。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "The expansion ratio controls a large part of the parameter count and compute cost in a Transformer block.",
+              "zh": "扩展比例会决定 Transformer 模块中相当一部分的参数量和计算成本。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "multi-head-attention",
+      "topic": "Transformers",
+      "title": {
+        "en": "Multi-Head Attention",
+        "zh": "多头注意力"
+      },
+      "summary": {
+        "en": "Several attention heads that learn different relationships in parallel and are combined.",
+        "zh": "并行学习不同关系、再将结果组合起来的多个注意力头。"
+      },
+      "coreIdea": {
+        "en": "Splitting the representation into heads lets the model inspect multiple subspaces and interaction patterns at the same layer.",
+        "zh": "把表示拆分成多个头，可以让模型在同一层中观察多个子空间和交互模式。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "Each head computes attention using its own projections. The head outputs are concatenated and passed through a final projection.",
+              "zh": "每个头使用自己的投影计算注意力。各头输出拼接后，再经过一个最终投影。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "Head dimension, number of heads, and the attention kernel determine both quality and runtime cost. Hardware-friendly dimensions usually matter.",
+              "zh": "头维度、头数量和注意力算子共同决定质量与运行成本。适合硬件的维度通常很重要。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "neural-network",
+      "topic": "Foundations",
+      "title": {
+        "en": "Neural Network",
+        "zh": "神经网络"
+      },
+      "summary": {
+        "en": "A parameterized composition of functions that learns a mapping from inputs to outputs.",
+        "zh": "由多个函数组合而成、通过学习参数建立输入到输出映射的模型。"
+      },
+      "coreIdea": {
+        "en": "A neural network is a program whose behavior is shaped by learned parameters. Layers transform representations until the output supports the task.",
+        "zh": "神经网络可以看作一个由学习到的参数塑造行为的程序。各层逐步变换表示，直到输出能够支持目标任务。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "The forward pass evaluates a computation graph. Training adjusts parameters using a loss, [[term:backpropagation|backpropagation]], and an optimizer.",
+              "zh": "前向过程执行计算图。训练使用损失、[[term:backpropagation|反向传播]]和优化器调整参数。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "Architecture, data, objective, and runtime constraints are coupled. A model is useful only when its behavior and cost fit the product requirement.",
+              "zh": "架构、数据、目标函数和运行时约束彼此关联。只有当模型的行为和成本满足产品要求时，它才真正有用。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "overfitting",
+      "topic": "Training",
+      "title": {
+        "en": "Overfitting",
+        "zh": "过拟合"
+      },
+      "summary": {
+        "en": "A failure mode in which a model fits training examples well but generalizes poorly.",
+        "zh": "模型很好地拟合训练样本，却难以泛化到新数据的失败模式。"
+      },
+      "coreIdea": {
+        "en": "Overfitting means the model has learned details that do not transfer to the target distribution. It is diagnosed by comparing training and validation behavior.",
+        "zh": "过拟合意味着模型学到了不能迁移到目标分布的细节。通常通过比较训练和验证表现来诊断。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "A high-capacity model can memorize noise or narrow correlations, especially when data is limited or the objective is weakly constrained.",
+              "zh": "高容量模型可能记住噪声或狭窄的相关性，数据有限或目标约束不足时尤其如此。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "Use clean splits, regularization, augmentation, early stopping, or more representative data. Do not use the test set to tune repeatedly.",
+              "zh": "可以使用干净的数据划分、正则化、数据增强、提前停止或更有代表性的数据。不要反复用测试集调参。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "position-wise-ffn",
+      "topic": "Transformers",
+      "title": {
+        "en": "Position-Wise Feed-Forward Network",
+        "zh": "逐位置前馈网络"
+      },
+      "summary": {
+        "en": "The feed-forward sublayer that applies the same MLP independently to every sequence position.",
+        "zh": "对序列中的每个位置独立应用同一个 MLP 的前馈子层。"
+      },
+      "coreIdea": {
+        "en": "Attention exchanges information between positions, while the position-wise FFN transforms each position's feature vector locally.",
+        "zh": "注意力在位置之间交换信息，而逐位置 FFN 在本地变换每个位置的特征向量。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "The same parameters are reused at every position. This makes the operation easy to batch as matrix multiplications.",
+              "zh": "每个位置复用相同参数，因此该操作可以方便地批量实现为矩阵乘法。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "The FFN often accounts for more parameters than attention. Its intermediate width is a key quality and cost knob.",
+              "zh": "FFN 的参数量通常多于注意力。中间层宽度是影响质量和成本的重要旋钮。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "positional-encoding",
+      "topic": "Transformers",
+      "title": {
+        "en": "Positional Encoding",
+        "zh": "位置编码"
+      },
+      "summary": {
+        "en": "A signal that gives a sequence model information about token order or relative position.",
+        "zh": "向序列模型提供 token 顺序或相对位置的信息。"
+      },
+      "coreIdea": {
+        "en": "Self-attention alone does not know whether a token came before or after another token. Position information removes that ambiguity.",
+        "zh": "单独的自注意力并不知道某个 token 位于另一个 token 之前还是之后。位置信息可以消除这种歧义。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "Position information may be added to embeddings, applied as a relative bias, or encoded through a rotation such as RoPE.",
+              "zh": "位置信息可以加到 embedding 上，也可以作为相对偏置，或通过 RoPE 这样的旋转方式编码。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "The encoding scheme constrains context length, extrapolation behavior, and compatibility with checkpoints and kernels.",
+              "zh": "位置编码方案会约束上下文长度、外推行为以及与模型检查点和算子的兼容性。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "qkv-projection",
+      "topic": "Transformers",
+      "title": {
+        "en": "QKV Projection",
+        "zh": "QKV 投影"
+      },
+      "summary": {
+        "en": "The learned projections that produce queries, keys, and values for attention.",
+        "zh": "为注意力生成 query、key 和 value 的可学习投影。"
+      },
+      "coreIdea": {
+        "en": "Queries express what each position is looking for, keys describe what positions offer, and values carry the information that is mixed.",
+        "zh": "Query 表示每个位置要寻找什么，Key 描述各位置能提供什么，Value 携带最终被混合的信息。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "The input representation is projected into Q, K, and V spaces. Attention scores compare Q with K, then use the normalized scores to combine V.",
+              "zh": "输入表示被投影到 Q、K、V 空间。注意力分数比较 Q 和 K，再用归一化后的分数组合 V。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "Fused QKV projections can reduce memory traffic, while grouped or multi-query variants reduce the number of cached K and V heads.",
+              "zh": "融合 QKV 投影可以减少内存流量，而分组查询或多查询变体可以减少缓存的 K、V 头数量。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "quantization",
+      "topic": "Deployment",
+      "title": {
+        "en": "Quantization",
+        "zh": "量化"
+      },
+      "summary": {
+        "en": "Representing model values with lower precision to reduce memory use and accelerate computation.",
+        "zh": "用更低精度表示模型数值，以减少内存占用并加速计算。"
+      },
+      "coreIdea": {
+        "en": "Quantization maps a floating-point range to a smaller integer or floating-point format. The mapping introduces error that must be measured against task quality.",
+        "zh": "量化把浮点范围映射到更小的整数或浮点格式。映射会引入误差，需要结合任务质量进行评估。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "A scale and sometimes a zero point define how real values map to the target representation. Scales may be per tensor, channel, group, or token.",
+              "zh": "缩放因子以及有时使用的零点决定实数如何映射到目标表示。缩放可以按张量、通道、分组或 token 设置。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "The useful result depends on both numerical error and hardware support. A smaller format is not automatically faster if the runtime lacks a good kernel.",
+              "zh": "最终收益同时取决于数值误差和硬件支持。如果运行时缺少高效算子，更小的格式不一定更快。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "regularization",
+      "topic": "Training",
+      "title": {
+        "en": "Regularization",
+        "zh": "正则化"
+      },
+      "summary": {
+        "en": "Constraints or penalties that discourage a model from fitting unstable or unnecessarily complex solutions.",
+        "zh": "抑制模型学习不稳定或不必要复杂解的约束或惩罚。"
+      },
+      "coreIdea": {
+        "en": "Regularization changes the training objective or data exposure so that solutions with better expected generalization become easier to prefer.",
+        "zh": "正则化改变训练目标或数据暴露方式，使预期泛化更好的解更容易被偏好。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "Weight decay, dropout, data augmentation, label smoothing, and early stopping are different forms of regularization.",
+              "zh": "权重衰减、随机失活、数据增强、标签平滑和提前停止都属于不同形式的正则化。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "Regularization is not a substitute for representative data or a correct evaluation split. Tune it against held-out behavior.",
+              "zh": "正则化不能替代有代表性的数据或正确的评估划分。应该根据留出集表现进行调整。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "residual-connection",
+      "topic": "Transformers",
+      "title": {
+        "en": "Residual Connection",
+        "zh": "残差连接"
+      },
+      "summary": {
+        "en": "A shortcut that adds a module's input to its output.",
+        "zh": "把模块输入加到模块输出上的捷径连接。"
+      },
+      "coreIdea": {
+        "en": "A residual path lets a block learn a correction to the input instead of rebuilding the entire representation from zero.",
+        "zh": "残差路径让模块学习对输入的修正，而不是从零重建整个表示。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "A block computes a transformation F(x) and returns x + F(x), provided the shapes are compatible or a projection is used.",
+              "zh": "模块计算变换 F(x)，并在形状兼容或经过投影时返回 x + F(x)。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "Residual paths improve gradient flow and make deep compositions easier to optimize, but they do not remove the need for normalization and stable initialization.",
+              "zh": "残差路径改善梯度流，让深层组合更容易优化，但不能取代归一化和稳定初始化。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "runtime-peak-memory",
+      "topic": "Deployment",
+      "title": {
+        "en": "Runtime Peak Memory",
+        "zh": "运行时峰值内存"
+      },
+      "summary": {
+        "en": "The largest amount of memory simultaneously live during one execution.",
+        "zh": "一次执行过程中同时存活的最大内存占用。"
+      },
+      "coreIdea": {
+        "en": "Peak memory is about the high-water mark of live allocations, not the sum of every allocation made over time.",
+        "zh": "峰值内存关注同时存活分配的最高点，而不是把整个过程中所有分配简单相加。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "Inputs, weights, temporary workspaces, outputs, caches, and allocator reservations can overlap in time and contribute to the peak.",
+              "zh": "输入、权重、临时工作空间、输出、缓存和分配器预留可能在时间上重叠，共同形成峰值。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "Measure with the target runtime and batch shape. Operator fusion and buffer reuse can lower peak memory without changing model semantics.",
+              "zh": "应在目标运行时和批形状下测量。算子融合和缓冲区复用可以在不改变模型语义的情况下降低峰值内存。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "self-attention",
+      "topic": "Transformers",
+      "title": {
+        "en": "Self-Attention",
+        "zh": "自注意力"
+      },
+      "summary": {
+        "en": "An operation in which each sequence position reads a weighted combination of other positions.",
+        "zh": "序列中的每个位置读取其他位置加权组合信息的操作。"
+      },
+      "coreIdea": {
+        "en": "Attention weights are computed from query-key compatibility, then applied to values. This creates content-dependent communication between positions.",
+        "zh": "注意力权重由 query-key 的兼容性计算，再作用于 value，从而在位置之间建立依赖内容的通信。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "Scaled dot products produce scores, a mask may remove illegal connections, and softmax turns the remaining scores into weights.",
+              "zh": "缩放点积产生分数，掩码可以移除不允许的连接，softmax 将剩余分数转换成权重。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "The quadratic sequence interaction can dominate long-context cost. Flash-style kernels reduce memory traffic but do not change the underlying dependency pattern.",
+              "zh": "二次复杂度的序列交互可能主导长上下文成本。Flash 类算子可以减少内存流量，但不会改变底层依赖模式。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "softmax",
+      "topic": "Foundations",
+      "title": {
+        "en": "Softmax",
+        "zh": "Softmax"
+      },
+      "summary": {
+        "en": "A normalized exponential function that converts a vector of scores into a probability-like distribution.",
+        "zh": "把分数向量转换成类概率分布的归一化指数函数。"
+      },
+      "coreIdea": {
+        "en": "Softmax preserves relative score differences while making outputs nonnegative and sum to one.",
+        "zh": "Softmax 保留分数之间的相对差异，同时让输出非负且总和为一。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "Subtracting the maximum logit before exponentiation improves numerical stability without changing the result.",
+              "zh": "指数运算前减去最大 logit 可以改善数值稳定性，同时不改变结果。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "Temperature changes how concentrated the distribution is. In attention, masking must happen before softmax so invalid positions receive no weight.",
+              "zh": "温度会改变分布的集中程度。在注意力中，掩码必须在 softmax 之前应用，才能让无效位置获得零权重。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "training-set",
+      "topic": "Foundations",
+      "title": {
+        "en": "Training Set",
+        "zh": "训练集"
+      },
+      "summary": {
+        "en": "The examples used to fit a model's parameters.",
+        "zh": "用于拟合模型参数的样本集合。"
+      },
+      "coreIdea": {
+        "en": "The training set supplies the direct optimization signal. Its coverage and quality shape what the model can learn.",
+        "zh": "训练集提供直接的优化信号。它的覆盖范围和质量会塑造模型能够学到的内容。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "Batches sample examples from the training set, compute a loss, and update parameters repeatedly across epochs or steps.",
+              "zh": "训练过程从训练集中采样批次，计算损失，并在多个 epoch 或 step 中反复更新参数。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "Deduplicate and filter data before training. Leakage from validation or test sets makes reported performance unreliable.",
+              "zh": "训练前应去重并过滤数据。从验证集或测试集泄漏的信息会让报告的性能失去可信度。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "transformer-block",
+      "topic": "Transformers",
+      "title": {
+        "en": "Transformer Block",
+        "zh": "Transformer 模块"
+      },
+      "summary": {
+        "en": "A repeated unit that combines attention, a feed-forward network, normalization, and residual paths.",
+        "zh": "组合注意力、前馈网络、归一化和残差路径的重复计算单元。"
+      },
+      "coreIdea": {
+        "en": "A block alternates communication across positions with local feature transformation. Repeating the block builds hierarchical contextual representations.",
+        "zh": "模块交替执行跨位置通信和局部特征变换。重复堆叠模块可以构建层次化的上下文表示。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "A common block contains self-attention and a position-wise FFN, each surrounded by residual and normalization operations.",
+              "zh": "常见模块包含自注意力和逐位置 FFN，并在每个子层周围使用残差和归一化操作。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "The exact ordering, widths, masks, and normalization variant must match the checkpoint and inference implementation.",
+              "zh": "具体的顺序、宽度、掩码和归一化变体必须与模型检查点和推理实现匹配。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "transformer",
+      "topic": "Transformers",
+      "title": {
+        "en": "Transformer",
+        "zh": "Transformer"
+      },
+      "summary": {
+        "en": "A sequence architecture built from attention and feed-forward blocks.",
+        "zh": "由注意力和前馈模块构成的序列模型架构。"
+      },
+      "coreIdea": {
+        "en": "Transformers replace recurrence with content-dependent attention, making sequence computation highly parallel during training.",
+        "zh": "Transformer 用依赖内容的注意力替代循环结构，使训练时的序列计算高度并行。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "Encoder, decoder, and encoder-decoder forms use related blocks with different visibility rules and input-output interfaces.",
+              "zh": "编码器、解码器以及编码器-解码器结构使用相近的模块，但可见性规则和输入输出接口不同。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "Model width, depth, context length, vocabulary, and attention implementation define much of the memory and compute budget.",
+              "zh": "模型宽度、深度、上下文长度、词表和注意力实现共同决定大量内存与计算预算。"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "validation-set",
+      "topic": "Training",
+      "title": {
+        "en": "Validation Set",
+        "zh": "验证集"
+      },
+      "summary": {
+        "en": "Held-out examples used to compare model versions and tune training choices.",
+        "zh": "用于比较模型版本和调整训练选择的留出样本集合。"
+      },
+      "coreIdea": {
+        "en": "Validation data estimates behavior on unseen examples during development, while the test set should remain reserved for final reporting.",
+        "zh": "验证集在开发过程中估计模型对未见样本的表现，而测试集应该保留到最终报告阶段。"
+      },
+      "sections": [
+        {
+          "title": {
+            "en": "Mechanism",
+            "zh": "机制"
+          },
+          "body": [
+            {
+              "en": "After selected training steps, evaluate without parameter updates and compare task metrics or loss against earlier checkpoints.",
+              "zh": "在选定的训练步骤后进行不更新参数的评估，并将任务指标或损失与之前的检查点比较。"
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "Engineering notes",
+            "zh": "工程要点"
+          },
+          "body": [
+            {
+              "en": "Keep the split stable and representative. Repeated tuning against a small validation set can gradually overfit the development process.",
+              "zh": "保持划分稳定且有代表性。反复针对很小的验证集调参，可能让开发过程逐渐过拟合。"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "q001-data-quality-dimensions",
+      "order": 1,
+      "type": "multiple",
+      "topic": "Foundations",
+      "level": "Foundation",
+      "stage": "Data and Representation",
+      "prompt": {
+        "en": "Which dimensions are useful when judging the quality of a model dataset?",
+        "zh": "判断模型数据集质量时，哪些维度是有用的？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "Semantic accuracy",
+            "zh": "语义准确性"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "Coverage of the target distribution",
+            "zh": "对目标分布的覆盖"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "Format and schema consistency",
+            "zh": "格式和模式的一致性"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "Reproducibility of the data pipeline",
+            "zh": "数据流水线的可复现性"
+          }
+        }
+      ],
+      "answer": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "explanation": {
+        "en": "A useful dataset is correct, representative, structurally consistent, and produced by a process that can be inspected and repeated.",
+        "zh": "有用的数据集应当正确、有代表性、结构一致，并且由可检查、可重复的数据流程产生。"
+      },
+      "relatedTerms": [
+        "training-set",
+        "validation-set"
+      ]
+    },
+    {
+      "id": "q002-reusable-network-modules",
+      "order": 2,
+      "type": "single",
+      "topic": "Foundations",
+      "level": "Foundation",
+      "stage": "Architecture and Modules",
+      "prompt": {
+        "en": "Which statement best describes the reusable modules that make up a neural network?",
+        "zh": "下面哪项最能描述组成神经网络的可复用模块？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "Only convolution layers can be reused",
+            "zh": "只有卷积层可以复用"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "Every module must expose the same input shape",
+            "zh": "每个模块都必须暴露相同的输入形状"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "Modules are useful only during training",
+            "zh": "模块只在训练期间有用"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "Layers and blocks can be composed into larger models",
+            "zh": "层和模块可以组合成更大的模型"
+          }
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": {
+        "en": "A neural network is a composition of reusable layers and blocks. Their interfaces must be compatible, but they do not all need identical shapes or purposes.",
+        "zh": "神经网络由可复用的层和模块组合而成。它们的接口需要兼容，但不必拥有相同的形状或用途。"
+      },
+      "relatedTerms": [
+        "neural-network",
+        "fully-connected-layer",
+        "convolution",
+        "transformer-block"
+      ]
+    },
+    {
+      "id": "q003-hidden-layer-role",
+      "order": 3,
+      "type": "single",
+      "topic": "Foundations",
+      "level": "Foundation",
+      "stage": "Architecture and Modules",
+      "prompt": {
+        "en": "What is the main role of hidden layers in a neural network?",
+        "zh": "神经网络中隐藏层的主要作用是什么？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "Store raw input without transformation",
+            "zh": "不做变换地存储原始输入"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "Directly display the final answer",
+            "zh": "直接显示最终答案"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "Transform representations through learned nonlinear computation",
+            "zh": "通过学习到的非线性计算逐步变换表示"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "Add random noise to every feature",
+            "zh": "给每个特征加入随机噪声"
+          }
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": {
+        "en": "Hidden layers build intermediate representations. Their learned transformations let the model express useful structure between input and output.",
+        "zh": "隐藏层构建中间表示。学习到的变换让模型可以表达输入和输出之间的有用结构。"
+      },
+      "relatedTerms": [
+        "neural-network",
+        "activation-function"
+      ]
+    },
+    {
+      "id": "q004-activation-nonlinearity",
+      "order": 4,
+      "type": "single",
+      "topic": "Foundations",
+      "level": "Foundation",
+      "stage": "Architecture and Modules",
+      "prompt": {
+        "en": "Why are activation functions important between learned linear transformations?",
+        "zh": "为什么学习到的线性变换之间需要激活函数？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "They make every output exactly binary",
+            "zh": "它们让所有输出都严格变成二值"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "They remove the need for data",
+            "zh": "它们消除了对数据的需求"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "They introduce nonlinearity so stacked layers can represent nonlinear functions",
+            "zh": "它们引入非线性，使堆叠层能够表示非线性函数"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "They guarantee that optimization will converge",
+            "zh": "它们保证优化一定收敛"
+          }
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": {
+        "en": "A stack of linear operations can be collapsed into one linear operation. The activation is what gives depth its extra expressive power.",
+        "zh": "多个线性操作可以合并成一个线性操作。激活函数赋予深度结构额外的表达能力。"
+      },
+      "relatedTerms": [
+        "activation-function",
+        "neural-network"
+      ]
+    },
+    {
+      "id": "q005-neural-network-vs-linear",
+      "order": 5,
+      "type": "single",
+      "topic": "Foundations",
+      "level": "Foundation",
+      "stage": "Architecture and Modules",
+      "prompt": {
+        "en": "What is the key difference between a multilayer neural network and one linear layer?",
+        "zh": "多层神经网络与单个线性层之间的关键区别是什么？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "A neural network cannot use matrix multiplication",
+            "zh": "神经网络不能使用矩阵乘法"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "A linear layer always has more parameters",
+            "zh": "线性层的参数总是更多"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "Neural networks work only with images",
+            "zh": "神经网络只能处理图像"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "Nonlinear layers let the network model more complex functions",
+            "zh": "非线性层让网络能够建模更复杂的函数"
+          }
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": {
+        "en": "Neural networks still rely heavily on linear algebra, but nonlinear activations between transformations prevent the whole model from remaining linear.",
+        "zh": "神经网络仍然大量依赖线性代数，但变换之间的非线性激活防止整个模型保持线性。"
+      },
+      "relatedTerms": [
+        "neural-network",
+        "activation-function",
+        "fully-connected-layer"
+      ]
+    },
+    {
+      "id": "q006-regression-output-activation",
+      "order": 6,
+      "type": "single",
+      "topic": "Foundations",
+      "level": "Working Knowledge",
+      "stage": "Architecture and Modules",
+      "prompt": {
+        "en": "For an unconstrained scalar regression target, which output activation is usually the safest default?",
+        "zh": "对于没有范围约束的标量回归目标，输出层通常最稳妥的默认激活是什么？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "Softmax",
+            "zh": "Softmax"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "Linear or no activation",
+            "zh": "线性函数或不使用激活"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "Hard threshold",
+            "zh": "硬阈值"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "A random activation selected per batch",
+            "zh": "每个批次随机选择一种激活"
+          }
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": {
+        "en": "A linear output can represent the full real line. Bounded activations are appropriate only when the target range and loss are designed around that bound.",
+        "zh": "线性输出可以表示整个实数范围。只有当目标范围和损失函数围绕某个边界设计时，才适合使用有界激活。"
+      },
+      "relatedTerms": [
+        "activation-function",
+        "loss-function"
+      ]
+    },
+    {
+      "id": "q007-softmax-probabilities",
+      "order": 7,
+      "type": "single",
+      "topic": "Foundations",
+      "level": "Foundation",
+      "stage": "Architecture and Modules",
+      "prompt": {
+        "en": "What does softmax do to a vector of logits?",
+        "zh": "Softmax 会对一组 logits 做什么？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "Sort them from largest to smallest",
+            "zh": "按从大到小排序"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "Convert them into nonnegative values that sum to one",
+            "zh": "转换成非负且总和为一的数值"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "Set every logit to zero",
+            "zh": "把所有 logit 设为零"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "Remove the largest logit",
+            "zh": "移除最大的 logit"
+          }
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": {
+        "en": "Softmax exponentiates and normalizes the scores, producing a probability-like distribution. It does not sort or discard the logits.",
+        "zh": "Softmax 对分数做指数变换并归一化，得到类概率分布。它不会排序或丢弃 logits。"
+      },
+      "relatedTerms": [
+        "softmax"
+      ]
+    },
+    {
+      "id": "q008-loss-as-optimization-target",
+      "order": 8,
+      "type": "single",
+      "topic": "Training",
+      "level": "Foundation",
+      "stage": "Training Objective",
+      "prompt": {
+        "en": "What is the role of a loss function during training?",
+        "zh": "损失函数在训练中的作用是什么？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "Provide a scalar objective whose gradients guide parameter updates",
+            "zh": "提供标量目标，其梯度指导参数更新"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "Replace the model's input data",
+            "zh": "替换模型的输入数据"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "Guarantee the model is unbiased",
+            "zh": "保证模型没有偏差"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "Measure only GPU memory",
+            "zh": "只测量 GPU 内存"
+          }
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": {
+        "en": "The loss turns prediction quality into an optimization signal. Backpropagation computes its gradients, and the optimizer uses them to change parameters.",
+        "zh": "损失函数把预测质量转换成优化信号。反向传播计算其梯度，优化器利用梯度修改参数。"
+      },
+      "relatedTerms": [
+        "loss-function",
+        "backpropagation"
+      ]
+    },
+    {
+      "id": "q009-cross-entropy-use",
+      "order": 9,
+      "type": "single",
+      "topic": "Training",
+      "level": "Working Knowledge",
+      "stage": "Training Objective",
+      "prompt": {
+        "en": "Why is cross-entropy commonly used for single-label classification?",
+        "zh": "为什么单标签分类中常用交叉熵？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "It ignores the predicted class probabilities",
+            "zh": "它会忽略预测类别概率"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "It requires no target labels",
+            "zh": "它不需要目标标签"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "It penalizes assigning low probability to the observed class",
+            "zh": "它会惩罚给真实类别分配过低概率的行为"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "It makes every class equally likely",
+            "zh": "它让每个类别的概率都相等"
+          }
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": {
+        "en": "Cross-entropy is the negative log likelihood of the target class. It gives a strong penalty when the model is confidently wrong.",
+        "zh": "交叉熵是目标类别负对数似然。当模型自信地预测错误时，它会给出较强惩罚。"
+      },
+      "relatedTerms": [
+        "loss-function",
+        "softmax"
+      ]
+    },
+    {
+      "id": "q010-sgd-gradient-estimate",
+      "order": 10,
+      "type": "single",
+      "topic": "Training",
+      "level": "Foundation",
+      "stage": "Training Objective",
+      "prompt": {
+        "en": "What does a minibatch gradient represent in stochastic gradient descent?",
+        "zh": "在随机梯度下降中，小批量梯度代表什么？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "The exact gradient over every possible example",
+            "zh": "所有可能样本上的精确梯度"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "An estimate of the full-data gradient from a sampled batch",
+            "zh": "用抽取的小批量估计完整数据梯度"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "A gradient that never contains noise",
+            "zh": "完全不含噪声的梯度"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "A gradient computed only after deployment",
+            "zh": "只在部署后计算的梯度"
+          }
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": {
+        "en": "A minibatch provides a cheaper, noisy estimate of the gradient over the training distribution. The noise can affect optimization and sometimes helps exploration.",
+        "zh": "小批量提供了一个更便宜但带噪声的训练分布梯度估计。这种噪声会影响优化，有时也有助于探索。"
+      },
+      "relatedTerms": [
+        "training-set",
+        "loss-function",
+        "backpropagation"
+      ]
+    },
+    {
+      "id": "q011-momentum-purpose",
+      "order": 11,
+      "type": "single",
+      "topic": "Training",
+      "level": "Working Knowledge",
+      "stage": "Training Stability",
+      "prompt": {
+        "en": "What is the main purpose of momentum in an optimizer?",
+        "zh": "优化器中的动量主要用于什么？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "Store the entire training dataset in the optimizer",
+            "zh": "把整个训练集存进优化器"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "Remove the need to compute gradients",
+            "zh": "消除计算梯度的需要"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "Accumulate a moving direction to smooth noisy updates",
+            "zh": "积累移动方向，平滑带噪声的更新"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "Turn a classifier into a regressor",
+            "zh": "把分类器变成回归器"
+          }
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": {
+        "en": "Momentum keeps a running state that carries useful direction across steps. It can reduce oscillation and speed progress along consistent directions.",
+        "zh": "动量维护一个跨 step 延续的状态，保留有用的更新方向。它可以减少震荡，并加快在一致方向上的进展。"
+      },
+      "relatedTerms": [
+        "backpropagation"
+      ]
+    },
+    {
+      "id": "q012-overfitting-symptom",
+      "order": 12,
+      "type": "single",
+      "topic": "Training",
+      "level": "Foundation",
+      "stage": "Training Stability",
+      "prompt": {
+        "en": "Which pattern is a common symptom of overfitting?",
+        "zh": "哪种现象是过拟合的常见表现？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "Training and validation performance improve together",
+            "zh": "训练和验证表现同步提升"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "Training performance keeps improving while validation performance degrades",
+            "zh": "训练表现继续提升，而验证表现变差"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "Both losses are missing because no data exists",
+            "zh": "因为没有数据所以两个损失都不存在"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "The model has exactly zero parameters",
+            "zh": "模型恰好有零个参数"
+          }
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": {
+        "en": "A widening gap between training and validation behavior suggests that the model is fitting details specific to the training examples.",
+        "zh": "训练和验证表现之间的差距扩大，说明模型可能正在拟合训练样本特有的细节。"
+      },
+      "relatedTerms": [
+        "overfitting",
+        "training-set",
+        "validation-set"
+      ]
+    },
+    {
+      "id": "q013-regularization-for-overfitting",
+      "order": 13,
+      "type": "single",
+      "topic": "Training",
+      "level": "Foundation",
+      "stage": "Training Stability",
+      "prompt": {
+        "en": "Which intervention directly aims to reduce overfitting?",
+        "zh": "哪种措施直接针对减少过拟合？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "Add a suitable regularization constraint or penalty",
+            "zh": "加入合适的正则化约束或惩罚"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "Remove the validation split",
+            "zh": "移除验证集划分"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "Tune every parameter against the test set",
+            "zh": "针对测试集调节所有参数"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "Duplicate every training example",
+            "zh": "复制每个训练样本"
+          }
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": {
+        "en": "Regularization changes the optimization pressure so that memorizing fragile details becomes less attractive. The best choice depends on the data and model.",
+        "zh": "正则化改变优化压力，让记忆脆弱细节变得不那么有利。具体选择取决于数据和模型。"
+      },
+      "relatedTerms": [
+        "regularization",
+        "overfitting",
+        "validation-set"
+      ]
+    },
+    {
+      "id": "q014-residual-shortcuts",
+      "order": 14,
+      "type": "single",
+      "topic": "Foundations",
+      "level": "Working Knowledge",
+      "stage": "Architecture and Modules",
+      "prompt": {
+        "en": "Why do residual shortcuts often make deep networks easier to optimize?",
+        "zh": "为什么残差捷径通常能让深层网络更容易优化？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "They delete all nonlinearities",
+            "zh": "它们删除所有非线性"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "They guarantee zero training loss",
+            "zh": "它们保证训练损失为零"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "They create a direct path for representations and gradients",
+            "zh": "它们为表示和梯度创建直接路径"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "They prevent the model from using learned weights",
+            "zh": "它们阻止模型使用学习到的权重"
+          }
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": {
+        "en": "The shortcut lets a block learn a residual correction and provides a shorter route for gradient flow through many stacked blocks.",
+        "zh": "捷径让模块学习残差修正，并让梯度可以沿更短路径穿过多个堆叠模块。"
+      },
+      "relatedTerms": [
+        "residual-connection",
+        "transformer-block"
+      ]
+    },
+    {
+      "id": "q015-convolution-properties",
+      "order": 15,
+      "type": "single",
+      "topic": "CNNs",
+      "level": "Foundation",
+      "stage": "Architecture and Modules",
+      "prompt": {
+        "en": "Which property is central to a standard convolution layer?",
+        "zh": "标准卷积层的核心属性是什么？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "Local receptive fields with shared weights",
+            "zh": "局部感受野和共享权重"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "A separate full parameter matrix at every pixel",
+            "zh": "每个像素使用独立的完整参数矩阵"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "No dependence on neighboring positions",
+            "zh": "完全不依赖相邻位置"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "A requirement that inputs be text tokens",
+            "zh": "要求输入必须是文本 token"
+          }
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": {
+        "en": "Convolution reuses a small kernel across positions. This encodes locality and translation-aware structure while using fewer parameters than a fully connected layer.",
+        "zh": "卷积在不同位置复用小型卷积核。它利用局部性和位置结构，并且比全连接层使用更少参数。"
+      },
+      "relatedTerms": [
+        "convolution",
+        "fully-connected-layer"
+      ]
+    },
+    {
+      "id": "q016-depthwise-separable-convolution",
+      "order": 16,
+      "type": "single",
+      "topic": "CNNs",
+      "level": "Working Knowledge",
+      "stage": "Architecture and Modules",
+      "prompt": {
+        "en": "How does depthwise-separable convolution reduce computation?",
+        "zh": "深度可分离卷积如何减少计算量？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "It removes all channel mixing",
+            "zh": "它移除所有通道混合"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "It replaces convolution with random sampling",
+            "zh": "它用随机采样替代卷积"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "It separates per-channel spatial filtering from 1x1 channel mixing",
+            "zh": "它把逐通道空间滤波与 1x1 通道混合分开"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "It requires a larger kernel for every channel pair",
+            "zh": "它要求每一对通道都使用更大卷积核"
+          }
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": {
+        "en": "Depthwise filtering handles spatial structure per channel, then a pointwise layer handles channel mixing. The factorization avoids a full spatial kernel for every input-output channel pair.",
+        "zh": "深度卷积按通道处理空间结构，点卷积再处理通道混合。这种分解避免了每个输入输出通道对都使用完整空间卷积核。"
+      },
+      "relatedTerms": [
+        "depthwise-separable-convolution",
+        "convolution"
+      ]
+    },
+    {
+      "id": "q017-conv-bn-folding",
+      "order": 17,
+      "type": "single",
+      "topic": "Deployment",
+      "level": "Working Knowledge",
+      "stage": "Compilation and Kernels",
+      "prompt": {
+        "en": "What does convolution and batch-normalization folding do for inference?",
+        "zh": "卷积与批归一化折叠在推理时做什么？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "Merge fixed normalization parameters into the convolution",
+            "zh": "把固定的归一化参数合并到卷积中"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "Add a second training pass after deployment",
+            "zh": "部署后再增加一次训练"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "Replace weights with random values",
+            "zh": "用随机值替换权重"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "Make batch statistics change during evaluation",
+            "zh": "让评估阶段的批统计量继续变化"
+          }
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": {
+        "en": "With fixed evaluation statistics, normalization is an affine transform that can be algebraically absorbed into the preceding convolution.",
+        "zh": "评估统计量固定后，归一化就是一个仿射变换，可以通过代数运算吸收到前面的卷积中。"
+      },
+      "relatedTerms": [
+        "conv-bn-folding",
+        "convolution"
+      ]
+    },
+    {
+      "id": "q018-transformer-core-mechanism",
+      "order": 18,
+      "type": "single",
+      "topic": "Transformers",
+      "level": "Foundation",
+      "stage": "Architecture and Modules",
+      "prompt": {
+        "en": "Which pair best captures the two main computations inside a standard Transformer block?",
+        "zh": "哪一对最能概括标准 Transformer 模块中的两类主要计算？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "Pooling and image rendering",
+            "zh": "池化和图像渲染"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "Sorting and database lookup",
+            "zh": "排序和数据库查询"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "Attention across positions and a position-wise feed-forward network",
+            "zh": "跨位置的注意力和逐位置前馈网络"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "Only one linear projection",
+            "zh": "只有一个线性投影"
+          }
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": {
+        "en": "Attention mixes information across positions, while the feed-forward sublayer transforms each position independently. Residual paths and normalization support both.",
+        "zh": "注意力跨位置混合信息，前馈子层独立变换每个位置。残差路径和归一化为两者提供支持。"
+      },
+      "relatedTerms": [
+        "transformer-block",
+        "self-attention",
+        "position-wise-ffn"
+      ]
+    },
+    {
+      "id": "q019-self-attention-role",
+      "order": 19,
+      "type": "single",
+      "topic": "Transformers",
+      "level": "Foundation",
+      "stage": "Architecture and Modules",
+      "prompt": {
+        "en": "What does self-attention allow a sequence position to do?",
+        "zh": "自注意力允许序列中的一个位置做什么？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "Read only its own feature vector",
+            "zh": "只能读取自己的特征向量"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "Read a content-dependent weighted combination of other positions",
+            "zh": "读取依赖内容的其他位置加权组合"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "Ignore the input sequence length",
+            "zh": "忽略输入序列长度"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "Update model weights during the forward pass",
+            "zh": "在前向过程中更新模型权重"
+          }
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": {
+        "en": "Each query compares with keys to decide how much information to read from values at other positions.",
+        "zh": "每个 query 与 key 比较，以决定从其他位置的 value 中读取多少信息。"
+      },
+      "relatedTerms": [
+        "self-attention",
+        "qkv-projection"
+      ]
+    },
+    {
+      "id": "q020-qkv-projections",
+      "order": 20,
+      "type": "single",
+      "topic": "Transformers",
+      "level": "Working Knowledge",
+      "stage": "Architecture and Modules",
+      "prompt": {
+        "en": "In attention, what are query, key, and value projections used for?",
+        "zh": "在注意力中，query、key 和 value 投影分别用于什么？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "They are three copies of the final output",
+            "zh": "它们是最终输出的三个副本"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "They encode only the token vocabulary",
+            "zh": "它们只编码 token 词表"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "They define lookup intent, available content, and mixed information",
+            "zh": "它们分别定义查询意图、可提供内容和被混合的信息"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "They replace the loss function",
+            "zh": "它们替代损失函数"
+          }
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": {
+        "en": "Queries and keys produce compatibility scores. Those scores weight the values that are combined into the attention output.",
+        "zh": "Query 和 key 产生兼容性分数。这些分数用于加权组合 value，得到注意力输出。"
+      },
+      "relatedTerms": [
+        "qkv-projection",
+        "self-attention"
+      ]
+    },
+    {
+      "id": "q021-multi-head-attention-benefit",
+      "order": 21,
+      "type": "single",
+      "topic": "Transformers",
+      "level": "Working Knowledge",
+      "stage": "Architecture and Modules",
+      "prompt": {
+        "en": "What is a practical benefit of multi-head attention?",
+        "zh": "多头注意力的实际好处是什么？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "It guarantees every head learns the same pattern",
+            "zh": "它保证每个头学习相同模式"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "Different heads can model different relationships in parallel",
+            "zh": "不同的头可以并行建模不同关系"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "It removes the need for position information",
+            "zh": "它消除了对位置信息的需要"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "It prevents attention from reading other tokens",
+            "zh": "它阻止注意力读取其他 token"
+          }
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": {
+        "en": "Independent projections let heads specialize in different subspaces or dependency patterns before their outputs are combined.",
+        "zh": "独立的投影让不同头可以在不同子空间或依赖模式中形成专门化，然后再组合输出。"
+      },
+      "relatedTerms": [
+        "multi-head-attention",
+        "qkv-projection"
+      ]
+    },
+    {
+      "id": "q022-positional-encoding-role",
+      "order": 22,
+      "type": "single",
+      "topic": "Transformers",
+      "level": "Foundation",
+      "stage": "Data and Representation",
+      "prompt": {
+        "en": "Why does a Transformer need positional information?",
+        "zh": "为什么 Transformer 需要位置信息？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "Self-attention does not inherently identify token order",
+            "zh": "自注意力本身无法识别 token 顺序"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "It makes every token embedding identical",
+            "zh": "它让所有 token embedding 相同"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "It removes the need for attention weights",
+            "zh": "它消除了注意力权重的需要"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "It converts a sequence into an unordered set on purpose",
+            "zh": "它有意把序列转换成无序集合"
+          }
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": {
+        "en": "Without an order signal, the same token set can be ambiguous under permutation. Position encodings make sequence structure available to the model.",
+        "zh": "没有顺序信号时，同一组 token 在排列变化下可能产生歧义。位置编码让模型获得序列结构。"
+      },
+      "relatedTerms": [
+        "positional-encoding",
+        "self-attention"
+      ]
+    },
+    {
+      "id": "q023-attention-vs-ffn",
+      "order": 23,
+      "type": "single",
+      "topic": "Transformers",
+      "level": "Working Knowledge",
+      "stage": "Architecture and Modules",
+      "prompt": {
+        "en": "How do attention and the position-wise feed-forward network differ?",
+        "zh": "注意力和逐位置前馈网络有什么区别？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "Both operations are restricted to one position",
+            "zh": "两种操作都限制在单个位置"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "Attention only changes weights, while the FFN only changes labels",
+            "zh": "注意力只改变权重，FFN 只改变标签"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "Attention mixes across positions, while the FFN transforms each position independently",
+            "zh": "注意力跨位置混合信息，FFN 独立变换每个位置"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "The FFN is used only during data loading",
+            "zh": "FFN 只在加载数据时使用"
+          }
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": {
+        "en": "This division gives a Transformer both cross-token communication and per-token nonlinear feature processing.",
+        "zh": "这种分工让 Transformer 同时具备跨 token 通信和逐 token 的非线性特征处理能力。"
+      },
+      "relatedTerms": [
+        "self-attention",
+        "position-wise-ffn",
+        "mlp"
+      ]
+    },
+    {
+      "id": "q024-causal-mask",
+      "order": 24,
+      "type": "single",
+      "topic": "Transformers",
+      "level": "Working Knowledge",
+      "stage": "Architecture and Modules",
+      "prompt": {
+        "en": "What does a causal attention mask enforce during autoregressive training?",
+        "zh": "自回归训练中，因果注意力掩码保证什么？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "Every token can read future target tokens",
+            "zh": "每个 token 都可以读取未来目标 token"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "A position can attend only to allowed past and current positions",
+            "zh": "一个位置只能关注允许的过去位置和当前位置"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "All attention scores become positive",
+            "zh": "所有注意力分数都变成正数"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "The sequence length becomes zero",
+            "zh": "序列长度变成零"
+          }
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": {
+        "en": "The mask blocks future positions so the model cannot use information that would be unavailable at generation time.",
+        "zh": "掩码屏蔽未来位置，防止模型使用生成时本来不可获得的信息。"
+      },
+      "relatedTerms": [
+        "self-attention",
+        "transformer"
+      ]
+    },
+    {
+      "id": "q025-transformer-architecture-families",
+      "order": 25,
+      "type": "single",
+      "topic": "Transformers",
+      "level": "Foundation",
+      "stage": "Architecture and Modules",
+      "prompt": {
+        "en": "Which are common Transformer architecture families?",
+        "zh": "哪些属于常见的 Transformer 架构家族？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "Encoder-only",
+            "zh": "仅编码器"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "Decoder-only",
+            "zh": "仅解码器"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "Encoder-decoder",
+            "zh": "编码器-解码器"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "All of the above",
+            "zh": "以上全部"
+          }
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": {
+        "en": "All three families are widely used. Their attention masks, interfaces, and training objectives determine the behavior they are suited for.",
+        "zh": "这三类结构都被广泛使用。注意力掩码、接口和训练目标共同决定它们适合的行为。"
+      },
+      "relatedTerms": [
+        "transformer",
+        "transformer-block"
+      ]
+    },
+    {
+      "id": "q026-decoder-only-false-statement",
+      "order": 26,
+      "type": "single",
+      "topic": "Transformers",
+      "level": "Working Knowledge",
+      "stage": "Training Objective",
+      "prompt": {
+        "en": "Which statement about decoder-only Transformers is false?",
+        "zh": "关于仅解码器 Transformer，哪项说法是错误的？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "They commonly use causal self-attention",
+            "zh": "它们通常使用因果自注意力"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "They can generate tokens autoregressively",
+            "zh": "它们可以自回归地生成 token"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "They can be pretrained with next-token prediction",
+            "zh": "它们可以使用下一个 token 预测进行预训练"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "They must use a separate encoder for every input",
+            "zh": "它们必须为每个输入使用独立编码器"
+          }
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": {
+        "en": "A decoder-only model can process the prompt directly through its own stack. A separate encoder is not required by the architecture.",
+        "zh": "仅解码器模型可以直接通过自身堆栈处理提示词。该架构不要求独立编码器。"
+      },
+      "relatedTerms": [
+        "transformer",
+        "self-attention"
+      ]
+    },
+    {
+      "id": "q027-pretraining-false-statement",
+      "order": 27,
+      "type": "single",
+      "topic": "Training",
+      "level": "Working Knowledge",
+      "stage": "Training Objective",
+      "prompt": {
+        "en": "Which statement about language-model pretraining is false?",
+        "zh": "关于语言模型预训练，哪项说法是错误的？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "It can use large collections of unlabeled text",
+            "zh": "它可以使用大量无标签文本"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "The objective can be next-token prediction",
+            "zh": "目标可以是下一个 token 预测"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "Every example must have a human-written task label",
+            "zh": "每个样本都必须有人工编写的任务标签"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "Data quality and filtering still matter",
+            "zh": "数据质量和过滤仍然重要"
+          }
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": {
+        "en": "Self-supervised pretraining can derive targets from the input sequence. Human-written labels may be added for later supervised stages, but are not required for every pretraining example.",
+        "zh": "自监督预训练可以从输入序列本身构造目标。人工标签可以用于后续监督阶段，但不是每个预训练样本都必需。"
+      },
+      "relatedTerms": [
+        "training-set",
+        "transformer",
+        "loss-function"
+      ]
+    },
+    {
+      "id": "q028-transformer-training-stability",
+      "order": 28,
+      "type": "single",
+      "topic": "Training",
+      "level": "Deep Dive",
+      "stage": "Training Stability",
+      "prompt": {
+        "en": "Which change is most likely to make a deep Transformer harder to train?",
+        "zh": "哪种改动最可能让深层 Transformer 更难训练？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "Use a stable normalization and initialization scheme",
+            "zh": "使用稳定的归一化和初始化方案"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "Monitor gradient norms and validation behavior",
+            "zh": "监测梯度范数和验证表现"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "Remove normalization and residual paths without retuning optimization",
+            "zh": "不重新调节优化过程就移除归一化和残差路径"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "Use a validation set to compare checkpoints",
+            "zh": "使用验证集比较检查点"
+          }
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": {
+        "en": "Normalization and residual connections help control scale and gradient flow. Removing both without compensating changes can destabilize optimization.",
+        "zh": "归一化和残差连接有助于控制尺度和梯度流。在没有补偿性调整的情况下同时移除两者，可能破坏优化稳定性。"
+      },
+      "relatedTerms": [
+        "layer-normalization",
+        "residual-connection",
+        "transformer-block"
+      ]
+    },
+    {
+      "id": "q029-kv-cache-purpose",
+      "order": 29,
+      "type": "single",
+      "topic": "Deployment",
+      "level": "Working Knowledge",
+      "stage": "Inference Runtime",
+      "prompt": {
+        "en": "What problem does the KV cache solve during autoregressive decoding?",
+        "zh": "自回归解码时，KV 缓存解决什么问题？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "It removes the need to store model weights",
+            "zh": "它消除了存储模型权重的需要"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "It avoids recomputing keys and values for earlier tokens",
+            "zh": "它避免重新计算早期 token 的 key 和 value"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "It converts attention into a convolution",
+            "zh": "它把注意力转换成卷积"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "It guarantees a fixed context length",
+            "zh": "它保证固定的上下文长度"
+          }
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": {
+        "en": "Earlier keys and values do not change when a new token is appended, so retaining them avoids repeating their projection work.",
+        "zh": "追加新 token 时，早期 key 和 value 不会改变，因此保留它们可以避免重复投影计算。"
+      },
+      "relatedTerms": [
+        "kv-cache",
+        "self-attention"
+      ]
+    },
+    {
+      "id": "q030-runtime-peak-memory",
+      "order": 30,
+      "type": "single",
+      "topic": "Deployment",
+      "level": "Foundation",
+      "stage": "Inference Runtime",
+      "prompt": {
+        "en": "What does runtime peak memory measure?",
+        "zh": "运行时峰值内存衡量什么？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "The total bytes ever allocated, even after they are freed",
+            "zh": "整个过程中曾经分配过的总字节数，即使之后已释放"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "Only the parameter file size on disk",
+            "zh": "只有磁盘上的参数文件大小"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "The largest amount of memory live at the same time",
+            "zh": "同时存活的最大内存量"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "The number of CPU instructions in the model",
+            "zh": "模型中的 CPU 指令数量"
+          }
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": {
+        "en": "Peak memory is the maximum concurrent live allocation. It is affected by weights, inputs, temporary buffers, outputs, caches, and allocator behavior.",
+        "zh": "峰值内存是并发存活分配的最大值。它受权重、输入、临时缓冲、输出、缓存和分配器行为影响。"
+      },
+      "relatedTerms": [
+        "runtime-peak-memory",
+        "kv-cache"
+      ]
+    },
+    {
+      "id": "q031-quantization-purpose",
+      "order": 31,
+      "type": "single",
+      "topic": "Deployment",
+      "level": "Foundation",
+      "stage": "Hardware Deployment",
+      "prompt": {
+        "en": "Why is a model commonly quantized for deployment?",
+        "zh": "模型部署时通常为什么要量化？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "To reduce memory use and potentially improve runtime efficiency",
+            "zh": "减少内存占用，并可能提高运行效率"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "To guarantee no numerical error",
+            "zh": "保证没有数值误差"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "To increase the number of floating-point bits",
+            "zh": "增加浮点数位数"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "To remove all activation functions",
+            "zh": "移除所有激活函数"
+          }
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": {
+        "en": "Lower-precision representations can reduce bandwidth and storage, and supported hardware may execute them more efficiently. Accuracy impact must be measured.",
+        "zh": "低精度表示可以减少带宽和存储，受支持的硬件也可能更高效地执行它们。精度影响必须实际测量。"
+      },
+      "relatedTerms": [
+        "quantization",
+        "runtime-peak-memory"
+      ]
+    },
+    {
+      "id": "q032-int8-storage-width",
+      "order": 32,
+      "type": "single",
+      "topic": "Deployment",
+      "level": "Foundation",
+      "stage": "Hardware Deployment",
+      "prompt": {
+        "en": "How many bits are used to store one standard INT8 value?",
+        "zh": "一个标准 INT8 数值使用多少位存储？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "4 bits",
+            "zh": "4 位"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "8 bits",
+            "zh": "8 位"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "16 bits",
+            "zh": "16 位"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "32 bits",
+            "zh": "32 位"
+          }
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": {
+        "en": "INT8 uses eight bits per stored value. The signed numerical range is commonly -128 through 127.",
+        "zh": "INT8 每个数值使用八位存储。有符号数值范围通常是 -128 到 127。"
+      },
+      "relatedTerms": [
+        "quantization"
+      ]
+    },
+    {
+      "id": "q033-int8-calibration-factors",
+      "order": 33,
+      "type": "multiple",
+      "topic": "Deployment",
+      "level": "Deep Dive",
+      "stage": "Hardware Deployment",
+      "prompt": {
+        "en": "Which factors can affect INT8 calibration quality?",
+        "zh": "哪些因素会影响 INT8 校准质量？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "The representative calibration data",
+            "zh": "有代表性的校准数据"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "The choice of per-tensor or finer-grained scales",
+            "zh": "按张量或更细粒度设置缩放的选择"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "The observed activation range and outliers",
+            "zh": "观测到的激活范围和异常值"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "All of the above",
+            "zh": "以上全部"
+          }
+        }
+      ],
+      "answer": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "explanation": {
+        "en": "Calibration estimates ranges and scales from data. Poorly matched samples, coarse granularity, or outliers can all increase quantization error.",
+        "zh": "校准根据数据估计范围和缩放。样本不匹配、粒度过粗或异常值都可能增加量化误差。"
+      },
+      "relatedTerms": [
+        "quantization",
+        "runtime-peak-memory"
+      ]
+    },
+    {
+      "id": "q034-smoothquant-scale-migration",
+      "order": 34,
+      "type": "single",
+      "topic": "Deployment",
+      "level": "Deep Dive",
+      "stage": "Hardware Deployment",
+      "prompt": {
+        "en": "What is the main idea behind SmoothQuant-style scale migration?",
+        "zh": "SmoothQuant 风格的尺度迁移的核心思想是什么？"
+      },
+      "choices": [
+        {
+          "key": "A",
+          "label": {
+            "en": "Remove all activation quantization",
+            "zh": "移除所有激活量化"
+          }
+        },
+        {
+          "key": "B",
+          "label": {
+            "en": "Make every weight exactly zero",
+            "zh": "让所有权重严格为零"
+          }
+        },
+        {
+          "key": "C",
+          "label": {
+            "en": "Move scale between activations and weights to make quantization easier",
+            "zh": "在激活和权重之间迁移尺度，让量化更容易"
+          }
+        },
+        {
+          "key": "D",
+          "label": {
+            "en": "Increase sequence length during inference",
+            "zh": "在推理时增加序列长度"
+          }
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": {
+        "en": "The rewrite balances activation and weight ranges before quantization. It aims to reduce difficult activation outliers while preserving the represented function.",
+        "zh": "这种重写在量化前平衡激活和权重的范围，目标是在保持函数表示不变的同时减少难以处理的激活异常值。"
+      },
+      "relatedTerms": [
+        "quantization",
+        "fully-connected-layer"
+      ]
+    }
+  ]
+}

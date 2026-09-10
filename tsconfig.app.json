@@ -2,7 +2,11 @@
   "compilerOptions": {
     "target": "ES2022",
     "useDefineForClassFields": true,
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -14,11 +18,10 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    "types": ["vite/client", "vitest/globals"],
-    "paths": {
-      "@term-sdk": ["./src/content-sdk/index.tsx"]
-    }
+    "jsx": "react-jsx"
   },
-  "include": ["src", "content-libraries"]
+  "include": [
+    "src",
+    "content-libraries/library.json"
+  ]
 }
