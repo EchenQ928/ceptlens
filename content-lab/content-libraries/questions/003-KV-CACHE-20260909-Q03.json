@@ -27,7 +27,7 @@
     "gradingInstruction": "评分时关注答案是否正确说明两个阶段的 KV Cache 读写行为，以及这些行为与并行度、计算规模、显存访问之间的因果关系。学习模式仅展示完整参考解答。"
   },
   "ceptCheck": {
-    "stem": "如果换用一张算力更强、显存带宽不变的 GPU，Prefill 和 Decode 哪个阶段更可能明显加速？为什么？"
+    "stem": "Prefill 中每个位置也只能关注自己及之前的 Token，为什么它可以并行处理多个位置，而 Decode 通常需要逐步生成？"
   },
   "taxonomy": {
     "primaryConcept": "Prefill 与 Decode 的 KV Cache 行为",
