@@ -24,7 +24,7 @@
   "correctAnswer": ["B"],
   "explanation": "**正确答案：B**\n\n自回归生成时，模型每次只新增一个 Token，但新的注意力计算仍然需要使用此前所有位置的 K/V。如果不做缓存，历史 Token 的 K/V 会在每一步被重复计算。KV Cache 保留这些已经算过的历史 K/V，让后续步骤直接复用，从而减少 Decode 阶段的重复计算，尤其缓解上下文变长后逐步生成的时延增长。\n\n**A｜把 KV Cache 与模型压缩混淆**\nKV Cache 不会改变模型参数数量，也不会让模型权重变小。它是推理过程中为中间结果分配的运行时缓存，通常还会额外占用显存。\n\n**B｜准确描述 KV Cache 解决的核心痛点**\n它针对的是历史 K/V 的重复计算。当前步骤仍然需要计算新 Token 的 Query、Key 和 Value，但历史部分可以直接从缓存中读取。\n\n**C｜把 Decode 阶段与首 Token 计算混淆**\nKV Cache 主要优化逐 Token 生成阶段。生成开始前的 Prefill 阶段仍然需要处理输入上下文，不能因为有 KV Cache 就跳过初始注意力计算。\n\n**D｜把缓存误解成并行生成**\nKV Cache 不会改变自回归生成必须依赖前序结果的事实，也不会让所有 Token 一次生成。它只是减少每一步对历史信息的重复计算。",
   "ceptCheck": {
-    "stem": "如果上下文长度继续增加，KV Cache 为什么仍然会占用越来越多的显存？"
+    "stem": "KV cache解决了上述痛点，但代价是什么？"
   },
   "taxonomy": {
     "primaryConcept": "KV Cache 解决的推理痛点",
