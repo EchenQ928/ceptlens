@@ -27,7 +27,7 @@
     "gradingInstruction": "评分时关注答案是否正确说明两个阶段的 KV Cache 读写行为，以及这些行为与并行度、计算规模、显存访问之间的因果关系。学习模式仅展示完整参考解答。"
   },
   "ceptCheck": {
-    "stem": "为什么 Decode 阶段不能只读取 KV Cache，而仍然需要计算当前 Token 的 Q、K 和 V？"
+    "stem": "为什么 Decode 阶段每次只生成一个 Token，历史 KV Cache 的读取量仍会随着上下文长度增长？这会怎样影响它的性能瓶颈？"
   },
   "taxonomy": {
     "primaryConcept": "Prefill 与 Decode 的 KV Cache 行为",
