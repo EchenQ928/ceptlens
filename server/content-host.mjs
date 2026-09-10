@@ -7,8 +7,13 @@ const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "
 const distRoot = path.join(projectRoot, "dist");
 const libraryPath = path.join(projectRoot, "content-libraries", "library.json");
 const packagePath = path.join(projectRoot, "package.json");
-const port = Number(process.env.CEPTLENS_PORT ?? process.argv[2] ?? 4173);
-const host = process.env.CEPTLENS_HOST ?? "127.0.0.1";
+const cliArgs = process.argv.slice(2);
+const cliValue = (flag) => {
+  const index = cliArgs.indexOf(flag);
+  return index >= 0 ? cliArgs[index + 1] : undefined;
+};
+const port = Number(process.env.CEPTLENS_PORT ?? cliValue("--port") ?? cliArgs[0] ?? 4173);
+const host = process.env.CEPTLENS_HOST ?? cliValue("--host") ?? "127.0.0.1";
 const publicUrl = process.env.CEPTLENS_PUBLIC_ORIGIN ?? `http://${host}:${port}`;
 
 const contentTypes = {

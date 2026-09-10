@@ -4,13 +4,15 @@ After=network.target
 
 [Service]
 Type=simple
+User=ceptlens
 WorkingDirectory=/srv/ceptlens/current
 Environment=NODE_ENV=production
-Environment=CEPTLENS_PORT=4173
 Environment=CEPTLENS_PUBLIC_ORIGIN=https://ceptlens.com
-ExecStart=/usr/bin/npm run host
+ExecStart=/usr/bin/node server/content-host.mjs --host 127.0.0.1 --port 8765
 Restart=always
 RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
 
 [Install]
 WantedBy=multi-user.target
