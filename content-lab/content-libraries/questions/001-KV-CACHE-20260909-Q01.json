@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "3.0",
+  "id": "KV-CACHE-20260909-Q01",
+  "type": "single_choice",
+  "stem": "在 Transformer 的自回归生成中，[[term:kv-cache|KV Cache]] 做了什么？",
+  "options": [
+    {"key": "A", "text": "缓存每一层中历史 Token 已经计算得到的 Key 和 Value 张量，后续生成时可以直接复用这些历史张量。"},
+    {"key": "B", "text": "缓存生成 Key 和 Value 所使用的投影权重，使后续生成时可以直接复用这些权重。"},
+    {"key": "C", "text": "缓存最后一层生成的 Key 和 Value，所有其他层共享这份缓存。"},
+    {"key": "D", "text": "缓存历史 Token 已经得到的注意力分布，后续生成时沿用这些注意力权重。"}
+  ],
+  "correctAnswer": ["A"],
+  "explanation": "KV Cache 保存的是各层历史位置的 K/V 中间张量，新的生成步骤可以继续使用它们参与[[term:self-attention|自注意力]]计算。它缓存的是运行过程中产生的 K/V 结果，而不是生成 K/V 的模型权重、最后一层的专属缓存，或已经完成的注意力分布。",
+  "ceptCheck": {
+    "stem": "为什么通常没有 Q Cache？",
+    "referenceAnswer": "因为每个解码步骤都会为新生成的 Token 计算一个新的 Query；历史 Query 不会在后续步骤中再次作为当前查询使用。",
+    "explanation": "在自回归解码中，当前 Query 用来读取历史 K/V。历史 K/V 会被后续 Query 反复读取，而每一步的 Query 都对应新的当前位置，因此跨步骤缓存 Query 没有同样的复用价值。"
+  },
+  "taxonomy": {
+    "primaryConcept": "KV Cache 的作用",
+    "modelFamily": "G4 Transformer与Attention",
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E9 推理与运行时优化",
+    "priority": "P0",
+    "knowledgeTopics": ["推理系统", "架构模块", "QKV与注意力"],
+    "taskScenarios": ["自回归生成", "Decode"],
+    "optimizationObjectives": ["时延"],
+    "runtimeEnvironments": ["硬件无关"]
+  },
+  "ordering": {"order": 1001, "prerequisites": []}
+}

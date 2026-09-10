@@ -43,6 +43,7 @@ export interface SubjectiveAnswerSpec {
   rubric: SubjectiveRubricItem[];
   gradingInstruction?: RichText;
 }
+export interface CeptCheckSpec { stem: RichText; referenceAnswer: RichText; explanation: RichText; }
 
 /** Runtime question. Author files omit termDependencies; the platform derives them from explicit links. */
 export interface QuestionPackage {
@@ -53,6 +54,7 @@ export interface QuestionPackage {
   options: QuestionOption[];
   correctAnswer: string[];
   explanation: RichText;
+  ceptCheck?: CeptCheckSpec;
   subjectiveAnswer?: SubjectiveAnswerSpec;
   taxonomy: QuestionTaxonomy;
   ordering: QuestionOrdering;

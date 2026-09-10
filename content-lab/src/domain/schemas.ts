@@ -30,12 +30,14 @@ const subjectiveAnswerSchema = z.object({
   rubric: z.array(rubricSchema).min(1),
   gradingInstruction: nonEmpty.optional()
 }).strict();
+const ceptCheckSchema = z.object({ stem: nonEmpty, referenceAnswer: nonEmpty, explanation: nonEmpty }).strict();
 
 const questionBase = z.object({
   schemaVersion: z.literal("3.0"),
   id,
   stem: nonEmpty,
   explanation: nonEmpty,
+  ceptCheck: ceptCheckSchema.optional(),
   taxonomy: taxonomySchema,
   ordering: orderingSchema
 });
@@ -106,8 +108,8 @@ export function richTextToPlainText(text: string): string {
   return text.replace(explicitTermLinkPattern, (_marker, _termId, label: string) => label);
 }
 
-export function questionRichText(question: { stem: string; explanation: string; options?: Array<{ text: string }>; subjectiveAnswer?: { referenceAnswer: string; rubric: Array<{ criterion: string }> } }): string {
-  return [question.stem, ...(question.options ?? []).map((option) => option.text), question.explanation, question.subjectiveAnswer?.referenceAnswer ?? "", ...(question.subjectiveAnswer?.rubric.map((item) => item.criterion) ?? [])].join("\n");
+export function questionRichText(question: { stem: string; explanation: string; options?: Array<{ text: string }>; subjectiveAnswer?: { referenceAnswer: string; rubric: Array<{ criterion: string }> }; ceptCheck?: { stem: string; referenceAnswer: string; explanation: string } }): string {
+  return [question.stem, ...(question.options ?? []).map((option) => option.text), question.explanation, question.subjectiveAnswer?.referenceAnswer ?? "", ...(question.subjectiveAnswer?.rubric.map((item) => item.criterion) ?? []), question.ceptCheck?.stem ?? "", question.ceptCheck?.referenceAnswer ?? "", question.ceptCheck?.explanation ?? ""].join("\n");
 }
 
 export function dependenciesFromText(text: string, sourceLabel: string): TermDependency[] {
