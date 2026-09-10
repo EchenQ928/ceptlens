@@ -37,4 +37,4 @@ jobs:
       - name: Activate release and health check
         run: |
           ssh -i ~/.ssh/ceptlens_deploy "${{ secrets.CEPTLENS_DEPLOY_USER }}@${{ secrets.CEPTLENS_DEPLOY_HOST }}" \
-            "sudo /usr/local/bin/ceptlens-deploy ceptlens-${GITHUB_SHA}.tar.gz ${GITHUB_SHA}"
+            "sudo /usr/local/bin/ceptlens-deploy-v2 ceptlens-${GITHUB_SHA}.tar.gz ${GITHUB_SHA}"

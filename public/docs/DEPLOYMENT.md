@@ -2,7 +2,7 @@
 
 The production beta runs on a Linux ECS host with Nginx and systemd. Node serves the application and API on loopback; Nginx provides the public HTTPS origin. Production content and service data must stay on local server storage, not in an iCloud-synchronized directory.
 
-GitHub Actions runs `npm ci`, `npm run check`, and `npm run test:services` for the deployment workflow. A release archive is created from the exact Git commit, uploaded to `/srv/ceptlens/releases/`, and activated by `/usr/local/bin/ceptlens-deploy`.
+GitHub Actions runs `npm run setup` and `npm run check:all` for the deployment workflow. A release archive is created from the exact Git commit, uploaded to `/srv/ceptlens/releases/`, and activated by `/usr/local/bin/ceptlens-deploy-v2`.
 
 ## GitHub production secrets
 
@@ -20,7 +20,7 @@ The matching public key belongs in the deployment user's `~/.ssh/authorized_keys
 
 1. Install Node.js 22.18.0 or newer and verify the version used by `sudo` and systemd.
 2. Create the `ceptlens` service user and `/srv/ceptlens/releases/`. Keep `/var/lib/ceptlens` owned by the service user.
-3. Install `deploy/ceptlens-deploy.sh` as `/usr/local/bin/ceptlens-deploy` with mode `755`. Allow the deployment user to run it through `sudo`.
+3. Install `deploy/ceptlens-deploy.sh` as `/usr/local/bin/ceptlens-deploy-v2` with mode `755`. Allow the deployment user to run it through `sudo`.
 4. Install `deploy/ceptlens.service.example` as `/etc/systemd/system/ceptlens.service`, then run `systemctl daemon-reload` and `systemctl enable ceptlens`.
 5. Create `/etc/ceptlens/ceptlens.env` with mode `600`:
 
