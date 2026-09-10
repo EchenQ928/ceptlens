@@ -10,8 +10,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.18.0
+          node-version-file: .nvmrc
           cache: npm
-      - run: npm ci
-      - run: npm run check
-      - run: npm run test:services
+          cache-dependency-path: |
+            package-lock.json
+            content-lab/package-lock.json
+      - run: npm run setup
+      - run: npm run check:all

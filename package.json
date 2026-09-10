@@ -4,6 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "start": "node --env-file-if-exists=.env server/content-host.mjs --host 127.0.0.1 --port 8765",
     "dev": "vite --host 0.0.0.0 --port 8765",
     "build": "tsc -b && vite build",
     "build:staged": "tsc -b && vite build --outDir .dist-next --emptyOutDir",
@@ -13,6 +15,7 @@
     "validate": "tsx scripts/validate-content.ts",
     "test": "vitest run",
     "check": "npm run validate && npm run test && npm run build",
+    "check:all": "npm run check && npm run test:services && npm --prefix content-lab run check && npm --prefix content-lab run test:imports",
     "test:services": "node scripts/verify-services.mjs"
   },
   "dependencies": {

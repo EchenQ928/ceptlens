@@ -9,12 +9,16 @@ The repository contains the production learning platform and a separate local Co
 Requires Node.js 22.18.0 or newer:
 
 ```bash
-npm ci
-npm run check
-npm run dev
+npm run setup
+npm run check:all
+npm start
 ```
 
 Open http://127.0.0.1:8765/.
+
+`npm start` serves the built application and its backend, including the Content Manager at `/#/developer`. Rebuild with `npm run build` after frontend changes. `npm run dev` is a frontend-only development server; stop the backend first because they use the same port.
+
+For a new partner joining from another computer, follow [`PARTNER_ONBOARDING.md`](PARTNER_ONBOARDING.md), including GitHub authentication and Aliyun server access.
 
 For production deployment, see [`public/docs/DEPLOYMENT.md`](public/docs/DEPLOYMENT.md).
 
