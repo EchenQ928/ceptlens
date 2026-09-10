@@ -343,7 +343,7 @@ const server = createServer(async (request, response) => {
         const directory = resolve(candidate, "content-libraries/questions");
         return Promise.all((await readdir(directory)).filter(file => file.endsWith(".json")).map(async file => JSON.parse(await readFile(resolve(directory, file), "utf8"))));
       });
-      response.writeHead(200, { "Content-Type": "application/json; charset=utf-8", "Content-Disposition": "attachment; filename=modelpath-question-library.json" });
+      response.writeHead(200, { "Content-Type": "application/json; charset=utf-8", "Content-Disposition": "attachment; filename=ceptlens-question-library.json" });
       return response.end(JSON.stringify({ schemaVersion: "3.0", kind: "question-bundle", exportedAt: new Date().toISOString(), questions }, null, 2));
     }
     const termExportMatch = url.pathname.match(/^\/api\/content\/terms\/([a-zA-Z0-9][a-zA-Z0-9._-]*)\/export$/);
@@ -383,6 +383,6 @@ for (const signal of ["SIGINT", "SIGTERM"]) process.once(signal, async () => { a
 server.on("error", async error => { console.error(error.code === "EADDRINUSE" ? `端口 ${port} 已使用，请先停止旧实验室，或用 --port 指定其他端口。` : error.message); await vite.close(); process.exitCode = 1; });
 
 server.listen(port, host, () => {
-  console.log(`ModelPath 独立内容实验室 ${version}: ${publicUrl}`);
+  console.log(`CeptLens 独立内容实验室 ${version}: ${publicUrl}`);
   console.log("教学包保存在本目录 content-libraries；本服务不连接正式平台。");
 });

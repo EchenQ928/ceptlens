@@ -1,4 +1,4 @@
-# ModelPath 独立内容实验室 1.0.1
+# CeptLens 独立内容实验室 1.0.1
 
 本次修复导入期间预览读取半成品导致的白屏。首次运行和报错处理见 [启动与依赖说明](启动与依赖说明.md)。
 
@@ -18,7 +18,7 @@ macOS/Linux：在本目录执行 `bash start-lab.sh`。
 
 线上实验室入口为 **https://ceptlens.com/lab/**，整条路径由 HTTPS 基础认证保护。用户名填写 `developer`，密码填写项目维护者提供的开发者密钥；页面中的导入、校验和导出操作还会再次验证同一密钥。开发者密钥不提交到仓库，也不写入题包。
 
-线上实验室只用于题包设计、预览和审批前测试。当前仅放入 KV Cache 第 1 题；原始 34 题保存在仓库的 `content-batches/kv-cache-serving-20260909/`，后续按逐题确认的结果导入。
+线上实验室只用于题包设计、预览和审批前测试。当前题目与词条草稿库均为空；原始 34 题保存在仓库的 `content-batches/kv-cache-serving-20260909/`，后续按逐题确认的结果导入。
 
 ## 日常工作
 
@@ -47,4 +47,4 @@ macOS/Linux：在本目录执行 `bash start-lab.sh`。
 
 `npm run test:imports`：在临时副本验证真实导入、同 ID 替换、失败不覆盖、导出和重启保留。不会操作当前草稿或正式网站。
 
-包格式：`schemaVersion: 3.0`、`sdkVersion: 1.x`。依赖与教学 SDK 对齐 ModelPath beta6；与同格式的现有正式站通过 ZIP 交换内容，不通过源码路径互相引用。只在扩展 SDK API 或改变协议时才需要升级工具；日常内容开发不需要更新整站源码。
+包格式：`schemaVersion: 3.0`、`sdkVersion: 1.x`。依赖与教学 SDK 对齐 CeptLens beta6；与同格式的现有正式站通过 ZIP 交换内容，不通过源码路径互相引用。只在扩展 SDK API 或改变协议时才需要升级工具；日常内容开发不需要更新整站源码。
