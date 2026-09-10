@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "3.0",
+  "id": "KV-CACHE-20260909-Q03",
+  "type": "subjective",
+  "stem": "请分别说明 Prefill 和 Decode 阶段对 [[term:kv-cache|KV Cache]] 的处理方式，重点描述两个阶段中 KV Cache 的读写行为，并据此分析为什么 Prefill 通常更偏向 Compute-bound，而 Decode 通常更偏向 Memory-bound。",
+  "explanation": "这道题的关键不是分别背出“Compute-bound”和“Memory-bound”，而是把 KV Cache 的读写过程与两个阶段的计算形态联系起来。完整回答应说明：Prefill 一次处理整段输入上下文，批量计算并写入历史 K/V；Decode 每次只处理一个新 Token，读取历史 KV Cache、计算当前 Token 的 Q/K/V，并追加新的 K/V。前者具有更大的矩阵计算规模和更高的并行度，通常更容易受计算能力限制；后者单步计算规模较小，却需要反复读取不断增长的历史 KV Cache，通常更容易受显存带宽和数据访问限制。",
+  "subjectiveAnswer": {
+    "referenceAnswer": "**Prefill：处理输入上下文并建立 KV Cache**\n\nPrefill 阶段一次性处理用户已经输入的整段上下文。对每一层而言，模型会批量计算这段序列的 Query、Key 和 Value，并执行带因果掩码的自注意力。历史 Token 对应的 K/V 会被写入 KV Cache，作为后续生成阶段的上下文。\n\n由于 Prefill 同时处理多个 Token，线性投影和注意力计算通常可以组织成较大的矩阵运算，GPU 并行度较高，权重也能被多个 Token 共同复用。因此在典型场景下，Prefill 更容易受到矩阵计算能力限制，表现为 Compute-bound。\n\n**Decode：读取历史 KV 并追加当前 KV**\n\nDecode 阶段每次只生成一个新 Token。当前 Token 经过每一层后会产生新的 Query、Key 和 Value，其中新的 Key 和 Value 会追加到 KV Cache。与此同时，当前 Query 必须读取并使用此前所有历史位置的 K/V，完成当前步骤的注意力计算。\n\nDecode 的单步输入规模很小，矩阵乘法难以像 Prefill 那样充分填满 GPU 计算单元；但每生成一个 Token，都要从显存中读取模型权重和历史 KV Cache。随着上下文变长，需要读取的历史 KV 也会变多。因此 Decode 通常更容易受到显存带宽、缓存访问和数据搬运的限制，表现为 Memory-bound。\n\n**两者的核心差异**\n\nPrefill 的主要行为是批量计算并写入一段历史 KV；Decode 的主要行为是读取历史 KV、计算当前 Token 的新投影，并追加新的 KV。KV Cache 减少的是历史 K/V 投影的重复计算，但不会消除 Decode 中当前 Token 的计算，也不会把自回归生成变成并行生成。\n\n“Compute-bound”和“Memory-bound”是典型倾向，而不是绝对标签。实际瓶颈还会受到模型规模、上下文长度、Batch Size、硬件、量化方式和推理引擎实现的影响。",
+    "rubric": [
+      {
+        "criterion": "准确说明 Prefill 一次处理已有输入上下文，并批量计算和写入历史 K/V 到 KV Cache。",
+        "points": 3
+      },
+      {
+        "criterion": "准确说明 Decode 每次处理一个新 Token，读取历史 KV Cache，同时计算当前 Token 的 Q/K/V，并追加新的 K/V。",
+        "points": 3
+      },
+      {
+        "criterion": "将 Prefill 的大矩阵运算、高并行度与 Compute-bound 建立清晰因果联系。",
+        "points": 2
+      },
+      {
+        "criterion": "将 Decode 的小单步计算规模、历史 KV 反复读取和显存带宽压力与 Memory-bound 建立清晰因果联系。",
+        "points": 2
+      }
+    ],
+    "gradingInstruction": "重点评价因果链是否完整。只写“Prefill 是 Compute-bound、Decode 是 Memory-bound”而没有解释 KV Cache 的读写行为、并行度和数据访问压力时，不应给出高分。Compute-bound 与 Memory-bound 应理解为典型性能倾向，而非不受条件影响的绝对结论。"
+  },
+  "ceptCheck": {
+    "stem": "为什么 Decode 阶段不能只读取 KV Cache，而仍然需要计算当前 Token 的 Q、K 和 V？"
+  },
+  "taxonomy": {
+    "primaryConcept": "Prefill 与 Decode 的 KV Cache 行为",
+    "modelFamily": "G4 Transformer与Attention",
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E9 推理与运行时优化",
+    "priority": "P0",
+    "knowledgeTopics": ["推理系统", "架构模块", "QKV与注意力", "性能分析"],
+    "taskScenarios": ["自回归生成", "Prefill", "Decode"],
+    "optimizationObjectives": ["时延", "吞吐", "显存带宽"],
+    "runtimeEnvironments": ["硬件无关"]
+  },
+  "ordering": {
+    "order": 1003,
+    "prerequisites": ["KV-CACHE-20260909-Q01", "KV-CACHE-20260909-Q02"]
+  }
+}
