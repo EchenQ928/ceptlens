@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "3.0",
+  "id": "KV-CACHE-20260909-Q02",
+  "type": "single_choice",
+  "stem": "KV Cache 主要解决了 Transformer 自回归生成中的什么痛点？",
+  "options": [
+    {
+      "key": "A",
+      "text": "减少模型参数数量，使模型在不重新训练的情况下变得更小。"
+    },
+    {
+      "key": "B",
+      "text": "避免每生成一个新 Token 都重新计算历史 Token 的 Key 和 Value，减少 Decode 阶段的重复计算。"
+    },
+    {
+      "key": "C",
+      "text": "让模型在生成第一个 Token 之前就能跳过对输入序列的注意力计算。"
+    },
+    {
+      "key": "D",
+      "text": "把自回归生成改造成一次性并行生成，因此不再需要按顺序生成 Token。"
+    }
+  ],
+  "correctAnswer": ["B"],
+  "explanation": "**正确答案：B**\n\n自回归生成时，模型每次只新增一个 Token，但新的注意力计算仍然需要使用此前所有位置的 K/V。如果不做缓存，历史 Token 的 K/V 会在每一步被重复计算。KV Cache 保留这些已经算过的历史 K/V，让后续步骤直接复用，从而减少 Decode 阶段的重复计算，尤其缓解上下文变长后逐步生成的时延增长。\n\n**A｜把 KV Cache 与模型压缩混淆**\nKV Cache 不会改变模型参数数量，也不会让模型权重变小。它是推理过程中为中间结果分配的运行时缓存，通常还会额外占用显存。\n\n**B｜准确描述 KV Cache 解决的核心痛点**\n它针对的是历史 K/V 的重复计算。当前步骤仍然需要计算新 Token 的 Query、Key 和 Value，但历史部分可以直接从缓存中读取。\n\n**C｜把 Decode 阶段与首 Token 计算混淆**\nKV Cache 主要优化逐 Token 生成阶段。生成开始前的 Prefill 阶段仍然需要处理输入上下文，不能因为有 KV Cache 就跳过初始注意力计算。\n\n**D｜把缓存误解成并行生成**\nKV Cache 不会改变自回归生成必须依赖前序结果的事实，也不会让所有 Token 一次生成。它只是减少每一步对历史信息的重复计算。",
+  "ceptCheck": {
+    "stem": "如果上下文长度继续增加，KV Cache 为什么仍然会占用越来越多的显存？"
+  },
+  "taxonomy": {
+    "primaryConcept": "KV Cache 解决的推理痛点",
+    "modelFamily": "G4 Transformer与Attention",
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E9 推理与运行时优化",
+    "priority": "P0",
+    "knowledgeTopics": ["推理系统", "架构模块", "QKV与注意力"],
+    "taskScenarios": ["自回归生成", "Decode"],
+    "optimizationObjectives": ["时延", "显存"],
+    "runtimeEnvironments": ["硬件无关"]
+  },
+  "ordering": {"order": 1002, "prerequisites": ["KV-CACHE-20260909-Q01"]}
+}
