@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "3.0",
+  "id": "KV-CACHE-20260909-Q05",
+  "type": "subjective",
+  "stem": "请解释为什么在自注意力的 Decode 过程中，不能只缓存历史 Attention Output，而需要分别缓存历史 Key 和 Value。请说明当前 Query 如何使用这两类缓存。",
+  "explanation": "**核心理解**\n\n历史 Key 和 Value 在后续步骤承担不同职责：Key 用来与当前 Query 计算注意力分数，Value 用来根据这些分数加权生成当前输出。每个新 Token 都会产生新的 Query，因此注意力分数和输出也需要随当前 Query 重新计算。历史 Attention Output 已经是在旧 Query 下完成的聚合结果，无法提供后续步骤重新分配注意力所需的 Key，也无法替代用于加权聚合的 Value。",
+  "subjectiveAnswer": {
+    "referenceAnswer": "**Key：帮助当前 Query 找到相关位置**\n\nDecode 生成新 Token 时，当前 Query 会与历史 Key 做相似度计算，得到当前步骤的注意力分数。由于每个新 Token 都会产生新的 Query，模型需要用同一批历史 Key 重新判断当前 Token 应该关注哪些位置。\n\n**Value：提供被聚合的内容**\n\n注意力分数经过归一化后，会作为权重对历史 Value 做加权求和，得到当前 Token 的 Attention Output。不同的 Query 可能产生不同的权重，因此同一段历史 Value 可以被组合出不同的输出。\n\n**为什么需要分别保存 K 和 V**\n\n历史 Attention Output 已经是在某个旧 Query 下完成的聚合结果。它不包含后续 Query 重新计算注意力分数所需的 Key，也不能让模型重新访问并组合各历史位置的 Value。保存历史 Key 和 Value，才能在每个 Decode 步骤用新的 Query 完成新的注意力计算。",
+    "rubric": [
+      {
+        "criterion": "说明当前 Query 与历史 Key 计算注意力分数，且新 Token 会产生新的 Query。",
+        "points": 3
+      },
+      {
+        "criterion": "说明注意力权重对历史 Value 做加权聚合以得到当前 Attention Output。",
+        "points": 3
+      },
+      {
+        "criterion": "解释历史 Attention Output 是旧 Query 下的聚合结果，无法支持后续步骤重新计算分数和组合 Value。",
+        "points": 3
+      },
+      {
+        "criterion": "明确指出 Key 与 Value 在注意力计算中承担不同职责。",
+        "points": 1
+      }
+    ],
+    "gradingInstruction": "评分依据隐藏于 rubric；学习模式展示完整参考解答，不展示评分点或分值。"
+  },
+  "taxonomy": {
+    "primaryConcept": "Attention Output 与 K/V Cache 的区别",
+    "modelFamily": "G4 Transformer与Attention",
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E9 推理与运行时优化",
+    "priority": "P0",
+    "knowledgeTopics": [
+      "推理系统",
+      "架构模块",
+      "QKV与注意力"
+    ],
+    "taskScenarios": [
+      "自回归生成",
+      "Decode"
+    ],
+    "optimizationObjectives": [
+      "时延",
+      "显存"
+    ],
+    "runtimeEnvironments": [
+      "硬件无关"
+    ]
+  },
+  "ordering": {
+    "order": 1005,
+    "prerequisites": [
+      "KV-CACHE-20260909-Q04"
+    ]
+  }
+}
