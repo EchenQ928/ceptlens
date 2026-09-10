@@ -269,7 +269,7 @@ const server = createServer(async (request, response) => {
     const url = new URL(request.url ?? "/", `${forwardedProto}://${request.headers.host ?? "localhost"}`);
     if (host === "127.0.0.1" || host === "localhost") {
       if (!["127.0.0.1", "localhost"].includes(url.hostname) && !request.headers["x-forwarded-for"]) return json(response, 403, { ok: false, error: "实验室仅允许本机地址" });
-      if (request.headers["sec-fetch-site"] === "cross-site") return json(response, 403, { ok: false, error: "不允许外站调用本机实验室" });
+      if (request.headers["sec-fetch-site"] === "cross-site" && !request.headers["x-forwarded-for"]) return json(response, 403, { ok: false, error: "不允许外站调用本机实验室" });
     }
     if (request.headers.origin && request.headers.origin !== url.origin) return json(response, 403, { ok: false, error: "不允许跨站内容请求" });
     if (!url.pathname.startsWith("/api/") || url.pathname === "/api/lab/catalog") {
