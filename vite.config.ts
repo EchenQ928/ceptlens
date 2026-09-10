@@ -1,12 +1,19 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { fileURLToPath, URL } from "node:url";
 
 export default defineConfig({
   plugins: [react()],
-  build: {
-    sourcemap: true
+  resolve: {
+    dedupe: ["react", "react-dom", "react-router-dom"],
+    alias: {
+      "@term-sdk": fileURLToPath(new URL("./src/content-sdk/index.tsx", import.meta.url))
+    }
   },
-  server: {
-    port: 5173
+  base: "./",
+  build: {
+    sourcemap: true,
+    target: "es2022",
+    chunkSizeWarningLimit: 800
   }
 });

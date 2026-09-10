@@ -1,132 +1,37 @@
-import { ArrowRight, BookOpen, CheckCircle2, Code2, Layers3, Sparkles } from "lucide-react";
+import { ArrowRight, BookOpen, CheckCircle2, ClipboardCheck, Clock3, Network } from "lucide-react";
 import { Link } from "react-router-dom";
-import { ProgressRing } from "../components/ProgressRing";
-import { library, orderedQuestions, topicCounts } from "../domain/content";
-import { useCopy, useLocale } from "../i18n";
-import { useProgress } from "../state/progress";
+import { richTextToPlainText } from "../domain/schemas";
+import { textForLocale } from "../domain/content";
+import { useContent } from "../hooks/useContent";
+import { useProgress } from "../hooks/useProgress";
+import { useLocale, uiText } from "../i18n";
+import { taxonomyText } from "../domain/taxonomy";
 
 export function DashboardPage() {
-  const copy = useCopy();
-  const { pick } = useLocale();
-  const { progress, isCompleted } = useProgress();
-  const completedCount = progress.completedQuestionIds.filter((id) =>
-    orderedQuestions.some((question) => question.id === id)
-  ).length;
-  const completion = (completedCount / orderedQuestions.length) * 100;
-  const nextQuestion = orderedQuestions.find((question) => !isCompleted(question.id)) ?? orderedQuestions[0];
-  const topics = Object.entries(topicCounts());
-
+  const { questions, terms } = useContent();
+  const { locale } = useLocale();
+  const progress = useProgress();
+  const completed = questions.filter((question) => progress.completed.includes(question.id)).length;
+  const percent = Math.round((completed / Math.max(questions.length, 1)) * 100);
+  const next = questions.find((question) => question.id === progress.lastQuestionId) || questions.find((question) => !progress.completed.includes(question.id)) || questions[0];
   return (
-    <div className="page-stack">
-      <section className="page-intro dashboard-intro">
-        <div>
-          <span className="eyebrow">CEPTLENS / LEARNING SYSTEM</span>
-          <h1>{copy("overviewTitle")}</h1>
-          <p>{copy("overviewDescription")}</p>
-        </div>
-        <div className="intro-actions">
-          <Link className="button button-primary" to={`/learn/${nextQuestion.id}`}>
-            <BookOpen size={17} />
-            <span>{completedCount > 0 ? copy("continueLearning") : copy("startLearning")}</span>
-          </Link>
-          <Link className="button button-secondary" to="/terms">
-            <Layers3 size={17} />
-            <span>{copy("reviewTerms")}</span>
-          </Link>
-        </div>
-      </section>
-
-      <section className="dashboard-grid">
-        <div className="panel progress-panel">
-          <div className="panel-heading">
-            <div>
-              <span className="eyebrow">{copy("progress")}</span>
-              <h2>{completedCount} / {orderedQuestions.length}</h2>
-            </div>
-            <ProgressRing value={completion} label={copy("completed")} />
-          </div>
-          <div className="progress-track" aria-hidden="true">
-            <span style={{ width: `${completion}%` }} />
-          </div>
-          <div className="panel-footer-line">
-            <span>{library.terms.length} {copy("terms")}</span>
-            <span>{orderedQuestions.length} {copy("questionsAvailable")}</span>
-          </div>
-        </div>
-
-        <div className="panel checkpoint-panel">
-          <div className="panel-heading compact">
-            <div>
-              <span className="eyebrow">{copy("recentCheckpoint")}</span>
-              <h2>{nextQuestion.id.toUpperCase()}</h2>
-            </div>
-            <CheckCircle2 size={21} className={isCompleted(nextQuestion.id) ? "icon-success" : "icon-muted"} />
-          </div>
-          <p className="checkpoint-prompt">{pick(nextQuestion.prompt)}</p>
-          <div className="meta-row">
-            <span>{nextQuestion.topic}</span>
-            <span>{nextQuestion.level}</span>
-          </div>
-          <Link className="text-link" to={`/learn/${nextQuestion.id}`}>
-            <span>{isCompleted(nextQuestion.id) ? copy("review") : copy("next")}</span>
-            <ArrowRight size={16} />
-          </Link>
-        </div>
-      </section>
-
-      <section className="content-section">
-        <div className="section-heading">
-          <div>
-            <span className="eyebrow">ROADMAP</span>
-            <h2>{copy("learningPath")}</h2>
-          </div>
-          <p>{copy("learningPathDescription")}</p>
-        </div>
-        <div className="topic-grid">
-          {topics.map(([topic, count]) => {
-            const topicCompleted = progress.completedQuestionIds.filter((id) =>
-              orderedQuestions.some((question) => question.id === id && question.topic === topic)
-            ).length;
-            return (
-              <Link className="topic-row" key={topic} to={`/learn?topic=${encodeURIComponent(topic)}`}>
-                <span className="topic-icon">
-                  <Sparkles size={16} />
-                </span>
-                <span className="topic-copy">
-                  <strong>{topic}</strong>
-                  <small>
-                    {topicCompleted} / {count} {copy("questions")}
-                  </small>
-                </span>
-                <ArrowRight size={17} />
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="split-callout">
-        <div>
-          <span className="eyebrow">BILINGUAL BY DEFAULT</span>
-          <h2>{copy("bilingualContent")}</h2>
-          <p>{copy("bilingualDescription")}</p>
-        </div>
-        <div className="callout-code">library.json<br /><span>en + zh</span></div>
-      </section>
-
-      <section className="developer-callout">
-        <div className="developer-callout-icon">
-          <Code2 size={20} />
-        </div>
-        <div>
-          <h2>{copy("developerTitle")}</h2>
-          <p>{copy("developerDescription")}</p>
-        </div>
-        <Link className="text-link" to="/developers">
-          <span>{copy("developerLink")}</span>
-          <ArrowRight size={16} />
+    <div className="page dashboard-page">
+      <div className="page-heading dashboard-heading">
+        <div><p className="eyebrow">AI MODEL ENGINEERING · V1.0</p><h1>{uiText(locale, "从一道题开始，建立模型设计能力", "Build model design skills one question at a time")}</h1><p>{uiText(locale, "当前共", "There are")} {questions.length} {uiText(locale, "道题，其中", "questions, including")} {questions.filter(q => q.taxonomy.priority === "P0").length} P0 {uiText(locale, "题，已按前置关系排列。", "questions ordered by prerequisites.")}</p></div>
+        <div className="heading-metric"><strong>{percent}%</strong><span>{uiText(locale, "主干完成度", "Core completion")}</span><div className="metric-bar"><i style={{ width: `${percent}%` }} /></div></div>
+      </div>
+      <div className="mode-grid">
+        <Link className="mode-card learning" to="/learn">
+          <div className="mode-icon"><BookOpen /></div><div className="mode-copy"><span className="mode-kicker">LEARN</span><h2>{uiText(locale, "学习模式", "Learn")}</h2><p>{uiText(locale, "按模型族、层级和工程链路选择题库；支持做题后看解析或直接看题。", "Filter the library by model family, level, and engineering stage. Practice first or read the answer directly.")}</p><div className="mode-stats"><span><b>{completed}</b> {uiText(locale, "已完成", "completed")}</span><span><b>{questions.filter(q => progress.wrong.includes(q.id)).length}</b> {uiText(locale, "待复习", "to review")}</span><span><b>{terms.length}</b> {uiText(locale, "个共享词条", "shared terms")}</span></div></div><ArrowRight className="mode-arrow" />
         </Link>
-      </section>
+        <Link className="mode-card exam" to="/exam">
+          <div className="mode-icon"><ClipboardCheck /></div><div className="mode-copy"><span className="mode-kicker">ASSESS</span><h2>{uiText(locale, "考核模式", "Assessment")}</h2><p>{uiText(locale, "30 分钟随机组卷，自动保存答卷。客观题即时计分；题型未齐或主观题未评分时，不发布完整总成绩。", "A 30-minute paper with autosaved answers. Objective items are scored immediately; incomplete papers remain provisional.")}</p><div className="mode-stats"><span><b>5</b> {uiText(locale, "单选", "single choice")}</span><span><b>5</b> {uiText(locale, "多选", "multiple choice")}</span><span><b>2</b> {uiText(locale, "主观", "short answer")}{questions.filter(q => q.type === "subjective").length < 2 ? " · pending" : ""}</span></div></div><ArrowRight className="mode-arrow" />
+        </Link>
+      </div>
+      <div className="dashboard-grid">
+        <section className="panel continue-panel"><div className="panel-heading"><div><span className="eyebrow">CONTINUE</span><h2>{uiText(locale, "继续学习", "Continue learning")}</h2></div><Clock3 size={19} /></div>{next && <><div className="sequence-number">{uiText(locale, "第", "Question")} {next.ordering.order} / {questions.length}</div><h3>{richTextToPlainText(next.stem, locale)}</h3><div className="compact-tags"><span>{textForLocale(next.taxonomy.modelFamily, locale)}</span><span>{taxonomyText(next.taxonomy.learningLevel, locale)}</span><span>{taxonomyText(next.taxonomy.engineeringStage, locale)}</span></div><Link className="primary-button" to={`/learn/questions/${next.id}?mode=${progress.studyMode}`}>{uiText(locale, "继续", "Continue")} <ArrowRight size={16} /></Link></>}</section>
+        <section className="panel curriculum-panel"><div className="panel-heading"><div><span className="eyebrow">BACKBONE</span><h2>{uiText(locale, "当前主干", "Current sequence")}</h2></div><Network size={19} /></div><ol className="backbone-list">{questions.slice(0, 6).map((question) => <li key={question.id} className={progress.completed.includes(question.id) ? "done" : ""}><span>{progress.completed.includes(question.id) ? <CheckCircle2 size={17} /> : question.ordering.order}</span><Link to={`/learn/questions/${question.id}`}>{textForLocale(question.taxonomy.primaryConcept, locale)}</Link><small>{question.taxonomy.learningLevel.slice(0, 2)}</small></li>)}</ol><Link className="text-link" to="/learn">{uiText(locale, "查看完整题库", "View full library")} <ArrowRight size={15} /></Link></section>
+      </div>
     </div>
   );
 }

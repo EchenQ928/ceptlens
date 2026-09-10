@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "layer-normalization",
+  "title": {
+    "zh-CN": "LayerNorm",
+    "en-US": "LayerNorm"
+  },
+  "aliases": [
+    "Layer Normalization",
+    "层归一化",
+    "LN"
+  ],
+  "summary": {
+    "zh-CN": "LayerNorm 对单个样本、单个 [[term:token|Token]] 的特征维做归一化：先用这一行特征自己的均值和方差标准化，再用可学习的缩放与偏移恢复合适表示。它不依赖同批次其他样本。",
+    "en-US": "LayerNorm normalizes the feature dimension of one [[term:token|token]] in one sample: it standardizes the row using that row's own mean and variance, then applies learnable scale and bias to restore a suitable representation. It does not depend on other samples in the batch."
+  },
+  "coreConclusion": {
+    "zh-CN": "LayerNorm 在每个 Token 内部统一特征尺度，使深层网络中的数值与梯度更容易保持稳定。",
+    "en-US": "LayerNorm keeps feature scales aligned within each token, making values and gradients easier to stabilize in deep networks."
+  },
+  "prerequisites": [
+    "neural-network"
+  ]
+}

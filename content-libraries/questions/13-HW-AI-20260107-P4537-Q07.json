@@ -1,0 +1,95 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260107-P4537-Q07",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "如果一个模型出现了[[term:overfitting|过拟合]]，我们通过以下哪些操作和优化能够缓解或者减少这种过拟合可能带来的问题?",
+    "en-US": "If a model is [[term:overfitting|overfitting]], which operation can help reduce the resulting problems?"
+  },
+  "explanation": {
+    "zh-CN": "[[term:overfitting|过拟合]]说明模型过于复杂、对训练数据拟合过度。添加[[term:regularization|正则化]]（如 L1/L2、[[term:dropout|Dropout]]）可以约束模型复杂度，提高泛化能力；其余选项要么无效，要么会加重过拟合。",
+    "en-US": "[[term:overfitting|Overfitting]] means that the model is too complex and fits the training data too closely. Adding [[term:regularization|regularization]], such as L1/L2 penalties or [[term:dropout|Dropout]], constrains model complexity and improves generalization; the other options are ineffective or may worsen overfitting."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "使用正则化缓解过拟合",
+      "en-US": "Using regularization to reduce overfitting"
+    },
+    "modelFamily": {
+      "zh-CN": "G0 通用/跨模型",
+      "en-US": "G0 General / cross-model"
+    },
+    "learningLevel": "L0 通用基础",
+    "engineeringStage": "E6 训练稳定性与调优",
+    "priority": "P0",
+    "secondaryEngineeringStages": [
+      {
+        "zh-CN": "E5 训练目标与训练过程",
+        "en-US": "E5 Training objectives and process"
+      }
+    ],
+    "knowledgeTopics": [
+      {
+        "zh-CN": "学习机制",
+        "en-US": "Learning mechanisms"
+      },
+      {
+        "zh-CN": "训练系统",
+        "en-US": "Training systems"
+      }
+    ],
+    "optimizationObjectives": [
+      {
+        "zh-CN": "泛化",
+        "en-US": "Generalization"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "taskScenarios": []
+  },
+  "ordering": {
+    "order": 13,
+    "prerequisites": [
+      "HW-AI-20260527-P4981-Q05"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "在原有数据集上重新训练",
+        "en-US": "Retrain on the existing dataset"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "添加[[term:regularization|正则化]]",
+        "en-US": "Add [[term:regularization|regularization]]"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "将数据集复制后再训练",
+        "en-US": "Duplicate the dataset and train again"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "减少数据集后再训练",
+        "en-US": "Reduce the dataset and train again"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "B"
+  ]
+}

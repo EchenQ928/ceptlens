@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "runtime-peak-memory",
+  "title": {
+    "zh-CN": "运行时峰值内存",
+    "en-US": "Runtime peak memory"
+  },
+  "aliases": [
+    "峰值内存",
+    "Peak Memory",
+    "推理峰值内存",
+    "运行时内存"
+  ],
+  "summary": {
+    "zh-CN": "运行时峰值内存是一段执行过程中，某一时刻所有仍然存活的设备内存分配之和。它不仅包含模型权重，还可能同时包含输入输出、[[term:intermediate-activation|中间激活]]、[[term:operator-workspace|算子工作区]]、缓存、[[term:compiler|编译]]后权重副本和运行时缓冲。",
+    "en-US": "Runtime peak memory is the sum of all device-memory allocations that remain alive at one moment during execution. It includes not only model weights, but also inputs and outputs, [[term:intermediate-activation|intermediate activations]], [[term:operator-workspace|operator workspaces]], caches, [[term:compiler|compiler]]-generated weight copies, and runtime buffers."
+  },
+  "coreConclusion": {
+    "zh-CN": "峰值是‘在同一时刻一起活着的内存’，不是模型文件大小，也不是把每层激活简单相加。",
+    "en-US": "Peak memory is the memory that is alive at the same time. It is not the model file size and not the simple sum of every layer's activations."
+  }
+}

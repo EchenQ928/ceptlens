@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "activation-function",
+  "title": {
+    "zh-CN": "激活函数",
+    "en-US": "Activation function"
+  },
+  "aliases": [
+    "activation function",
+    "激活层"
+  ],
+  "summary": {
+    "zh-CN": "激活函数是神经网络中处理计算结果的一类函数。不同函数可以截断、压缩或平滑地调整数值。它们提供的非线性响应与加权计算配合，让网络能够表达更复杂的关系。",
+    "en-US": "An activation function processes the result of a computation inside a neural network. Different functions can clip, compress, or smoothly adjust values. Their nonlinear response works with weighted computation so the network can express more complex relationships."
+  },
+  "coreConclusion": {
+    "zh-CN": "加权计算组合信息，非线性激活改变响应方式；不同激活函数用不同的曲线实现这一作用。",
+    "en-US": "Weighted computation combines information; nonlinear activation changes the response. Different activation functions implement this role with different curves."
+  },
+  "prerequisites": [
+    "neural-network"
+  ]
+}

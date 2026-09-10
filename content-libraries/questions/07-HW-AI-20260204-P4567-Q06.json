@@ -1,0 +1,95 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260204-P4567-Q06",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "在分类任务中，[[term:softmax|Softmax 函数]]的作用是？",
+    "en-US": "In a classification task, what does the [[term:softmax|Softmax function]] do?"
+  },
+  "explanation": {
+    "zh-CN": "[[term:softmax|Softmax 函数]]将神经网络的原始输出（[[term:logits|logits]]）转换为[[term:probability-distribution|概率分布]]，每个类别的概率值介于0到1之间，且所有类别的概率之和为1，适用于[[term:classification|多分类任务]]。",
+    "en-US": "The [[term:softmax|Softmax function]] converts the neural network's raw outputs ([[term:logits|logits]]) into a [[term:probability-distribution|probability distribution]]. Each class probability lies between 0 and 1, all class probabilities sum to 1, and the result is suitable for [[term:classification|multiclass classification]]."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "Softmax概率归一化",
+      "en-US": "Softmax probability normalization"
+    },
+    "modelFamily": {
+      "zh-CN": "G0 通用/跨模型",
+      "en-US": "G0 General / cross-model"
+    },
+    "learningLevel": "L0 通用基础",
+    "engineeringStage": "E4 模块与算子设计",
+    "priority": "P0",
+    "secondaryEngineeringStages": [
+      {
+        "zh-CN": "E1 问题定义与指标",
+        "en-US": "E1 Problem definition and metrics"
+      }
+    ],
+    "knowledgeTopics": [
+      {
+        "zh-CN": "学习机制",
+        "en-US": "Learning mechanisms"
+      },
+      {
+        "zh-CN": "架构模块",
+        "en-US": "Architecture modules"
+      }
+    ],
+    "taskScenarios": [
+      {
+        "zh-CN": "分类",
+        "en-US": "Classification"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "optimizationObjectives": []
+  },
+  "ordering": {
+    "order": 7,
+    "prerequisites": [
+      "HW-AI-20260513-P4937-Q11"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "将输入映射到[-1,1]区间用于激活",
+        "en-US": "Maps inputs to the [-1, 1] interval for activation"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "将输入转换为对数概率用于交叉熵损失",
+        "en-US": "Converts inputs into log probabilities for cross-entropy loss"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "限制输出范围以防止梯度爆炸",
+        "en-US": "Limits the output range to prevent exploding gradients"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "将输入映射到[0,1]区间表示[[term:probability-distribution|概率分布]]",
+        "en-US": "Maps inputs to the [0, 1] interval as a [[term:probability-distribution|probability distribution]]"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "D"
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260415-P4778-Q13",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "[[term:smoothquant|SmoothQuant]]是一种常用的大模型[[term:quantization|量化]]方法，它的核心思想是？",
+    "en-US": "What is the core idea of [[term:smoothquant|SmoothQuant]], a common large-model [[term:quantization|quantization]] method?"
+  },
+  "explanation": {
+    "zh-CN": "[[term:smoothquant|SmoothQuant]]通过等价变换把[[term:quantization|量化]]难度从 activation 迁移到 weight，本质上是将 activation 的 scale 吸收到权重中。",
+    "en-US": "[[term:smoothquant|SmoothQuant]] uses an equivalent transformation to move quantization difficulty from activations to weights. In essence, it absorbs the activation scale into the weights."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "SmoothQuant的激活到权重尺度迁移",
+      "en-US": "Moving activation scale into weights in SmoothQuant"
+    },
+    "modelFamily": {
+      "zh-CN": "G4 Transformer与Attention",
+      "en-US": "G4 Transformers and attention"
+    },
+    "learningLevel": "L2 分支深入",
+    "engineeringStage": "E8 压缩与轻量化",
+    "priority": "P0",
+    "knowledgeTopics": [
+      {
+        "zh-CN": "高效模型",
+        "en-US": "Efficient models"
+      },
+      {
+        "zh-CN": "张量与模型计算",
+        "en-US": "Tensors and model computation"
+      }
+    ],
+    "optimizationObjectives": [
+      {
+        "zh-CN": "数值精度",
+        "en-US": "Numerical precision"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "secondaryEngineeringStages": [],
+    "taskScenarios": []
+  },
+  "ordering": {
+    "order": 34,
+    "prerequisites": [
+      "HW-AI-20260509-P4904-Q19",
+      "HW-AI-20260624-P5123-Q05"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "将权重scale转移到activation",
+        "en-US": "Move weight scale to activations"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "将activation scale转移到权重",
+        "en-US": "Move activation scale to weights"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "减少层数",
+        "en-US": "Reduce the number of layers"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "减少batch",
+        "en-US": "Reduce the batch size"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "B"
+  ]
+}

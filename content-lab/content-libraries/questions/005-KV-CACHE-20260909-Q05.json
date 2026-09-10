@@ -1,0 +1,109 @@
+{
+  "schemaVersion": "3.0",
+  "id": "KV-CACHE-20260909-Q05",
+  "type": "subjective",
+  "stem": {
+    "zh-CN": "请解释为什么在自注意力的 Decode 过程中，不能只缓存历史 Attention Output，而需要分别缓存历史 Key 和 Value。请说明当前 Query 如何使用这两类缓存。",
+    "en-US": "Explain why self-attention Decode cannot cache only historical Attention Outputs and must cache historical Keys and Values separately. Describe how the current Query uses the two caches."
+  },
+  "explanation": {
+    "zh-CN": "**核心理解**\n\n历史 Key 和 Value 在后续步骤承担不同职责：Key 用来与当前 Query 计算注意力分数，Value 用来根据这些分数加权生成当前输出。每个新 Token 都会产生新的 Query，因此注意力分数和输出也需要随当前 Query 重新计算。历史 Attention Output 已经是在旧 Query 下完成的聚合结果，无法提供后续步骤重新分配注意力所需的 Key，也无法替代用于加权聚合的 Value。",
+    "en-US": "**Core idea**\n\nHistorical Keys and Values have different roles at later steps. Keys are matched with the current Query to compute attention scores, while Values are weighted by those scores to produce the current output. Every new token produces a new Query, so the scores and output must be recomputed for that Query. A historical Attention Output is already an aggregation made for an old Query; it does not provide the Keys needed to redistribute attention later and cannot replace the Values needed for a new weighted aggregation."
+  },
+  "subjectiveAnswer": {
+    "referenceAnswer": {
+      "zh-CN": "**Key：帮助当前 Query 找到相关位置**\n\nDecode 生成新 Token 时，当前 Query 会与历史 Key 做相似度计算，得到当前步骤的注意力分数。由于每个新 Token 都会产生新的 Query，模型需要用同一批历史 Key 重新判断当前 Token 应该关注哪些位置。\n\n**Value：提供被聚合的内容**\n\n注意力分数经过归一化后，会作为权重对历史 Value 做加权求和，得到当前 Token 的 Attention Output。不同的 Query 可能产生不同的权重，因此同一段历史 Value 可以被组合出不同的输出。\n\n**为什么需要分别保存 K 和 V**\n\n历史 Attention Output 已经是在某个旧 Query 下完成的聚合结果。它不包含后续 Query 重新计算注意力分数所需的 Key，也不能让模型重新访问并组合各历史位置的 Value。保存历史 Key 和 Value，才能在每个 Decode 步骤用新的 Query 完成新的注意力计算。",
+      "en-US": "**Key: help the current Query find relevant positions**\n\nWhen Decode produces a new token, the current Query is compared with historical Keys to obtain the current step's attention scores. Because every new token produces a new Query, the model must use the same historical Keys to decide again which positions the current token should attend to.\n\n**Value: provide the content to aggregate**\n\nAfter normalization, the attention scores weight the historical Values and produce the current token's Attention Output. Different Queries can produce different weights, so the same historical Values can be combined into different outputs.\n\n**Why K and V must be stored separately**\n\nA historical Attention Output is an aggregation already made for an earlier Query. It does not contain the Keys needed to recompute scores for a later Query, and it does not let the model revisit and recombine the Value at each historical position. Storing historical Keys and Values lets every Decode step perform a new attention calculation with the new Query."
+    },
+    "rubric": [
+      {
+        "criterion": {
+          "zh-CN": "说明当前 Query 与历史 Key 计算注意力分数，且新 Token 会产生新的 Query。",
+          "en-US": "Explain that the current Query computes attention scores with historical Keys and that a new token produces a new Query."
+        },
+        "points": 3
+      },
+      {
+        "criterion": {
+          "zh-CN": "说明注意力权重对历史 Value 做加权聚合以得到当前 Attention Output。",
+          "en-US": "Explain that attention weights aggregate historical Values to produce the current Attention Output."
+        },
+        "points": 3
+      },
+      {
+        "criterion": {
+          "zh-CN": "解释历史 Attention Output 是旧 Query 下的聚合结果，无法支持后续步骤重新计算分数和组合 Value。",
+          "en-US": "Explain that a historical Attention Output was aggregated for an old Query and cannot support later score recomputation or Value recombination."
+        },
+        "points": 3
+      },
+      {
+        "criterion": {
+          "zh-CN": "明确指出 Key 与 Value 在注意力计算中承担不同职责。",
+          "en-US": "Clearly distinguish the different roles of Key and Value in attention."
+        },
+        "points": 1
+      }
+    ],
+    "gradingInstruction": {
+      "zh-CN": "评分依据隐藏于 rubric；学习模式展示完整参考解答，不展示评分点或分值。",
+      "en-US": "The rubric is hidden during grading. Learning mode shows the complete reference answer without exposing criteria or point values."
+    }
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "Attention Output 与 K/V Cache 的区别",
+      "en-US": "Attention Output versus K/V Cache"
+    },
+    "modelFamily": {
+      "zh-CN": "G4 Transformer与Attention",
+      "en-US": "G4 Transformers and attention"
+    },
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E9 推理与运行时优化",
+    "priority": "P0",
+    "knowledgeTopics": [
+      {
+        "zh-CN": "推理系统",
+        "en-US": "Inference systems"
+      },
+      {
+        "zh-CN": "架构模块",
+        "en-US": "Architecture modules"
+      },
+      {
+        "zh-CN": "QKV与注意力",
+        "en-US": "QKV and attention"
+      }
+    ],
+    "taskScenarios": [
+      {
+        "zh-CN": "自回归生成",
+        "en-US": "Autoregressive generation"
+      },
+      "Decode"
+    ],
+    "optimizationObjectives": [
+      {
+        "zh-CN": "时延",
+        "en-US": "Latency"
+      },
+      {
+        "zh-CN": "显存",
+        "en-US": "Device memory"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ]
+  },
+  "ordering": {
+    "order": 1005,
+    "prerequisites": [
+      "KV-CACHE-20260909-Q04"
+    ]
+  }
+}

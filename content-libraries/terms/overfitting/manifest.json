@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "overfitting",
+  "title": {
+    "zh-CN": "过拟合",
+    "en-US": "Overfitting"
+  },
+  "aliases": [
+    "过度拟合",
+    "overfitting",
+    "泛化不足"
+  ],
+  "summary": {
+    "zh-CN": "过拟合是模型在训练数据上表现很好，却没有学到能迁移到新样本的稳定规律。它可能记住了[[term:training-set|训练集]]的偶然细节、噪声或偏差，因此[[term:validation-set|验证集]]、[[term:test-set|测试集]]或真实数据上的表现明显变差。",
+    "en-US": "Overfitting occurs when a model performs well on training data but fails to learn stable patterns that transfer to new examples. It may memorize accidental details, noise, or bias in the [[term:training-set|training set]], so performance on the [[term:validation-set|validation set]], [[term:test-set|test set]], or real data becomes much worse."
+  },
+  "coreConclusion": {
+    "zh-CN": "训练集越来越好而训练集之外的数据开始变差，说明模型正在记忆训练细节，而不是继续提升泛化能力。",
+    "en-US": "When training performance keeps improving while data outside the training set gets worse, the model is memorizing training details instead of improving generalization."
+  },
+  "prerequisites": [
+    "loss-function"
+  ]
+}

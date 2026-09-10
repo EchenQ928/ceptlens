@@ -1,26 +1,17 @@
-# Contributing to CeptLens
+# Contributing
 
-CeptLens is intended to be approachable for developers worldwide. Please keep public code, comments, commit messages, issue discussions, pull request titles, and documentation in English.
+Use Node.js 22.18.0 or newer. From the repository root:
 
-Chinese learning content is welcome when it appears as the `zh` value next to the English source. The English version should be treated as the canonical editing copy.
+```bash
+npm ci
+npm run check
+npm run test:services
+```
 
-## Development Flow
+Questions live in `content-libraries/questions/`. Term teaching packages live in `content-libraries/terms/`. Follow [`public/docs/DEVELOPER_GUIDE.md`](public/docs/DEVELOPER_GUIDE.md) and keep both `zh-CN` and `en-US` content complete.
 
-1. Install dependencies with `npm install`.
-2. Make focused changes.
-3. Run `npm run check`.
-4. Open a pull request that explains the learning or product behavior changed.
+Create a short-lived branch from `main`. Use one of these commit prefixes: `feat`, `fix`, `docs`, `content`, or `refactor`. Pull requests should describe behavior changes, verification results, and any data migration or deployment impact.
 
-## Content Guidelines
+Do not commit API keys, `.env` files, real user data, SQLite databases, company-internal material, runtime tokens, or `node_modules/`.
 
-- Keep explanations practical for software engineers.
-- Prefer concrete model behavior over vague analogies.
-- Link terms with `[[term:term-id|label]]` only when the term exists in `content-libraries/library.json`.
-- Keep questions objective and make every option plausible enough to test understanding.
-- Add both English and Chinese text in the same change.
-
-## Code Guidelines
-
-- Keep modules small and easy to read.
-- Prefer browser-native behavior and local state unless a server feature is necessary.
-- Avoid adding dependencies for simple formatting or state helpers.
+Use the repository issue and pull request templates. Changes involving accounts, learning records, or model calls must explain migration, privacy, and rollback implications. Report security issues privately as described in [`SECURITY.md`](SECURITY.md).

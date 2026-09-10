@@ -1,0 +1,98 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260408-P4728-Q18",
+  "type": "multiple_choice",
+  "stem": {
+    "zh-CN": "在[[term:transformer|Transformer]]的训练中，以下哪些技术用于稳定训练或加速收敛?",
+    "en-US": "Which techniques are used to stabilize training or speed convergence when training a [[term:transformer|Transformer]]?"
+  },
+  "explanation": {
+    "zh-CN": "四项技术均能稳定训练或加速收敛。预热避免初期震荡，裁剪防[[term:gradient-explosion|梯度爆炸]]，[[term:residual-connection|残差连接]]改善梯度流动，[[term:layer-normalization|层归一化]]稳定激活分布。",
+    "en-US": "All four techniques can stabilize training or speed convergence. Warmup avoids early oscillation, clipping prevents [[term:gradient-explosion|exploding gradients]], [[term:residual-connection|residual connections]] improve gradient flow, and [[term:layer-normalization|LayerNorm]] stabilizes activation distributions."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "Transformer训练稳定性技术",
+      "en-US": "Training-stability techniques for Transformers"
+    },
+    "modelFamily": {
+      "zh-CN": "G4 Transformer与Attention",
+      "en-US": "G4 Transformers and attention"
+    },
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E6 训练稳定性与调优",
+    "priority": "P0",
+    "secondaryEngineeringStages": [
+      {
+        "zh-CN": "E4 模块与算子设计",
+        "en-US": "E4 Module and operator design"
+      }
+    ],
+    "knowledgeTopics": [
+      {
+        "zh-CN": "学习机制",
+        "en-US": "Learning mechanisms"
+      },
+      {
+        "zh-CN": "架构模块",
+        "en-US": "Architecture modules"
+      }
+    ],
+    "optimizationObjectives": [
+      {
+        "zh-CN": "稳定性",
+        "en-US": "Stability"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "taskScenarios": []
+  },
+  "ordering": {
+    "order": 28,
+    "prerequisites": [
+      "HW-AI-20260204-P4567-Q02"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "[[term:learning-rate-warmup|学习率预热]]",
+        "en-US": "[[term:learning-rate-warmup|Learning-rate warmup]]"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "[[term:gradient-clipping|梯度裁剪]]",
+        "en-US": "[[term:gradient-clipping|Gradient clipping]]"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "[[term:residual-connection|残差连接]]",
+        "en-US": "[[term:residual-connection|Residual connections]]"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "[[term:layer-normalization|层归一化]]",
+        "en-US": "[[term:layer-normalization|Layer normalization]]"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ]
+}

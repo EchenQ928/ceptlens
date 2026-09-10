@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "3.0",
+  "id": "question-unique-id",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "题干；需要展开的概念直接写成 [[term:term-id|词条名称]]。",
+    "en-US": "Question stem; link an expandable concept as [[term:term-id|term label]]."
+  },
+  "options": [
+    { "key": "A", "text": { "zh-CN": "选项 A", "en-US": "Option A" } },
+    { "key": "B", "text": { "zh-CN": "选项 B", "en-US": "Option B" } }
+  ],
+  "correctAnswer": ["A"],
+  "explanation": {
+    "zh-CN": "说明答案成立的因果关系。",
+    "en-US": "Explain the causal relationship that makes the answer correct."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "一个主知识点",
+      "en-US": "One primary concept"
+    },
+    "modelFamily": "G0 通用/跨模型",
+    "learningLevel": "L0 通用基础",
+    "engineeringStage": "E0 基础机制与模型计算",
+    "priority": "P1"
+  },
+  "ordering": {
+    "order": 999
+  }
+}

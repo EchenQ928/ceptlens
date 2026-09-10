@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260204-P4567-Q14",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "关于[[term:transformer-architecture-families|GPT、BERT、T5 三种模型的架构]]，哪项描述是正确的？",
+    "en-US": "Which statement correctly describes the architectures of GPT, BERT, and T5?"
+  },
+  "explanation": {
+    "zh-CN": "GPT系列模型使用[[term:transformer|Transformer]]解码器进行自回归生成，BERT使用Transformer编码器进行双向上下文编码，T5采用[[term:transformer-architecture-families|编码器-解码器架构]]处理序列到序列任务。",
+    "en-US": "The GPT family uses a [[term:transformer|Transformer]] decoder for autoregressive generation, BERT uses a Transformer encoder for bidirectional contextual encoding, and T5 uses an [[term:transformer-architecture-families|encoder-decoder architecture]] for sequence-to-sequence tasks."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "Transformer模型架构范式",
+      "en-US": "Transformer architecture families"
+    },
+    "modelFamily": {
+      "zh-CN": "G4 Transformer与Attention",
+      "en-US": "G4 Transformers and attention"
+    },
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E3 架构选型与整体设计",
+    "priority": "P0",
+    "knowledgeTopics": [
+      {
+        "zh-CN": "架构模块",
+        "en-US": "Architecture modules"
+      }
+    ],
+    "taskScenarios": [
+      {
+        "zh-CN": "序列建模",
+        "en-US": "Sequence modeling"
+      },
+      {
+        "zh-CN": "生成",
+        "en-US": "Generation"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "secondaryEngineeringStages": [],
+    "optimizationObjectives": []
+  },
+  "ordering": {
+    "order": 25,
+    "prerequisites": [
+      "HW-AI-20260304-P4570-Q01"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "GPT是[[term:transformer-architecture-families|encoder-only]]，BERT是[[term:transformer-architecture-families|decoder-only]]，T5是encoder-decoder",
+        "en-US": "GPT is [[term:transformer-architecture-families|encoder-only]], BERT is [[term:transformer-architecture-families|decoder-only]], and T5 is encoder-decoder"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "GPT是encoder-decoder，BERT是[[term:transformer-architecture-families|decoder-only]]，T5是[[term:transformer-architecture-families|encoder-only]]",
+        "en-US": "GPT is encoder-decoder, BERT is [[term:transformer-architecture-families|decoder-only]], and T5 is [[term:transformer-architecture-families|encoder-only]]"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "GPT是encoder-decoder，BERT是encoder-decoder，T5是[[term:transformer-architecture-families|decoder-only]]",
+        "en-US": "GPT is encoder-decoder, BERT is encoder-decoder, and T5 is [[term:transformer-architecture-families|decoder-only]]"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "GPT是[[term:transformer-architecture-families|decoder-only]]，BERT是[[term:transformer-architecture-families|encoder-only]]，T5是encoder-decoder",
+        "en-US": "GPT is [[term:transformer-architecture-families|decoder-only]], BERT is [[term:transformer-architecture-families|encoder-only]], and T5 is encoder-decoder"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "D"
+  ]
+}

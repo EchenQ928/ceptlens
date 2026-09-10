@@ -1,0 +1,99 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260429-P4868-Q03",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "在 CNN 架构演进中，[[term:mobilenet|MobileNet]] 核心创新点在于将[[term:standard-convolution|标准卷积]]分解为",
+    "en-US": "In the evolution of CNN architectures, the core innovation of [[term:mobilenet|MobileNet]] is to decompose [[term:standard-convolution|standard convolution]] into"
+  },
+  "explanation": {
+    "zh-CN": "[[term:mobilenet|MobileNet]]用深度可分离卷积，将[[term:standard-convolution|标准卷积]]分解为[[term:depthwise-separable-convolution|Depthwise + Pointwise]]，显著降低计算量与参数量。",
+    "en-US": "[[term:mobilenet|MobileNet]] uses depthwise separable convolution to decompose [[term:standard-convolution|standard convolution]] into [[term:depthwise-separable-convolution|depthwise + pointwise]] convolution, significantly reducing computation and parameter count."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "深度可分离卷积",
+      "en-US": "Depthwise separable convolution"
+    },
+    "modelFamily": {
+      "zh-CN": "G2 CNN",
+      "en-US": "G2 CNN"
+    },
+    "learningLevel": "L2 分支深入",
+    "engineeringStage": "E4 模块与算子设计",
+    "priority": "P0",
+    "secondaryEngineeringStages": [
+      {
+        "zh-CN": "E8 压缩与轻量化",
+        "en-US": "E8 Compression and efficiency"
+      }
+    ],
+    "knowledgeTopics": [
+      {
+        "zh-CN": "架构模块",
+        "en-US": "Architecture modules"
+      },
+      {
+        "zh-CN": "高效模型",
+        "en-US": "Efficient models"
+      }
+    ],
+    "optimizationObjectives": [
+      {
+        "zh-CN": "参数量",
+        "en-US": "Parameter count"
+      },
+      {
+        "zh-CN": "MACs",
+        "en-US": "MACs"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "taskScenarios": []
+  },
+  "ordering": {
+    "order": 16,
+    "prerequisites": [
+      "HW-AI-20260408-P4728-Q19"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "空间卷积和时间卷积",
+        "en-US": "Spatial convolution and temporal convolution"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "[[term:depthwise-separable-convolution|深度卷积（Depthwise）和逐点卷积（Pointwise）]]",
+        "en-US": "[[term:depthwise-separable-convolution|Depthwise convolution and pointwise convolution]]"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "1×1 卷积和 3×3 卷积的并行计算",
+        "en-US": "Parallel 1×1 and 3×3 convolutions"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "[[term:fully-connected-layer|全连接层]]和[[term:pooling|池化层]]的组合",
+        "en-US": "A combination of a [[term:fully-connected-layer|fully connected layer]] and a [[term:pooling|pooling layer]]"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "B"
+  ]
+}

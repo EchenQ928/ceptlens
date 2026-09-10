@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "validation-set",
+  "title": {
+    "zh-CN": "验证集",
+    "en-US": "Validation set"
+  },
+  "aliases": [
+    "验证数据",
+    "Validation Set",
+    "验证样本"
+  ],
+  "summary": {
+    "zh-CN": "验证集是不参与当前参数梯度更新、用于模型选择的数据。训练过程中可用它判断是否[[term:overfitting|过拟合]]、选择超参数和最佳检查点，但不能把验证损失反向传播到模型里。",
+    "en-US": "A validation set is used for model selection without participating in the current parameter-gradient updates. During training, it can reveal [[term:overfitting|overfitting]], guide hyperparameter selection, and identify the best checkpoint, but its loss must not be backpropagated into the model."
+  },
+  "coreConclusion": {
+    "zh-CN": "验证集负责做训练过程中的选择与诊断，不负责直接更新模型参数。",
+    "en-US": "The validation set supports selection and diagnosis during training; it does not directly update model parameters."
+  },
+  "prerequisites": [
+    "training-set"
+  ]
+}

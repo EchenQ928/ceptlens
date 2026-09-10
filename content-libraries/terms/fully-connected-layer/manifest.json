@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "fully-connected-layer",
+  "title": {
+    "zh-CN": "全连接层",
+    "en-US": "Fully connected layer"
+  },
+  "aliases": [
+    "全连接",
+    "fully connected layer",
+    "dense layer",
+    "FC 层"
+  ],
+  "summary": {
+    "zh-CN": "全连接层让每个输出单元接收全部输入，每条连接都有自己的权重。各单元对输入加权求和，并可加上自己的偏置，把一组输入特征组合成一组新特征。",
+    "en-US": "A fully connected layer lets every output unit receive every input, with a separate weight for each connection. Each unit computes a weighted sum of the inputs and can add its own bias, combining one set of features into another."
+  },
+  "coreConclusion": {
+    "zh-CN": "全连接层的每条连接对应一个权重，每个输出单元对应一组权重。把这些权重按输出单元排成行，就能用矩阵乘法一次表示整层计算。",
+    "en-US": "Each connection in a fully connected layer has one weight, and each output unit has one weight vector. Arrange those vectors as rows to express the whole layer with matrix multiplication."
+  },
+  "prerequisites": [
+    "neural-network"
+  ]
+}

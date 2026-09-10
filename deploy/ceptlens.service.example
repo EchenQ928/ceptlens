@@ -1,16 +1,16 @@
 [Unit]
-Description=CeptLens content host
+Description=CeptLens web service
 After=network.target
 
 [Service]
 Type=simple
 User=ceptlens
 WorkingDirectory=/srv/ceptlens/current
-Environment=NODE_ENV=production
-Environment=CEPTLENS_PUBLIC_ORIGIN=https://ceptlens.com
+EnvironmentFile=/etc/ceptlens/ceptlens.env
 ExecStart=/usr/bin/node server/content-host.mjs --host 127.0.0.1 --port 8765
-Restart=always
+Restart=on-failure
 RestartSec=5
+UMask=0077
 NoNewPrivileges=true
 PrivateTmp=true
 

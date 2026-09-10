@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "mlp",
+  "title": {
+    "zh-CN": "多层感知机（MLP）",
+    "en-US": "Multilayer perceptron (MLP)"
+  },
+  "aliases": [
+    "多层感知机",
+    "MLP",
+    "multilayer perceptron"
+  ],
+  "summary": {
+    "zh-CN": "多层感知机是一种采用全连接结构的神经网络：每个计算单元都接收上一层的全部结果。隐藏层结合加权组合与非线性激活，逐层提取特征，最终由输出层完成预测。",
+    "en-US": "A multilayer perceptron is a neural network built from fully connected layers: every computation unit receives all results from the previous layer. Hidden layers combine weighted computation with nonlinear activation to extract features layer by layer, and the output layer produces the prediction."
+  },
+  "coreConclusion": {
+    "zh-CN": "MLP 通过全连接的层逐级组合信息：一层用不同参数产生一组新结果，下一层再加工这组结果；非线性变换让多层组合能够表达更丰富的关系。",
+    "en-US": "An MLP combines information through successive fully connected layers. Each layer uses its own parameters to produce new results, and nonlinear transformations let the stack express richer relationships."
+  }
+}

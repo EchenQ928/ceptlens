@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "dropout",
+  "title": {
+    "zh-CN": "Dropout",
+    "en-US": "Dropout"
+  },
+  "aliases": [
+    "神经元随机屏蔽",
+    "随机失活",
+    "Dropout正则化"
+  ],
+  "summary": {
+    "zh-CN": "Dropout 在训练的每次前向中，按概率随机把一部分神经元输出置零，让模型不能长期依赖固定的共适应路径；[[term:inference|推理时]]关闭随机屏蔽，使用完整网络。",
+    "en-US": "During each training forward pass, Dropout randomly sets some neuron outputs to zero with a given probability so the model cannot depend on a fixed co-adaptation path. During [[term:inference|inference]], random masking is disabled and the complete network is used."
+  },
+  "coreConclusion": {
+    "zh-CN": "训练时不断抽取不同的随机子网络，推理时恢复完整网络；被屏蔽的是本次激活，不是永久删除参数。",
+    "en-US": "Training repeatedly samples different random subnetworks; inference restores the complete network. Masked activations are temporary, not permanently deleted parameters."
+  },
+  "prerequisites": [
+    "regularization",
+    "neural-network"
+  ]
+}

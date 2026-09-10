@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260304-P4570-Q09",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "关于[[term:pretraining|预训练]]的目标，错误的是",
+    "en-US": "Which statement about the objective of [[term:pretraining|pretraining]] is incorrect?"
+  },
+  "explanation": {
+    "zh-CN": "[[term:pretraining|预训练]]（如[[term:mlm|BERT 的 MLM]]）属于[[term:self-supervised-learning|自监督学习]]，其训练信号（如被遮蔽的单词）直接从无标注文本中构造，无需人工标注。其目标是让模型通过上下文预测来学习语言的[[term:representation-learning|通用表示]]。",
+    "en-US": "[[term:pretraining|Pretraining]], such as BERT's [[term:mlm|MLM]], is a form of [[term:self-supervised-learning|self-supervised learning]]. Its training signal, such as masked words, is constructed directly from unlabeled text without manual annotation. The objective is to learn general language [[term:representation-learning|representations]] through contextual prediction."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "预训练与自监督学习目标",
+      "en-US": "Pretraining and self-supervised learning objectives"
+    },
+    "modelFamily": {
+      "zh-CN": "G4 Transformer与Attention",
+      "en-US": "G4 Transformers and attention"
+    },
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E5 训练目标与训练过程",
+    "priority": "P0",
+    "knowledgeTopics": [
+      {
+        "zh-CN": "学习机制",
+        "en-US": "Learning mechanisms"
+      }
+    ],
+    "taskScenarios": [
+      {
+        "zh-CN": "序列建模",
+        "en-US": "Sequence modeling"
+      }
+    ],
+    "optimizationObjectives": [
+      {
+        "zh-CN": "泛化",
+        "en-US": "Generalization"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "secondaryEngineeringStages": []
+  },
+  "ordering": {
+    "order": 27
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "必须依赖标注数据",
+        "en-US": "It must rely on labeled data"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "主要使用[[term:cross-entropy-loss|交叉熵损失函数]]",
+        "en-US": "It mainly uses [[term:cross-entropy-loss|cross-entropy loss]]"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "通过无监督学习捕捉语言统计规律",
+        "en-US": "It captures statistical regularities of language through unsupervised learning"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "模型需学习上下文表示能力",
+        "en-US": "The model must learn contextual representation ability"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "A"
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260520-P4962-Q09",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "关于[[term:kv-cache|KV Cache]]在[[term:autoregressive-inference|自回归推理]]中的作用，最准确的是:",
+    "en-US": "What is the most accurate description of the role of [[term:kv-cache|KV Cache]] in [[term:autoregressive-inference|autoregressive inference]]?"
+  },
+  "explanation": {
+    "zh-CN": "[[term:kv-cache|KV Cache]] 保存历史 [[term:token|token]] 的 Key 与 Value，大幅减少重复运算。",
+    "en-US": "[[term:kv-cache|KV Cache]] stores the Key and Value tensors of historical [[term:token|tokens]], greatly reducing repeated computation."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "KV Cache的历史K/V复用",
+      "en-US": "Reusing historical K/V in KV Cache"
+    },
+    "modelFamily": {
+      "zh-CN": "G4 Transformer与Attention",
+      "en-US": "G4 Transformers and attention"
+    },
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E9 推理与运行时优化",
+    "priority": "P0",
+    "knowledgeTopics": [
+      {
+        "zh-CN": "推理系统",
+        "en-US": "Inference systems"
+      },
+      {
+        "zh-CN": "高效模型",
+        "en-US": "Efficient models"
+      }
+    ],
+    "taskScenarios": [
+      {
+        "zh-CN": "生成",
+        "en-US": "Generation"
+      }
+    ],
+    "optimizationObjectives": [
+      {
+        "zh-CN": "时延",
+        "en-US": "Latency"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "secondaryEngineeringStages": []
+  },
+  "ordering": {
+    "order": 29,
+    "prerequisites": [
+      "HW-AI-20260624-P5123-Q05",
+      "HW-AI-20260509-P4904-Q05"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "减少参数量，从而降低模型存储体积",
+        "en-US": "Reduce the number of parameters and therefore reduce model storage"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "提升训练收敛速度",
+        "en-US": "Improve training convergence"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "缓存历史[[term:token|token]]的[[term:qkv-projection|K/V]]，避免每步重复计算",
+        "en-US": "Cache the [[term:qkv-projection|K/V]] of historical [[term:token|tokens]] to avoid recomputing them at every step"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "让模型在推理时不再需要[[term:self-attention|注意力机制]]",
+        "en-US": "Remove the need for [[term:self-attention|attention]] during inference"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "C"
+  ]
+}

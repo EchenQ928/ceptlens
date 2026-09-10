@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "multi-head-attention",
+  "title": {
+    "zh-CN": "多头注意力",
+    "en-US": "Multi-head attention"
+  },
+  "aliases": [
+    "Multi-Head Attention",
+    "MHA",
+    "多头自注意力",
+    "注意力头"
+  ],
+  "summary": {
+    "zh-CN": "多头注意力把同一输入分别投影到多组较小的 [[term:qkv-projection|Query、Key、Value]] 子空间，每一头独立计算注意力，再把各头结果拼接并做输出投影。不同头因此可以学习不同位置关系或特征关系。",
+    "en-US": "Multi-head attention projects the same input into several smaller [[term:qkv-projection|Query, Key, and Value]] subspaces, computes attention independently in each head, then concatenates the results and applies an output projection. Different heads can learn different positional or feature relationships."
+  },
+  "coreConclusion": {
+    "zh-CN": "多头不是重复同一份注意力，而是用多组独立投影并行学习多种读取关系，最后统一融合。",
+    "en-US": "Multi-head attention is not the same attention repeated. It uses several independent projections to learn multiple reading relationships in parallel and fuses them at the end."
+  },
+  "prerequisites": [
+    "self-attention",
+    "qkv-projection"
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260121-P4546-Q08",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "在深度学习中，[[term:cross-entropy-loss|交叉熵损失函数（Cross-Entropy Loss）]]通常用于？",
+    "en-US": "In deep learning, the [[term:cross-entropy-loss|cross-entropy loss]] is commonly used for"
+  },
+  "explanation": {
+    "zh-CN": "交叉熵损失函数是[[term:classification|分类任务]]中的常用损失函数，用于衡量模型预测概率分布与真实标签之间的差异。它鼓励模型对正确类别的预测概率接近1。",
+    "en-US": "Cross-entropy loss is a common loss function for [[term:classification|classification]]. It measures the difference between the model's predicted probability distribution and the true label, encouraging the predicted probability of the correct class to approach 1."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "交叉熵损失函数",
+      "en-US": "Cross-entropy loss"
+    },
+    "modelFamily": {
+      "zh-CN": "G0 通用/跨模型",
+      "en-US": "G0 General / cross-model"
+    },
+    "learningLevel": "L0 通用基础",
+    "engineeringStage": "E5 训练目标与训练过程",
+    "priority": "P0",
+    "knowledgeTopics": [
+      {
+        "zh-CN": "学习机制",
+        "en-US": "Learning mechanisms"
+      }
+    ],
+    "taskScenarios": [
+      {
+        "zh-CN": "分类",
+        "en-US": "Classification"
+      }
+    ],
+    "optimizationObjectives": [
+      {
+        "zh-CN": "精度",
+        "en-US": "Accuracy"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "secondaryEngineeringStages": []
+  },
+  "ordering": {
+    "order": 9,
+    "prerequisites": [
+      "HW-AI-20260204-P4567-Q06",
+      "HW-AI-20260617-P5119-Q09"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "增加模型的泛化能力",
+        "en-US": "Increasing model generalization"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "无监督学习中优化数据分布",
+        "en-US": "Optimizing the data distribution in unsupervised learning"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "[[term:regression|回归任务]]中衡量预测值与真实值的差异",
+        "en-US": "Measuring the difference between predictions and targets in a [[term:regression|regression task]]"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "[[term:classification|分类任务]]中衡量预测概率与真实标签的差异",
+        "en-US": "Measuring the difference between predicted probabilities and true labels in a [[term:classification|classification task]]"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "D"
+  ]
+}

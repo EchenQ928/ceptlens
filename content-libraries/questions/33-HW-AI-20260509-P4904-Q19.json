@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260509-P4904-Q19",
+  "type": "multiple_choice",
+  "stem": {
+    "zh-CN": "在 [[term:quantization|INT8 量化]]部署中，以下哪些因素会影响量化后模型的精度？",
+    "en-US": "Which factors affect model accuracy after [[term:quantization|INT8 quantization]] deployment?"
+  },
+  "explanation": {
+    "zh-CN": "[[term:calibration-set|校准集]]分布影响量化参数标定；激活统计不稳定导致[[term:quantization-scale|scale]]偏差；[[term:outlier|离群值]]拉大scale降低精度。浮点训练是前提而非量化精度影响因素。",
+    "en-US": "The distribution of the [[term:calibration-set|calibration set]] affects quantization-parameter calibration; unstable activation statistics can bias the [[term:quantization-scale|scale]]; and [[term:outlier|outliers]] can enlarge the scale and reduce accuracy. Floating-point training is a prerequisite, not a direct factor affecting post-quantization accuracy."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "INT8量化精度的校准因素",
+      "en-US": "Calibration factors affecting INT8 quantization accuracy"
+    },
+    "modelFamily": {
+      "zh-CN": "G0 通用/跨模型",
+      "en-US": "G0 General / cross-model"
+    },
+    "learningLevel": "L2 分支深入",
+    "engineeringStage": "E8 压缩与轻量化",
+    "priority": "P0",
+    "knowledgeTopics": [
+      {
+        "zh-CN": "高效模型",
+        "en-US": "Efficient models"
+      },
+      {
+        "zh-CN": "数学与数值",
+        "en-US": "Mathematics and numerics"
+      }
+    ],
+    "optimizationObjectives": [
+      {
+        "zh-CN": "数值精度",
+        "en-US": "Numerical precision"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "secondaryEngineeringStages": [],
+    "taskScenarios": []
+  },
+  "ordering": {
+    "order": 33,
+    "prerequisites": [
+      "HW-AI-20260423-P4829-Q01"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "[[term:calibration-set|校准集]]分布是否接近真实数据",
+        "en-US": "Whether the [[term:calibration-set|calibration-set]] distribution is close to real data"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "[[term:quantization-scale|激活范围]]统计是否稳定",
+        "en-US": "Whether [[term:quantization-scale|activation-range]] statistics are stable"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "是否存在[[term:outlier|离群值]]导致 [[term:quantization-scale|scale]] 不合理",
+        "en-US": "Whether [[term:outlier|outliers]] make the [[term:quantization-scale|scale]] unreasonable"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "是否使用了浮点数进行训练",
+        "en-US": "Whether floating-point numbers were used for training"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "A",
+    "B",
+    "C"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "backpropagation",
+  "title": {
+    "zh-CN": "反向传播",
+    "en-US": "Backpropagation"
+  },
+  "aliases": [
+    "backpropagation",
+    "反向传播算法",
+    "反传"
+  ],
+  "summary": {
+    "zh-CN": "反向传播沿计算图从损失向前追踪影响，用链式法则高效算出每个参数对损失的梯度。",
+    "en-US": "Backpropagation traces influence backward through a computation graph from the loss and efficiently computes the gradient of the loss with respect to every parameter using the chain rule."
+  },
+  "coreConclusion": {
+    "zh-CN": "它先让网络完成一次前向计算，再从损失向前复用局部导数，得到所有参数的梯度；参数更新由优化器完成。",
+    "en-US": "The network first performs a forward pass. Backpropagation then reuses local derivatives from the loss backward to obtain every parameter gradient; the optimizer performs the parameter update."
+  },
+  "prerequisites": [
+    "neural-network",
+    "loss-function"
+  ]
+}

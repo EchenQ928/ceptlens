@@ -1,7 +1,11 @@
 # Code of Conduct
 
-CeptLens uses the Contributor Covenant Code of Conduct as a baseline. Contributors are expected to communicate respectfully, assume good intent, and keep discussions focused on improving the project.
+CeptLens aims to be a safe, respectful open-source project for learning and collaboration. Participants are expected to:
 
-Unacceptable behavior includes harassment, personal attacks, sustained disruption, and publishing private information without permission.
+- Respect people with different backgrounds, experience, and opinions.
+- Discuss code, content, and facts without attacking individuals.
+- Give specific, actionable feedback and welcome beginner questions.
+- Protect other people's privacy. Do not publish accounts, contact details, learning records, API keys, or production data.
+- Accept maintainers' final decisions about project safety, scope, and quality.
 
-Report conduct concerns by opening a private security contact if available for the repository owner, or by contacting the maintainers through the channels listed on the project page.
+Harassment, discrimination, threats, malicious disclosure of private information, stalking, impersonation, and deliberate project sabotage are not acceptable. Report conduct problems to the project maintainers with the necessary facts and without sensitive data. Reports will be handled confidentially; maintainers may issue warnings, temporarily restrict participation, or permanently remove access.

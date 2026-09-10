@@ -1,0 +1,41 @@
+{
+  "name": "ceptlens-content-lab",
+  "private": true,
+  "version": "1.0.1",
+  "type": "module",
+  "scripts": {
+    "start": "npm run validate && npm run build && node server/lab-host.mjs",
+    "dev": "npm start",
+    "build": "tsc -b && vite build",
+    "validate": "tsx scripts/validate-content.ts",
+    "test": "vitest run",
+    "check": "npm run validate && npm run test && npm run build",
+    "test:imports": "npm run validate && node scripts/verify-imports.mjs"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "6.1.1",
+    "fflate": "0.8.3",
+    "highlight.js": "11.12.0",
+    "katex": "0.18.5",
+    "lucide-react": "1.38.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-router-dom": "7.18.3",
+    "rolldown": "1.2.6",
+    "vite": "8.2.2",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@types/katex": "0.16.8",
+    "@types/node": "22.18.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.5",
+    "jsdom": "26.1.0",
+    "tsx": "4.23.13",
+    "typescript": "7.0.2",
+    "vitest": "4.1.11"
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  }
+}

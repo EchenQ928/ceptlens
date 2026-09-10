@@ -1,0 +1,99 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260422-P4820-Q07",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "在部署阶段（Inference），将[[term:convolution|卷积层（Convolution）]]与[[term:batch-normalization|批归一化层（Batch Normalization, BN）]]进行融合（Folding）是各大[[term:compiler|编译器]]的标配操作。以下关于 [[term:conv-bn-folding|Conv+BN 融合]]的描述中，最准确的是",
+    "en-US": "During deployment, fusing a [[term:convolution|convolution layer]] with a [[term:batch-normalization|batch-normalization layer]] is standard practice for major [[term:compiler|compilers]]. Which statement about [[term:conv-bn-folding|Conv + BN folding]] is most accurate?"
+  },
+  "explanation": {
+    "zh-CN": "[[term:conv-bn-folding|Conv+BN 融合]]是编译期代数变换，将 BN 参数吸收到 Conv 中，减少[[term:runtime|运行时]]开销。",
+    "en-US": "[[term:conv-bn-folding|Conv + BN folding]] is an algebraic transformation performed during compilation: BN parameters are absorbed into Conv, reducing [[term:runtime|runtime]] overhead."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "Conv+BN推理融合",
+      "en-US": "Conv + BN inference folding"
+    },
+    "modelFamily": {
+      "zh-CN": "G2 CNN",
+      "en-US": "G2 CNN"
+    },
+    "learningLevel": "L2 分支深入",
+    "engineeringStage": "E10 编译、算子与内核",
+    "priority": "P0",
+    "secondaryEngineeringStages": [
+      {
+        "zh-CN": "E9 推理与运行时优化",
+        "en-US": "E9 Inference and runtime optimization"
+      }
+    ],
+    "knowledgeTopics": [
+      {
+        "zh-CN": "架构模块",
+        "en-US": "Architecture modules"
+      },
+      {
+        "zh-CN": "推理系统",
+        "en-US": "Inference systems"
+      },
+      {
+        "zh-CN": "编译硬件",
+        "en-US": "Compilation and hardware"
+      }
+    ],
+    "optimizationObjectives": [
+      {
+        "zh-CN": "时延",
+        "en-US": "Latency"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "taskScenarios": []
+  },
+  "ordering": {
+    "order": 17,
+    "prerequisites": [
+      "HW-AI-20260408-P4728-Q19"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "融合是为了让 BN 的梯度能更快反向传播到 Conv 层，从而加速[[term:inference|推理]]。",
+        "en-US": "Folding lets BN gradients backpropagate to the Conv layer faster, which accelerates [[term:inference|inference]]"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "融合是一种纯代数等价变换，在模型编译期（Offline）就将 BN 的缩放和偏移参数直接吸收到 Conv 的权重和偏置中，[[term:runtime|运行时]]完全没有 BN 的开销。",
+        "en-US": "Folding is a purely algebraic equivalent transformation: during offline compilation, BN scale and bias are absorbed into Conv weights and bias, so runtime has no separate BN overhead"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "融合是在[[term:runtime|运行时（Runtime）]]将 BN 的均值和方差传入 Conv 的底层算子中并行计算。",
+        "en-US": "Folding passes BN mean and variance into the low-level Conv operator at runtime for parallel computation"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "[[term:conv-bn-folding|Conv+BN 融合]]会轻微改变模型的输出精度，因为融合后的算子无法使用 Tensor Core 加速。",
+        "en-US": "[[term:conv-bn-folding|Conv + BN folding]] slightly changes model accuracy because the folded operator cannot use Tensor Core acceleration"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "B"
+  ]
+}

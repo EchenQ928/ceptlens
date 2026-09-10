@@ -1,0 +1,84 @@
+{
+  "schemaVersion": "3.0",
+  "id": "KV-CACHE-20260909-Q01",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "在 Transformer 的自回归生成中，[[term:kv-cache|KV Cache]] 做了什么？",
+    "en-US": "In autoregressive generation with a Transformer, what does [[term:kv-cache|KV Cache]] do?"
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "缓存历史 Token 已经得到的注意力分布，后续生成时沿用这些注意力权重。",
+        "en-US": "It caches the attention distributions already obtained for historical tokens and reuses those attention weights during later generation."
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "缓存生成 Key 和 Value 所使用的投影权重，使后续生成时可以直接复用这些权重。",
+        "en-US": "It caches the projection weights used to produce Keys and Values, so later generation can reuse those weights directly."
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "缓存每一层中历史 Token 已经计算得到的 Key 和 Value 张量，后续生成时可以直接复用这些历史张量。",
+        "en-US": "It caches the Key and Value tensors computed for historical tokens at every layer, so later steps can reuse those historical tensors directly."
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "缓存最后一层生成的 Key 和 Value，其他层在后续生成时共享这份缓存。",
+        "en-US": "It caches the Keys and Values from the final layer, and the other layers share that cache during later generation."
+      }
+    }
+  ],
+  "correctAnswer": [
+    "C"
+  ],
+  "explanation": {
+    "zh-CN": "**正确答案：C**\n\nKV Cache 保存的是每一层、每个历史位置已经计算得到的 K/V 中间张量。生成下一个 Token 时，这些历史 K/V 可以直接复用，并与当前步骤新计算出的 Query 一起参与[[term:self-attention|自注意力]]计算。\n\n**A｜把 K/V 张量误认为注意力分布**\n注意力分布是在 Query 与 K 的相似度经过缩放和 Softmax 后得到的结果。它会随着当前 Query 改变，因此不能作为固定的历史 K/V 缓存直接沿用。\n\n**B｜把缓存对象误认为投影权重**\n投影权重是模型参数，在不同输入之间共享；它不是针对历史 Token 运行后产生的中间结果。KV Cache 缓存的是计算结果，不是模型参数。\n\n**C｜准确描述 KV Cache 的对象和范围**\n缓存对象是每一层、每个历史位置对应的 Key 和 Value 张量。后续生成步骤可以直接读取并复用它们，从而避免重复计算历史部分。\n\n**D｜误解缓存的层级范围和共享方式**\nKV Cache 通常按层保存，每一层都有属于自己的 K/V 表示。不能只缓存最后一层，也不能让所有层共用同一份 K/V。",
+    "en-US": "**Correct answer: C**\n\nKV Cache stores the intermediate Key and Value tensors that have already been computed for each historical position in each layer. When the next token is generated, those historical K/V tensors can be reused directly and combined with the Query computed at the current step for [[term:self-attention|self-attention]].\n\n**A | Confusing K/V tensors with attention distributions**\nAn attention distribution is produced after the similarity between the Query and Keys is scaled and passed through Softmax. It changes with the current Query, so it is not a fixed substitute for the historical K/V cache.\n\n**B | Confusing cached results with projection weights**\nProjection weights are model parameters shared across inputs. They are not intermediate results produced by running a particular historical token through the model. KV Cache stores computed activations, not model parameters.\n\n**C | Correctly identifies the cached object and scope**\nThe cache contains the Key and Value tensor for every historical position in every layer. Later decoding steps can read and reuse these tensors instead of recomputing the historical part.\n\n**D | Misunderstanding the layer scope and sharing rule**\nKV Cache is normally organized by layer, and each layer has its own K/V representations. The final layer's cache cannot stand in for the caches of all other layers."
+  },
+  "ceptCheck": {
+    "stem": {
+      "zh-CN": "为什么通常没有 Q Cache？",
+      "en-US": "Why is there usually no Q Cache?"
+    }
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "KV Cache 的作用",
+      "en-US": "What KV Cache does"
+    },
+    "modelFamily": {
+      "zh-CN": "G4 Transformer与Attention",
+      "en-US": "G4 Transformers and attention"
+    },
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E9 推理与运行时优化",
+    "priority": "P0",
+    "knowledgeTopics": [
+      "推理系统",
+      "架构模块",
+      "QKV与注意力"
+    ],
+    "taskScenarios": [
+      "自回归生成",
+      "Decode"
+    ],
+    "optimizationObjectives": [
+      "时延"
+    ],
+    "runtimeEnvironments": [
+      "硬件无关"
+    ]
+  },
+  "ordering": {
+    "order": 1001,
+    "prerequisites": []
+  }
+}

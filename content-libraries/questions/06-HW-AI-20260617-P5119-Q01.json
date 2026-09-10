@@ -1,0 +1,86 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260617-P5119-Q01",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "使用[[term:mlp|多层感知机（MLP）]]对每月的降雨量进行预测，[[term:activation-function|输出层的激活函数]]推荐使用什么？",
+    "en-US": "When using a [[term:mlp|multilayer perceptron (MLP)]] to predict monthly rainfall, which [[term:activation-function|activation function]] is recommended for the output layer?"
+  },
+  "explanation": {
+    "zh-CN": "降雨量预测属于[[term:regression|回归任务]]，[[term:output-layer|输出层]]通常使用线性输出，即不加激活函数。",
+    "en-US": "Rainfall prediction is a [[term:regression|regression task]]. The [[term:output-layer|output layer]] typically uses a linear output, meaning no activation function is applied."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "回归任务输出层的激活函数选择",
+      "en-US": "Choosing the output activation for regression"
+    },
+    "modelFamily": {
+      "zh-CN": "G0 通用/跨模型",
+      "en-US": "G0 General / cross-model"
+    },
+    "learningLevel": "L0 通用基础",
+    "engineeringStage": "E4 模块与算子设计",
+    "priority": "P0",
+    "knowledgeTopics": [
+      {
+        "zh-CN": "架构模块",
+        "en-US": "Architecture modules"
+      }
+    ],
+    "taskScenarios": [
+      {
+        "zh-CN": "回归",
+        "en-US": "Regression"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "secondaryEngineeringStages": [],
+    "optimizationObjectives": []
+  },
+  "ordering": {
+    "order": 6,
+    "prerequisites": [
+      "HW-AI-20260513-P4937-Q11"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "ReLU",
+        "en-US": "ReLU"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "Tanh",
+        "en-US": "Tanh"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "Sigmoid",
+        "en-US": "Sigmoid"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "不使用激活函数",
+        "en-US": "Use no activation function"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "D"
+  ]
+}

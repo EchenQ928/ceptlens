@@ -1,0 +1,86 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260522-P4968-Q12",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "相比于[[term:self-attention|单头注意力]]，[[term:multi-head-attention|多头注意力（Multi-Head Attention, MHA）]]的核心优势在于?",
+    "en-US": "Compared with [[term:self-attention|single-head attention]], what is the core advantage of [[term:multi-head-attention|multi-head attention (MHA)]]?"
+  },
+  "explanation": {
+    "zh-CN": "多头注意力能从多个子空间捕获不同关系。",
+    "en-US": "Multi-head attention can capture different relationships in multiple representation subspaces."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "多头注意力的表示子空间与关系建模",
+      "en-US": "Representation subspaces and relation modeling in multi-head attention"
+    },
+    "modelFamily": {
+      "zh-CN": "G4 Transformer与Attention",
+      "en-US": "G4 Transformers and attention"
+    },
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E4 模块与算子设计",
+    "priority": "P0",
+    "knowledgeTopics": [
+      {
+        "zh-CN": "架构模块",
+        "en-US": "Architecture modules"
+      }
+    ],
+    "taskScenarios": [
+      {
+        "zh-CN": "序列建模",
+        "en-US": "Sequence modeling"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "secondaryEngineeringStages": [],
+    "optimizationObjectives": []
+  },
+  "ordering": {
+    "order": 21,
+    "prerequisites": [
+      "HW-AI-20260624-P5123-Q05"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "减少推理阶段的 [[term:kv-cache|KV Cache]] 显存占用",
+        "en-US": "Reduce [[term:kv-cache|KV Cache]] memory usage during inference"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "允许模型在不同的表示子空间中并行关注来自不同位置的信息",
+        "en-US": "Allow the model to attend to information from different positions in parallel across different representation subspaces"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "能够显著降低模型的总体参数量",
+        "en-US": "Significantly reduce the model's total parameter count"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "能够彻底消除序列处理中的位置依赖问题",
+        "en-US": "Completely eliminate positional dependence in sequence processing"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "B"
+  ]
+}

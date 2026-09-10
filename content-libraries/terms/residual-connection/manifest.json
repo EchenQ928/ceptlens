@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "residual-connection",
+  "title": {
+    "zh-CN": "残差连接",
+    "en-US": "Residual connection"
+  },
+  "aliases": [
+    "Residual Connection",
+    "Shortcut connection",
+    "跳跃连接",
+    "Shortcut"
+  ],
+  "summary": {
+    "zh-CN": "残差连接让输入同时走两条路径：一条经过[[term:convolution|卷积]]、[[term:attention-mechanism|注意力]]或[[term:position-wise-ffn|前馈网络]]等主变换，另一条作为 shortcut 直接绕过主变换；两路最后逐元素相加。",
+    "en-US": "A residual connection sends the input along two paths: one applies a main transformation such as [[term:convolution|convolution]], [[term:attention-mechanism|attention]], or [[term:position-wise-ffn|feed-forward processing]], while the other shortcut bypasses the main transformation. The two paths are then added element by element."
+  },
+  "coreConclusion": {
+    "zh-CN": "输出等于主支路变换结果加上原输入，使原信息和梯度都拥有一条较直接的通路。",
+    "en-US": "The output adds the main-path transformation to the original input, giving both information and gradients a more direct route."
+  },
+  "prerequisites": [
+    "neural-network"
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260318-P4624-Q20",
+  "type": "multiple_choice",
+  "stem": {
+    "zh-CN": "关于[[term:causal-mask|Causal Mask]]的作用，正确的是",
+    "en-US": "Which statements about the role of [[term:causal-mask|Causal Mask]] are correct?"
+  },
+  "explanation": {
+    "zh-CN": "因果掩码确保[[term:autoregressive-model|自回归模型]]在训练时只能访问当前位置及之前的信息，其实现方式通常是构建一个上三角为负无穷的矩阵。它主要用于[[term:decoder|解码器]]的[[term:self-attention|自注意力层]]，而非[[term:encoder|编码器]]，且适用于所有自回归生成任务，不限于文本。",
+    "en-US": "A causal mask ensures that an [[term:autoregressive-model|autoregressive model]] can access only the current position and earlier positions during training. It is commonly implemented as a matrix whose upper triangle is negative infinity. It is mainly used in the [[term:decoder|decoder]]'s [[term:self-attention|self-attention]] layer rather than the [[term:encoder|encoder]], and it applies to all autoregressive generation tasks, not only text."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "因果注意力掩码",
+      "en-US": "Causal attention masks"
+    },
+    "modelFamily": {
+      "zh-CN": "G4 Transformer与Attention",
+      "en-US": "G4 Transformers and attention"
+    },
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E4 模块与算子设计",
+    "priority": "P0",
+    "knowledgeTopics": [
+      {
+        "zh-CN": "架构模块",
+        "en-US": "Architecture modules"
+      }
+    ],
+    "taskScenarios": [
+      {
+        "zh-CN": "序列建模",
+        "en-US": "Sequence modeling"
+      },
+      {
+        "zh-CN": "生成",
+        "en-US": "Generation"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "secondaryEngineeringStages": [],
+    "optimizationObjectives": []
+  },
+  "ordering": {
+    "order": 24,
+    "prerequisites": [
+      "HW-AI-20260624-P5123-Q07"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "防止[[term:decoder|解码器]]在训练时看到未来的信息",
+        "en-US": "Prevent the [[term:decoder|decoder]] from seeing future information during training"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "是一个上三角为负无穷的矩阵",
+        "en-US": "Are matrices whose upper triangle is negative infinity"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "用于[[term:encoder|编码器]]的[[term:self-attention|自注意力层]]以增强局部性",
+        "en-US": "Are used in the [[term:encoder|encoder]]'s [[term:self-attention|self-attention]] layer to improve locality"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "仅适用于文本生成任务",
+        "en-US": "Apply only to text-generation tasks"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "A",
+    "B"
+  ]
+}

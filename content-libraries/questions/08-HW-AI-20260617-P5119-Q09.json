@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260617-P5119-Q09",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "在机器学习训练过程中，我们通常使用“[[term:gradient-descent|梯度下降法（Gradient Descent）]]”来更新[[term:model-parameter|模型参数]]。在这个过程中，[[term:loss-function|损失函数（Loss Function）]]的作用是：",
+    "en-US": "During machine-learning training, we commonly use [[term:gradient-descent|gradient descent]] to update [[term:model-parameter|model parameters]]. In this process, the role of the [[term:loss-function|loss function]] is to"
+  },
+  "explanation": {
+    "zh-CN": "[[term:gradient|梯度]]下降通过[[term:loss-function|损失函数]]的梯度更新模型参数。",
+    "en-US": "[[term:gradient|Gradient]] descent updates model parameters using the gradient of the [[term:loss-function|loss function]]."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "损失函数作为训练优化目标",
+      "en-US": "The loss function as the training objective"
+    },
+    "modelFamily": {
+      "zh-CN": "G0 通用/跨模型",
+      "en-US": "G0 General / cross-model"
+    },
+    "learningLevel": "L0 通用基础",
+    "engineeringStage": "E5 训练目标与训练过程",
+    "priority": "P0",
+    "secondaryEngineeringStages": [
+      {
+        "zh-CN": "E0 基础机制与模型计算",
+        "en-US": "E0 Foundational mechanisms and model computation"
+      }
+    ],
+    "knowledgeTopics": [
+      {
+        "zh-CN": "学习机制",
+        "en-US": "Learning mechanisms"
+      },
+      {
+        "zh-CN": "训练系统",
+        "en-US": "Training systems"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "taskScenarios": [],
+    "optimizationObjectives": []
+  },
+  "ordering": {
+    "order": 8,
+    "prerequisites": [
+      "HW-AI-20260724-P5183-Q08"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "作为一个固定值，用来记录模型训练所花费的总时间。",
+        "en-US": "Act as a fixed value that records the total time spent training the model"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "自动增加训练数据的数量，以提高模型的准确率。",
+        "en-US": "Automatically increase the amount of training data to improve model accuracy"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "决定模型在测试集上的能够达到的最高分数上限。",
+        "en-US": "Determine the maximum score the model can reach on the test set"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "作为优化的目标，通过计算其对参数的[[term:gradient|梯度]]来指明参数更新的方向。",
+        "en-US": "Serve as the optimization objective; its [[term:gradient|gradient]] with respect to the parameters indicates the update direction"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "D"
+  ]
+}

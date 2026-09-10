@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "position-wise-ffn",
+  "title": {
+    "zh-CN": "逐位置前馈网络",
+    "en-US": "Position-wise feed-forward network"
+  },
+  "aliases": [
+    "Position-wise FFN",
+    "FFN",
+    "前馈子层",
+    "Feed Forward Network"
+  ],
+  "summary": {
+    "zh-CN": "逐位置前馈网络把同一个两层小网络独立应用到序列的每一个位置。它不读取其他位置，而是在每个位置内部扩张、非线性变换并重新压回隐藏维度。",
+    "en-US": "A position-wise feed-forward network applies the same small two-layer network independently to every position in a sequence. It does not read other positions; it expands, nonlinearly transforms, and projects each position back to the hidden dimension."
+  },
+  "coreConclusion": {
+    "zh-CN": "所有位置共享同一套 FFN 参数，但各行独立计算；它改变特征，不负责跨位置交换信息。",
+    "en-US": "All positions share the same FFN parameters, but each row is computed independently. The FFN changes features; it does not exchange information across positions."
+  },
+  "prerequisites": [
+    "transformer-block",
+    "activation-function"
+  ]
+}

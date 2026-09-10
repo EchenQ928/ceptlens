@@ -1,0 +1,99 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260603-P4996-Q07",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "下列哪项不是[[term:quantization|量化]]的目的？",
+    "en-US": "Which of the following is not a purpose of [[term:quantization|quantization]]?"
+  },
+  "explanation": {
+    "zh-CN": "[[term:quantization|量化]]主要用于减小模型体积、提升推理效率和适配硬件。",
+    "en-US": "[[term:quantization|Quantization]] is mainly used to reduce model size, improve inference efficiency, and adapt models to hardware."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "量化的压缩与推理部署目的",
+      "en-US": "Compression and inference-deployment goals of quantization"
+    },
+    "modelFamily": {
+      "zh-CN": "G0 通用/跨模型",
+      "en-US": "G0 General / cross-model"
+    },
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E8 压缩与轻量化",
+    "priority": "P0",
+    "secondaryEngineeringStages": [
+      {
+        "zh-CN": "E9 推理与运行时优化",
+        "en-US": "E9 Inference and runtime optimization"
+      },
+      {
+        "zh-CN": "E11 硬件部署与性能分析",
+        "en-US": "E11 Hardware deployment and performance analysis"
+      }
+    ],
+    "knowledgeTopics": [
+      {
+        "zh-CN": "高效模型",
+        "en-US": "Efficient models"
+      }
+    ],
+    "optimizationObjectives": [
+      {
+        "zh-CN": "峰值内存",
+        "en-US": "Peak memory"
+      },
+      {
+        "zh-CN": "吞吐",
+        "en-US": "Throughput"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "端侧/嵌入式",
+        "en-US": "On-device / embedded"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "taskScenarios": []
+  },
+  "ordering": {
+    "order": 31,
+    "prerequisites": [
+      "HW-AI-20260805-P5197-Q13"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "减小模型体积",
+        "en-US": "Reduce model size"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "提升推理吞吐量",
+        "en-US": "Increase inference throughput"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "提高训练收敛速度",
+        "en-US": "Improve training convergence speed"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "适配移动端硬件",
+        "en-US": "Adapt to mobile hardware"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "C"
+  ]
+}

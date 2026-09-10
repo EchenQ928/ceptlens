@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260423-P4829-Q01",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "[[term:quantization|量化（Quantization）]]技术中，将 [[term:numerical-precision|FP16]] 转为 [[term:numerical-precision|INT8]] 主要压缩了：",
+    "en-US": "In [[term:quantization|quantization]], converting [[term:numerical-precision|FP16]] to [[term:numerical-precision|INT8]] mainly compresses the"
+  },
+  "explanation": {
+    "zh-CN": "量化是把参数由 [[term:numerical-precision|FP16]] 等高精度表示压缩为 [[term:numerical-precision|INT8]] 等低位宽表示，主要减少的是权重存储空间与[[term:memory-bandwidth|带宽占用]]。",
+    "en-US": "Quantization compresses parameters from higher-precision representations such as [[term:numerical-precision|FP16]] to lower-bit-width representations such as [[term:numerical-precision|INT8]]. The main reductions are in weight storage and [[term:memory-bandwidth|bandwidth usage]]."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "低比特量化与权重存储位宽",
+      "en-US": "Low-bit quantization and weight storage width"
+    },
+    "modelFamily": {
+      "zh-CN": "G0 通用/跨模型",
+      "en-US": "G0 General / cross-model"
+    },
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E8 压缩与轻量化",
+    "priority": "P0",
+    "knowledgeTopics": [
+      {
+        "zh-CN": "高效模型",
+        "en-US": "Efficient models"
+      }
+    ],
+    "optimizationObjectives": [
+      {
+        "zh-CN": "峰值内存",
+        "en-US": "Peak memory"
+      },
+      {
+        "zh-CN": "带宽",
+        "en-US": "Bandwidth"
+      },
+      {
+        "zh-CN": "数值精度",
+        "en-US": "Numerical precision"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "secondaryEngineeringStages": [],
+    "taskScenarios": []
+  },
+  "ordering": {
+    "order": 32,
+    "prerequisites": [
+      "HW-AI-20260603-P4996-Q07"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "注意力机制的头数",
+        "en-US": "Number of attention heads"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "模型的层数",
+        "en-US": "Number of model layers"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "权重的[[term:numerical-precision|存储位宽]]",
+        "en-US": "Weight [[term:numerical-precision|storage bit width]]"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "Token 词表的长度",
+        "en-US": "Length of the token vocabulary"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "C"
+  ]
+}

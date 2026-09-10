@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "term-unique-id",
+  "title": {
+    "zh-CN": "词条名称",
+    "en-US": "Term name"
+  },
+  "summary": {
+    "zh-CN": "零前置的一句话定义。",
+    "en-US": "A one-sentence definition with no prerequisites."
+  },
+  "coreConclusion": {
+    "zh-CN": "读者最终必须说清的一个核心结论。",
+    "en-US": "One core conclusion the reader must be able to state clearly."
+  }
+}

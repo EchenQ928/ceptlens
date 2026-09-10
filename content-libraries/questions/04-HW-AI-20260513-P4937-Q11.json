@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260513-P4937-Q11",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "[[term:activation-function|激活函数]]的主要作用是",
+    "en-US": "The main purpose of an [[term:activation-function|activation function]] is to"
+  },
+  "explanation": {
+    "zh-CN": "[[term:activation-function|激活函数]]的核心作用是引入非线性，使神经网络能够拟合复杂函数。",
+    "en-US": "The core role of an [[term:activation-function|activation function]] is to introduce nonlinearity, allowing a neural network to fit complex functions."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "激活函数引入非线性",
+      "en-US": "Activation functions introduce nonlinearity"
+    },
+    "modelFamily": {
+      "zh-CN": "G0 通用/跨模型",
+      "en-US": "G0 General / cross-model"
+    },
+    "learningLevel": "L0 通用基础",
+    "engineeringStage": "E4 模块与算子设计",
+    "priority": "P0",
+    "knowledgeTopics": [
+      {
+        "zh-CN": "架构模块",
+        "en-US": "Architecture modules"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "secondaryEngineeringStages": [],
+    "taskScenarios": [],
+    "optimizationObjectives": []
+  },
+  "ordering": {
+    "order": 4,
+    "prerequisites": [
+      "HW-AI-20260724-P5183-Q08"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "加快训练",
+        "en-US": "Speed up training"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "提高模型精度",
+        "en-US": "Improve model accuracy"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "增加模型参数",
+        "en-US": "Increase the number of model parameters"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "引入非线性",
+        "en-US": "Introduce nonlinearity"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "D"
+  ]
+}

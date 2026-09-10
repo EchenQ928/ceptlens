@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "kv-cache",
+  "title": {
+    "zh-CN": "KV Cache",
+    "en-US": "KV Cache"
+  },
+  "aliases": [
+    "K/V Cache",
+    "past_key_values",
+    "键值缓存",
+    "注意力缓存"
+  ],
+  "summary": {
+    "zh-CN": "KV Cache 在[[term:autoregressive-generation|自回归生成]]中保存每一层历史 [[term:token|Token]] 已经计算好的 Key 和 Value。下一步只为新 Token 计算新的 [[term:qkv-projection|Q、K、V]]，把新 K/V 追加到缓存，再用新 Query 读取全部可见历史 K/V。",
+    "en-US": "During [[term:autoregressive-generation|autoregressive generation]], KV Cache stores the already-computed Key and Value tensors for historical [[term:token|tokens]] at every layer. At the next step, only the new token's [[term:qkv-projection|Q, K, and V]] are computed; the new K/V are appended to the cache and the new Query reads all visible historical K/V."
+  },
+  "coreConclusion": {
+    "zh-CN": "缓存复用的是各层历史 K/V 投影结果，避免每一步重新计算旧 Token 的 K/V；它用内存换取更少重复计算。",
+    "en-US": "The cache reuses each layer's historical K/V projections, avoiding recomputation of old tokens' K/V at every step. It trades memory for less repeated computation."
+  },
+  "prerequisites": [
+    "qkv-projection",
+    "self-attention"
+  ]
+}

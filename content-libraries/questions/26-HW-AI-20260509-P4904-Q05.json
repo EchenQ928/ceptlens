@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260509-P4904-Q05",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "关于[[term:decoder-only|Decoder-only]]，下列哪一项说法是错误的？",
+    "en-US": "Which statement about [[term:decoder-only|decoder-only]] models is incorrect?"
+  },
+  "explanation": {
+    "zh-CN": "[[term:decoder-only|Decoder-only]] 模型没有独立 Encoder，通常通过上下文[[term:autoregressive-generation|自回归预测]]后续 token。",
+    "en-US": "[[term:decoder-only|Decoder-only]] models do not have a separate encoder and usually predict the next token autoregressively from the context."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "Decoder-only架构与自回归生成",
+      "en-US": "Decoder-only architectures and autoregressive generation"
+    },
+    "modelFamily": {
+      "zh-CN": "G4 Transformer与Attention",
+      "en-US": "G4 Transformers and attention"
+    },
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E3 架构选型与整体设计",
+    "priority": "P0",
+    "secondaryEngineeringStages": [
+      {
+        "zh-CN": "E5 训练目标与训练过程",
+        "en-US": "E5 Training objectives and process"
+      }
+    ],
+    "knowledgeTopics": [
+      {
+        "zh-CN": "架构模块",
+        "en-US": "Architecture modules"
+      },
+      {
+        "zh-CN": "学习机制",
+        "en-US": "Learning mechanisms"
+      }
+    ],
+    "taskScenarios": [
+      {
+        "zh-CN": "生成",
+        "en-US": "Generation"
+      },
+      {
+        "zh-CN": "序列建模",
+        "en-US": "Sequence modeling"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "optimizationObjectives": []
+  },
+  "ordering": {
+    "order": 26,
+    "prerequisites": [
+      "HW-AI-20260204-P4567-Q14",
+      "HW-AI-20260318-P4624-Q20"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "常用于文本续写和对话生成",
+        "en-US": "They are commonly used for text completion and dialogue generation"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "输入提示和输出文本常被组织为同一连续序列",
+        "en-US": "The input prompt and output text are often organized as one continuous sequence"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "必须包含[[term:encoder|独立编码器]]才能生成输出",
+        "en-US": "They must contain an independent [[term:encoder|encoder]] to generate output"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "常见训练思路是根据已有上下文继续预测后续 token",
+        "en-US": "A common training approach is to predict the next token from the available context"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "C"
+  ]
+}

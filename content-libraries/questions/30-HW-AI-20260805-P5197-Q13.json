@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260805-P5197-Q13",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "在[[term:runtime-peak-memory|端侧推理]]过程中，以下哪项因素最可能导致实际使用的[[term:runtime-peak-memory|峰值内存]]显著超过模型文件本身的大小？",
+    "en-US": "During [[term:runtime-peak-memory|on-device inference]], which factor is most likely to make actual [[term:runtime-peak-memory|peak memory]] usage substantially larger than the model file itself?"
+  },
+  "explanation": {
+    "zh-CN": "模型运行时还需保存[[term:intermediate-activation|中间激活]]和临时计算空间，因此[[term:runtime-peak-memory|峰值内存]]可能远大于模型文件。",
+    "en-US": "Model execution also needs to retain [[term:intermediate-activation|intermediate activations]] and temporary workspaces, so [[term:runtime-peak-memory|peak memory]] can be much larger than the model file."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "推理运行时峰值内存组成",
+      "en-US": "Runtime peak-memory composition during inference"
+    },
+    "modelFamily": {
+      "zh-CN": "G0 通用/跨模型",
+      "en-US": "G0 General / cross-model"
+    },
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E11 硬件部署与性能分析",
+    "priority": "P0",
+    "secondaryEngineeringStages": [
+      {
+        "zh-CN": "E9 推理与运行时优化",
+        "en-US": "E9 Inference and runtime optimization"
+      }
+    ],
+    "knowledgeTopics": [
+      {
+        "zh-CN": "推理系统",
+        "en-US": "Inference systems"
+      }
+    ],
+    "optimizationObjectives": [
+      {
+        "zh-CN": "峰值内存",
+        "en-US": "Peak memory"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "端侧/嵌入式",
+        "en-US": "On-device / embedded"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "taskScenarios": []
+  },
+  "ordering": {
+    "order": 30,
+    "prerequisites": [
+      "HW-AI-20260304-P4570-Q18"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "[[term:intermediate-activation|中间激活]]、[[term:operator-workspace|临时 buffer]] 和多分支并发执行",
+        "en-US": "[[term:intermediate-activation|Intermediate activations]], temporary buffers, and concurrent execution of multiple branches"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "输出类别数固定",
+        "en-US": "A fixed number of output classes"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "训练集规模过大",
+        "en-US": "An overly large training set"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "标签类别过少",
+        "en-US": "Too few label classes"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "A"
+  ]
+}

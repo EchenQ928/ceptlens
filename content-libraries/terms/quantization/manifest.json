@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "quantization",
+  "title": {
+    "zh-CN": "模型量化",
+    "en-US": "Model quantization"
+  },
+  "aliases": [
+    "quantization",
+    "量化",
+    "INT8 量化",
+    "INT8"
+  ],
+  "summary": {
+    "zh-CN": "模型量化用较少的离散数值表示原本的[[term:numerical-precision|浮点]]权重或激活。例如把一段浮点范围映射到 [[term:numerical-precision|INT8]] 的有限整数格点，推理时以[[term:quantization-scale|缩放因子]]还原数值尺度，从而减少模型体积、内存带宽和部分硬件上的计算成本。",
+    "en-US": "Model quantization represents floating-point weights or activations with fewer discrete values. For example, a floating-point range can be mapped to the finite integer grid of [[term:numerical-precision|INT8]], with a [[term:quantization-scale|scale factor]] used to recover the numerical range during inference. This reduces model size, memory bandwidth, and some hardware computation costs."
+  },
+  "coreConclusion": {
+    "zh-CN": "量化用有限精度的离散网格近似浮点数，以少量精度损失换取存储和推理效率。",
+    "en-US": "Quantization approximates floating-point numbers with a finite-precision grid, exchanging a controlled amount of accuracy for storage and inference efficiency."
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260107-P4537-Q08",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "[[term:transformer|Transformer]] [[term:positional-encoding|位置编码（Position Encoding）]]主要作用:",
+    "en-US": "What is the main purpose of [[term:positional-encoding|positional encoding]] in a [[term:transformer|Transformer]]?"
+  },
+  "explanation": {
+    "zh-CN": "[[term:transformer|Transformer]] 的[[term:self-attention|自注意力机制]]本身不包含顺序信息，位置编码用于向模型注入序列中各 [[term:token|token]] 的相对或绝对位置信息；它不用于增强非线性、提升带宽或降低计算量。",
+    "en-US": "The [[term:self-attention|self-attention]] mechanism in a [[term:transformer|Transformer]] does not contain sequence-order information by itself. Positional encoding injects relative or absolute position information for each [[term:token|token]]; it is not used to increase nonlinearity, improve bandwidth, or reduce computation."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "Transformer位置编码",
+      "en-US": "Positional encoding in Transformers"
+    },
+    "modelFamily": {
+      "zh-CN": "G4 Transformer与Attention",
+      "en-US": "G4 Transformers and attention"
+    },
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E4 模块与算子设计",
+    "priority": "P0",
+    "knowledgeTopics": [
+      {
+        "zh-CN": "架构模块",
+        "en-US": "Architecture modules"
+      }
+    ],
+    "taskScenarios": [
+      {
+        "zh-CN": "序列建模",
+        "en-US": "Sequence modeling"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "secondaryEngineeringStages": [],
+    "optimizationObjectives": []
+  },
+  "ordering": {
+    "order": 22,
+    "prerequisites": [
+      "HW-AI-20260624-P5123-Q07"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "增强非线性",
+        "en-US": "Increase nonlinearity"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "提供序列位置信息",
+        "en-US": "Provide sequence position information"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "提升并行带宽",
+        "en-US": "Increase parallel bandwidth"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "降低模型计算量",
+        "en-US": "Reduce model computation"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "B"
+  ]
+}

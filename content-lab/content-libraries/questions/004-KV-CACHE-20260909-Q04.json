@@ -1,0 +1,104 @@
+{
+  "schemaVersion": "3.0",
+  "id": "KV-CACHE-20260909-Q04",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "在 Decode 阶段，为什么只有 Key 和 Value 需要跨步缓存，而 Query 通常不需要缓存？",
+    "en-US": "During Decode, why are only Key and Value normally cached across steps while Query is not?"
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "历史 Key 和 Value 会继续参与后续 Token 的注意力计算，而历史 Query 只对应它生成时的那个位置。",
+        "en-US": "Historical Keys and Values continue to participate in later tokens' attention calculations, while a historical Query belongs only to the position where it was produced."
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "Query 只在 Prefill 阶段计算，Decode 阶段直接从当前缓存中读取 Query。",
+        "en-US": "Query is computed only during Prefill, and Decode reads it directly from the current cache."
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "Query 与模型权重完全相同，可以由每一步共享的投影参数直接替代。",
+        "en-US": "Query is identical to the model weights and can be replaced by the projection parameters shared across steps."
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "Key 和 Value 决定当前 Token 的信息需求，Query 只负责保存历史上下文。",
+        "en-US": "Key and Value determine the current token's information need, while Query only stores historical context."
+      }
+    }
+  ],
+  "correctAnswer": ["A"],
+  "explanation": {
+    "zh-CN": "**正确答案：A**\n\n在 Decode 阶段，当前 Token 的 Query 会与历史 Key、Value 做注意力计算。历史 Key 和 Value 会在后续每一步继续作为可访问的上下文，因此需要跨步保存；某一步的 Query 只服务于该步骤，下一步会根据新的当前 Token 重新计算 Query。\n\n**B｜混淆 Decode 的计算流程**\nDecode 仍然需要为当前 Token 计算新的 Query。缓存中保存的是历史 K/V，不会提供下一步的 Query。\n\n**C｜混淆投影参数与中间结果**\n投影权重可以跨步骤共享，但 Query 是根据当前隐藏状态计算出的中间张量，不同 Token 通常对应不同 Query。\n\n**D｜颠倒 Q、K、V 的职责**\nQuery 表示当前步骤的查询，Key 和 Value 组成可被查询的历史上下文。",
+    "en-US": "**Correct answer: A**\n\nDuring Decode, the current token's Query attends over historical Keys and Values. Historical Keys and Values remain available as context at every later step, so they must be carried across steps. A Query serves only the step where it was produced; the next step computes a new Query from the new current token.\n\n**B | Confusing the Decode computation**\nDecode still computes a new Query for the current token. The cache stores historical K/V; it does not provide the next step's Query.\n\n**C | Confusing projection parameters with intermediate results**\nProjection weights are shared across steps, but Query is an intermediate tensor computed from the current hidden state. Different tokens normally produce different Queries.\n\n**D | Reversing the roles of Q, K, and V**\nQuery expresses the current step's request, while Key and Value form the historical context that can be queried."
+  },
+  "ceptCheck": {
+    "stem": {
+      "zh-CN": "两个请求拥有完全相同的历史上下文，但它们当前要处理的 Token 不同。它们可以共享哪些注意力缓存？哪些结果需要分别计算？",
+      "en-US": "Two requests have exactly the same historical context but different current tokens. Which attention cache can they share, and which results must be computed separately?"
+    }
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "Q 不进入 KV Cache 的原因",
+      "en-US": "Why Q is not stored in KV Cache"
+    },
+    "modelFamily": {
+      "zh-CN": "G4 Transformer与Attention",
+      "en-US": "G4 Transformers and attention"
+    },
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E9 推理与运行时优化",
+    "priority": "P0",
+    "knowledgeTopics": [
+      {
+        "zh-CN": "推理系统",
+        "en-US": "Inference systems"
+      },
+      {
+        "zh-CN": "架构模块",
+        "en-US": "Architecture modules"
+      },
+      {
+        "zh-CN": "QKV与注意力",
+        "en-US": "QKV and attention"
+      }
+    ],
+    "taskScenarios": [
+      {
+        "zh-CN": "自回归生成",
+        "en-US": "Autoregressive generation"
+      },
+      "Decode"
+    ],
+    "optimizationObjectives": [
+      {
+        "zh-CN": "时延",
+        "en-US": "Latency"
+      },
+      {
+        "zh-CN": "显存",
+        "en-US": "Device memory"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ]
+  },
+  "ordering": {
+    "order": 1004,
+    "prerequisites": ["KV-CACHE-20260909-Q01", "KV-CACHE-20260909-Q02"]
+  }
+}

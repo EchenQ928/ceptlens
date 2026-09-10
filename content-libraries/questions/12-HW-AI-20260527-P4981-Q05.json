@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260527-P4981-Q05",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "在构建线性回归模型时，发现[[term:training-set|训练误差]]很小，但[[term:test-set|测试误差]]很大，最可能的原因是",
+    "en-US": "When building a linear regression model, the training error is small but the [[term:test-set|test error]] is large. What is the most likely cause?"
+  },
+  "explanation": {
+    "zh-CN": "[[term:training-set|训练误差]]小、[[term:test-set|测试误差]]大是[[term:overfitting|过拟合]]的典型特征，代表模型[[term:generalization|泛化能力]]不足。",
+    "en-US": "A small [[term:training-set|training error]] and large [[term:test-set|test error]] are typical signs of [[term:overfitting|overfitting]], indicating poor [[term:generalization|generalization]]."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "过拟合与泛化能力",
+      "en-US": "Overfitting and generalization"
+    },
+    "modelFamily": {
+      "zh-CN": "G0 通用/跨模型",
+      "en-US": "G0 General / cross-model"
+    },
+    "learningLevel": "L0 通用基础",
+    "engineeringStage": "E6 训练稳定性与调优",
+    "priority": "P0",
+    "knowledgeTopics": [
+      {
+        "zh-CN": "学习机制",
+        "en-US": "Learning mechanisms"
+      }
+    ],
+    "optimizationObjectives": [
+      {
+        "zh-CN": "泛化",
+        "en-US": "Generalization"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "secondaryEngineeringStages": [],
+    "taskScenarios": []
+  },
+  "ordering": {
+    "order": 12
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "[[term:underfitting|欠拟合]]",
+        "en-US": "[[term:underfitting|Underfitting]]"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "[[term:overfitting|过拟合]]",
+        "en-US": "[[term:overfitting|Overfitting]]"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "数据量不足",
+        "en-US": "Insufficient data"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "特征太少",
+        "en-US": "Too few features"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "B"
+  ]
+}

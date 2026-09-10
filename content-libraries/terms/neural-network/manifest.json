@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "neural-network",
+  "title": {
+    "zh-CN": "神经网络",
+    "en-US": "Neural network"
+  },
+  "aliases": [
+    "neural network",
+    "神经网络模型"
+  ],
+  "summary": {
+    "zh-CN": "神经网络是由许多相连的小计算单元组成的函数。数据在单元之间传递、组合和变换，最终得到预测结果。每个单元使用一些可以调整的数；训练通过反复调整这些数，让网络从例子中学会完成任务。",
+    "en-US": "A neural network is a function made from many connected small computation units. Data is passed, combined, and transformed between units until a prediction is produced. Each unit uses adjustable values, and training repeatedly changes those values so the network learns from examples."
+  },
+  "coreConclusion": {
+    "zh-CN": "神经网络的结构规定数据怎样计算，训练则通过不断调整权重和偏置，让它逐渐形成任务所需的输入—输出关系。",
+    "en-US": "The structure of a neural network defines how data is computed. Training adjusts weights and biases so the network gradually learns the input-output relationship required by the task."
+  }
+}

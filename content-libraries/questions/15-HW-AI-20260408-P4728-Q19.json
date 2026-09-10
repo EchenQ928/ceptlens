@@ -1,0 +1,96 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260408-P4728-Q19",
+  "type": "multiple_choice",
+  "stem": {
+    "zh-CN": "在 [[term:cnn|CNN]] 中，[[term:convolution|卷积操作（Convolution）]]的特性包括？",
+    "en-US": "Which are characteristics of the [[term:convolution|convolution operation]] in a [[term:cnn|CNN]]?"
+  },
+  "explanation": {
+    "zh-CN": "B 对，局部连接可减少参数；D 对，共享卷积核的梯度要累加；A、C 错。",
+    "en-US": "B is correct because local connections reduce the number of parameters; D is correct because the gradient of a shared kernel must be accumulated. A and C are incorrect."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "卷积的局部感受野与参数共享",
+      "en-US": "Local receptive fields and parameter sharing in convolution"
+    },
+    "modelFamily": {
+      "zh-CN": "G2 CNN",
+      "en-US": "G2 CNN"
+    },
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E4 模块与算子设计",
+    "priority": "P0",
+    "secondaryEngineeringStages": [
+      {
+        "zh-CN": "E0 基础机制与模型计算",
+        "en-US": "E0 Foundational mechanisms and model computation"
+      }
+    ],
+    "knowledgeTopics": [
+      {
+        "zh-CN": "架构模块",
+        "en-US": "Architecture modules"
+      },
+      {
+        "zh-CN": "学习机制",
+        "en-US": "Learning mechanisms"
+      }
+    ],
+    "optimizationObjectives": [
+      {
+        "zh-CN": "参数量",
+        "en-US": "Parameter count"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "taskScenarios": []
+  },
+  "ordering": {
+    "order": 15,
+    "prerequisites": [
+      "HW-AI-20260304-P4570-Q18"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "在卷积核大小与通道数固定的情况下，卷积层参数量会随着输入特征图空间尺寸的增大而线性增长",
+        "en-US": "With kernel size and channel count fixed, the number of convolution-layer parameters grows linearly with the spatial size of the input feature map"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "卷积层通过[[term:receptive-field|局部感受野]]建立输入与输出之间的连接关系，从而显著减少参数规模",
+        "en-US": "A convolution layer uses [[term:receptive-field|local receptive fields]] to connect inputs and outputs, significantly reducing parameter count"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "卷积操作本身保证网络对输入的任意[[term:translation-equivariance|平移严格不变]]，因此无需[[term:pooling|池化]]或[[term:data-augmentation|数据增强]]",
+        "en-US": "Convolution itself guarantees strict translation invariance for any input, so [[term:pooling|pooling]] and [[term:data-augmentation|data augmentation]] are unnecessary"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "卷积操作中[[term:parameter-sharing|同一卷积核在不同空间位置复用]]，其梯度在[[term:backpropagation|反向传播]]时需要进行累加",
+        "en-US": "A convolution reuses the same kernel at different spatial positions, so its gradient must be accumulated during [[term:backpropagation|backpropagation]]"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "B",
+    "D"
+  ]
+}

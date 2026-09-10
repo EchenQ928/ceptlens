@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260624-P5123-Q07",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "在[[term:transformer|Transformer 模型]]中，[[term:self-attention|自注意力机制]]的主要作用是什么？",
+    "en-US": "What is the main purpose of [[term:self-attention|self-attention]] in a [[term:transformer|Transformer model]]?"
+  },
+  "explanation": {
+    "zh-CN": "自注意力可以直接建模序列中任意位置之间的关系。",
+    "en-US": "Self-attention can directly model relationships between arbitrary positions in a sequence."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "自注意力的长距离依赖建模",
+      "en-US": "Long-range dependency modeling with self-attention"
+    },
+    "modelFamily": {
+      "zh-CN": "G4 Transformer与Attention",
+      "en-US": "G4 Transformers and attention"
+    },
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E4 模块与算子设计",
+    "priority": "P0",
+    "knowledgeTopics": [
+      {
+        "zh-CN": "架构模块",
+        "en-US": "Architecture modules"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "secondaryEngineeringStages": [],
+    "taskScenarios": [],
+    "optimizationObjectives": []
+  },
+  "ordering": {
+    "order": 19,
+    "prerequisites": [
+      "HW-AI-20260304-P4570-Q01"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "对输入序列进行降维处理",
+        "en-US": "Reduce the dimensionality of the input sequence"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "生成[[term:embedding|词嵌入]]",
+        "en-US": "Generate [[term:embedding|word embeddings]]"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "捕获序列中的[[term:long-range-dependency|长距离依赖关系]]",
+        "en-US": "Capture [[term:long-range-dependency|long-range dependencies]] in the sequence"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "将输入序列映射到固定长度向量",
+        "en-US": "Map the input sequence to a fixed-length vector"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "C"
+  ]
+}

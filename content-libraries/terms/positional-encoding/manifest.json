@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "positional-encoding",
+  "title": {
+    "zh-CN": "位置编码",
+    "en-US": "Positional encoding"
+  },
+  "aliases": [
+    "Positional Encoding",
+    "位置信息",
+    "位置嵌入",
+    "Position Embedding"
+  ],
+  "summary": {
+    "zh-CN": "位置编码把序列顺序写进模型表示。因为[[term:self-attention|自注意力]]只按内容匹配，如果交换输入行同时交换对应 [[term:qkv-projection|Q/K/V]]，它本身不会自动知道哪一行是第一个或第三个位置。",
+    "en-US": "Positional encoding writes sequence order into the model representation. Because [[term:self-attention|self-attention]] matches content, swapping input rows together with their [[term:qkv-projection|Q/K/V]] would not by itself tell the model which row is first or third."
+  },
+  "coreConclusion": {
+    "zh-CN": "位置编码让相同内容在不同位置拥有不同表示，使模型能够利用先后顺序和相对距离。",
+    "en-US": "Positional encoding gives the same content different representations at different positions, allowing the model to use order and relative distance."
+  },
+  "prerequisites": [
+    "self-attention"
+  ]
+}

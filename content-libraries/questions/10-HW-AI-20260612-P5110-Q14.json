@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260612-P5110-Q14",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "关于 [[term:sgd|SGD]] 的说法，错误的是",
+    "en-US": "Which statement about [[term:sgd|SGD]] is incorrect?"
+  },
+  "explanation": {
+    "zh-CN": "[[term:sgd|SGD]] 每次通常使用[[term:mini-batch|单个样本或小批量样本]]计算梯度，不是整个数据集。",
+    "en-US": "[[term:sgd|SGD]] usually computes a gradient from a single example or a small [[term:mini-batch|mini-batch]], not from the entire dataset."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "随机梯度下降的梯度估计与更新方式",
+      "en-US": "Gradient estimation and updates in stochastic gradient descent"
+    },
+    "modelFamily": {
+      "zh-CN": "G0 通用/跨模型",
+      "en-US": "G0 General / cross-model"
+    },
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E5 训练目标与训练过程",
+    "priority": "P0",
+    "secondaryEngineeringStages": [
+      {
+        "zh-CN": "E6 训练稳定性与调优",
+        "en-US": "E6 Training stability and tuning"
+      }
+    ],
+    "knowledgeTopics": [
+      {
+        "zh-CN": "学习机制",
+        "en-US": "Learning mechanisms"
+      },
+      {
+        "zh-CN": "训练系统",
+        "en-US": "Training systems"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "taskScenarios": [],
+    "optimizationObjectives": []
+  },
+  "ordering": {
+    "order": 10,
+    "prerequisites": [
+      "HW-AI-20260617-P5119-Q09"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "[[term:sgd|SGD]] 可能收敛速度较慢",
+        "en-US": "[[term:sgd|SGD]] may converge relatively slowly"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "[[term:sgd|SGD]] 需要设置[[term:learning-rate|学习率]]",
+        "en-US": "[[term:sgd|SGD]] requires a [[term:learning-rate|learning rate]]"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "[[term:sgd|SGD]] 使用[[term:batch-gradient-descent|整个数据集计算梯度]]",
+        "en-US": "[[term:sgd|SGD]] computes the gradient using the entire dataset"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "[[term:sgd|SGD]] 代表随机梯度下降",
+        "en-US": "[[term:sgd|SGD]] stands for stochastic gradient descent"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "C"
+  ]
+}

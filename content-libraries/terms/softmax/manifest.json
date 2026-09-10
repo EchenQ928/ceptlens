@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "softmax",
+  "title": {
+    "zh-CN": "Softmax",
+    "en-US": "Softmax"
+  },
+  "aliases": [
+    "Softmax函数",
+    "概率归一化"
+  ],
+  "summary": {
+    "zh-CN": "Softmax 把一组可正可负、大小任意的分数转换成一组非负且总和为 1 的权重。它保留分数的大小顺序，并让较高分数获得更大的权重。",
+    "en-US": "Softmax converts a set of scores with arbitrary signs and magnitudes into nonnegative weights that sum to 1. It preserves the ordering of scores and gives larger weights to larger scores."
+  },
+  "coreConclusion": {
+    "zh-CN": "Softmax 不是挑出最大值，而是让所有候选共享一个分母，形成可比较、总和为 1 的权重。",
+    "en-US": "Softmax does not simply select the maximum. All candidates share one denominator, producing comparable weights whose sum is 1."
+  }
+}

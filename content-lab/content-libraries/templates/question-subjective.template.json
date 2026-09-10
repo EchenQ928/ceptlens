@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "3.0",
+  "id": "subjective-question-unique-id",
+  "type": "subjective",
+  "stem": {
+    "zh-CN": "请解释一个模型机制，并说明它的工程边界。",
+    "en-US": "Explain one model mechanism and state its engineering boundaries."
+  },
+  "explanation": {
+    "zh-CN": "作答后展示的学习解释。",
+    "en-US": "The learning explanation shown after submission."
+  },
+  "subjectiveAnswer": {
+    "referenceAnswer": {
+      "zh-CN": "完整参考答案；需要时可显式使用 [[term:term-id|词条链接]]。",
+      "en-US": "A complete reference answer; use an explicit [[term:term-id|term link]] when needed."
+    },
+    "rubric": [
+      { "criterion": { "zh-CN": "准确说明输入、核心处理和输出。", "en-US": "Accurately describe the input, core processing, and output." }, "points": 6 },
+      { "criterion": { "zh-CN": "指出至少一个真实工程边界。", "en-US": "Identify at least one real engineering boundary." }, "points": 4 }
+    ]
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "一个主知识点",
+      "en-US": "One primary concept"
+    },
+    "modelFamily": "G0 通用/跨模型",
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E0 基础机制与模型计算",
+    "priority": "P1"
+  },
+  "ordering": {
+    "order": 999
+  }
+}

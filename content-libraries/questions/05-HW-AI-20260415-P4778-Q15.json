@@ -1,0 +1,85 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260415-P4778-Q15",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "[[term:neural-network|神经网络]]相比[[term:linear-model|线性模型]]的优势在于",
+    "en-US": "Compared with a [[term:linear-model|linear model]], the advantage of a [[term:neural-network|neural network]] is that it"
+  },
+  "explanation": {
+    "zh-CN": "[[term:neural-network|神经网络]]借助[[term:activation-function|激活函数]]可拟合复杂非线性关系，表达能力强于[[term:linear-model|线性模型]]。",
+    "en-US": "With the help of [[term:activation-function|activation functions]], a [[term:neural-network|neural network]] can fit complex nonlinear relationships and has greater expressive power than a [[term:linear-model|linear model]]."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "神经网络的非线性表示能力",
+      "en-US": "Nonlinear representation capacity of neural networks"
+    },
+    "modelFamily": {
+      "zh-CN": "G0 通用/跨模型",
+      "en-US": "G0 General / cross-model"
+    },
+    "learningLevel": "L0 通用基础",
+    "engineeringStage": "E4 模块与算子设计",
+    "priority": "P0",
+    "knowledgeTopics": [
+      {
+        "zh-CN": "架构模块",
+        "en-US": "Architecture modules"
+      },
+      {
+        "zh-CN": "学习机制",
+        "en-US": "Learning mechanisms"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "secondaryEngineeringStages": [],
+    "taskScenarios": [],
+    "optimizationObjectives": []
+  },
+  "ordering": {
+    "order": 5,
+    "prerequisites": [
+      "HW-AI-20260513-P4937-Q11"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "参数更少",
+        "en-US": "Uses fewer parameters"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "不需要[[term:activation-function|激活函数]]",
+        "en-US": "Does not need [[term:activation-function|activation functions]]"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "计算更简单",
+        "en-US": "Has simpler computation"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "可以学习非线性关系",
+        "en-US": "Can learn nonlinear relationships"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "D"
+  ]
+}

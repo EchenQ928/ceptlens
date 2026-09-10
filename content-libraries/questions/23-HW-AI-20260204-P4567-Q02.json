@@ -1,0 +1,86 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260204-P4567-Q02",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "在一个标准的[[term:transformer-block|Transformer Block]]中,一个[[term:multi-head-attention|Multi-Head Attention]]子层之后通常会跟一个[[term:position-wise-ffn|Position-wise FFN]]子层。关于这两个子层处理信息方式的描述,以下哪项最为准确?",
+    "en-US": "In a standard [[term:transformer-block|Transformer Block]], a [[term:multi-head-attention|Multi-Head Attention]] sublayer is usually followed by a [[term:position-wise-ffn|Position-wise FFN]] sublayer. Which description of how these two sublayers process information is most accurate?"
+  },
+  "explanation": {
+    "zh-CN": "在Transformer中，[[term:multi-head-attention|Multi-Head Attention]]通过[[term:self-attention|自注意力机制]]计算序列中所有位置之间的关系，实现跨位置信息融合；而[[term:position-wise-ffn|Position-wise FFN]]对每个位置的向量独立应用相同的[[term:fully-connected-layer|全连接层]]进行非线性变换，不涉及位置间交互。",
+    "en-US": "In a Transformer, [[term:multi-head-attention|Multi-Head Attention]] uses [[term:self-attention|self-attention]] to compute relationships between all positions and mix information across positions. [[term:position-wise-ffn|Position-wise FFN]] applies the same [[term:fully-connected-layer|fully connected layers]] independently to each position for nonlinear transformation, without interaction between positions."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "Attention与Position-wise FFN的信息混合边界",
+      "en-US": "The information-mixing boundary between Attention and Position-wise FFN"
+    },
+    "modelFamily": {
+      "zh-CN": "G4 Transformer与Attention",
+      "en-US": "G4 Transformers and attention"
+    },
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E4 模块与算子设计",
+    "priority": "P0",
+    "knowledgeTopics": [
+      {
+        "zh-CN": "架构模块",
+        "en-US": "Architecture modules"
+      }
+    ],
+    "taskScenarios": [
+      {
+        "zh-CN": "序列建模",
+        "en-US": "Sequence modeling"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "secondaryEngineeringStages": [],
+    "optimizationObjectives": []
+  },
+  "ordering": {
+    "order": 23,
+    "prerequisites": [
+      "HW-AI-20260522-P4968-Q12"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "[[term:multi-head-attention|Multi-Head Attention]]和FFN都独立地处理每个位置的向量,不进行位置间的信息交换。",
+        "en-US": "[[term:multi-head-attention|Multi-Head Attention]] and FFN both process each position independently without exchanging information between positions"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "FFN负责在不同位置间混合信息,而[[term:multi-head-attention|Multi-Head Attention]]则对每个位置的向量进行独立的非线性变换。",
+        "en-US": "FFN mixes information between positions, while [[term:multi-head-attention|Multi-Head Attention]] applies an independent nonlinear transformation to each position"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "[[term:multi-head-attention|Multi-Head Attention]]在不同位置间混合信息,而FFN则对每个位置的向量进行独立的非线性变换。",
+        "en-US": "[[term:multi-head-attention|Multi-Head Attention]] mixes information between positions, while FFN applies an independent nonlinear transformation to each position"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "[[term:multi-head-attention|Multi-Head Attention]]和FFN都负责在整个序列的不同位置间进行信息交换。",
+        "en-US": "[[term:multi-head-attention|Multi-Head Attention]] and FFN both exchange information across all positions in the sequence"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "C"
+  ]
+}

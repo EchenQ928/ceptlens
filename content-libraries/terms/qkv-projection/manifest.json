@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "3.0",
+  "sdkVersion": "1.x",
+  "id": "qkv-projection",
+  "title": {
+    "zh-CN": "QKV 投影",
+    "en-US": "QKV projection"
+  },
+  "aliases": [
+    "QKV",
+    "Query、Key、Value",
+    "Query Key Value",
+    "Q、K、V"
+  ],
+  "summary": {
+    "zh-CN": "Q、K、V 不是三份外部输入，而是同一组序列表示通过三组[[term:model-parameter|可学习]][[term:fully-connected-layer|线性层]]得到的三种角色表示。Q 用来发出查询，K 用来参与匹配，V 是匹配后真正被汇总的内容。",
+    "en-US": "Q, K, and V are not three external inputs. They are three role-specific representations produced from the same sequence representation by three learnable [[term:fully-connected-layer|linear layers]]. Q issues a query, K participates in matching, and V is the content actually aggregated after matching."
+  },
+  "coreConclusion": {
+    "zh-CN": "同一个输入向量被三组参数投影成查询、索引和值，分别承担检索过程中的不同角色。",
+    "en-US": "One input vector is projected by three parameter sets into a query, an index, and a value, each with a different role in retrieval."
+  },
+  "prerequisites": [
+    "self-attention"
+  ]
+}

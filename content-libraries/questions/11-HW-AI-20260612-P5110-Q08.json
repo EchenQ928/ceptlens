@@ -1,0 +1,95 @@
+{
+  "schemaVersion": "3.0",
+  "id": "HW-AI-20260612-P5110-Q08",
+  "type": "single_choice",
+  "stem": {
+    "zh-CN": "与[[term:sgd|普通 SGD]]相比，[[term:momentum|Momentum 方法]]的主要作用是什么？",
+    "en-US": "Compared with ordinary [[term:sgd|SGD]], what is the main purpose of the [[term:momentum|momentum method]]?"
+  },
+  "explanation": {
+    "zh-CN": "[[term:momentum|Momentum]]累积历史梯度，平滑更新方向，减少震荡并加速收敛。",
+    "en-US": "[[term:momentum|Momentum]] accumulates historical gradients, smooths the update direction, reduces oscillation, and speeds convergence."
+  },
+  "taxonomy": {
+    "primaryConcept": {
+      "zh-CN": "Momentum动量更新与收敛稳定性",
+      "en-US": "Momentum updates and convergence stability"
+    },
+    "modelFamily": {
+      "zh-CN": "G0 通用/跨模型",
+      "en-US": "G0 General / cross-model"
+    },
+    "learningLevel": "L1 技术栈基础",
+    "engineeringStage": "E5 训练目标与训练过程",
+    "priority": "P0",
+    "secondaryEngineeringStages": [
+      {
+        "zh-CN": "E6 训练稳定性与调优",
+        "en-US": "E6 Training stability and tuning"
+      }
+    ],
+    "knowledgeTopics": [
+      {
+        "zh-CN": "学习机制",
+        "en-US": "Learning mechanisms"
+      },
+      {
+        "zh-CN": "训练系统",
+        "en-US": "Training systems"
+      }
+    ],
+    "optimizationObjectives": [
+      {
+        "zh-CN": "稳定性",
+        "en-US": "Stability"
+      }
+    ],
+    "runtimeEnvironments": [
+      {
+        "zh-CN": "硬件无关",
+        "en-US": "Hardware-agnostic"
+      }
+    ],
+    "secondaryModelFamilies": [],
+    "taskScenarios": []
+  },
+  "ordering": {
+    "order": 11,
+    "prerequisites": [
+      "HW-AI-20260612-P5110-Q14"
+    ]
+  },
+  "options": [
+    {
+      "key": "A",
+      "text": {
+        "zh-CN": "保证全局最优解",
+        "en-US": "Guarantee the global optimum"
+      }
+    },
+    {
+      "key": "B",
+      "text": {
+        "zh-CN": "不再需要设置[[term:learning-rate|学习率]]",
+        "en-US": "Remove the need to set a [[term:learning-rate|learning rate]]"
+      }
+    },
+    {
+      "key": "C",
+      "text": {
+        "zh-CN": "引入历史梯度信息，减少震荡并加快收敛",
+        "en-US": "Introduce historical gradient information to reduce oscillation and speed convergence"
+      }
+    },
+    {
+      "key": "D",
+      "text": {
+        "zh-CN": "自动减少训练数据噪声",
+        "en-US": "Automatically reduce noise in the training data"
+      }
+    }
+  ],
+  "correctAnswer": [
+    "C"
+  ]
+}
