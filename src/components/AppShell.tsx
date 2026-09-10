@@ -1,4 +1,4 @@
-import { BookOpen, Braces, ClipboardCheck, Home, LibraryBig, Network, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { BookOpen, Braces, ClipboardCheck, Home, LibraryBig, Network, PanelLeftClose, PanelLeftOpen, UserRound } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 import { useContent } from "../hooks/useContent";
@@ -6,7 +6,6 @@ import { platformLabel } from "../infrastructure/version";
 import { useLearningSession } from "./LearningSession";
 import { LearningCompanion } from "./LearningCompanion";
 import { LanguageSwitcher, useLocale, uiText } from "../i18n";
-import { textForLocale } from "../domain/content";
 
 const navItems = [
   { to: "/", zh: "工作台", en: "Home", icon: Home },
@@ -34,8 +33,19 @@ export function AppShell({ children }: { children: ReactNode }) {
           <span className="topbar-divider" />
           <span className="topbar-scope">{uiText(locale, "AI 模型工程学习", "AI model engineering")}</span>
         </div>
-        <LanguageSwitcher />
-        <button className="topbar-user profile-trigger" onClick={() => window.dispatchEvent(new Event(session?.authenticated ? "ceptlens-profile" : "ceptlens-auth"))} aria-label={session?.authenticated ? uiText(locale, "设置个人资料", "Edit profile") : uiText(locale, "登录账户", "Sign in")}><span className="avatar">{session?.user.name.slice(0, 1) || uiText(locale, "我", "You")}</span><span>{session?.authenticated ? session.user.name : uiText(locale, "登录", "Sign in")}</span></button>
+        <div className="topbar-actions">
+          <LanguageSwitcher />
+          <button
+            type="button"
+            className="topbar-user profile-trigger"
+            onClick={() => window.dispatchEvent(new Event(session?.authenticated ? "ceptlens-profile" : "ceptlens-auth"))}
+            aria-label={session?.authenticated ? uiText(locale, "设置个人资料", "Edit profile") : uiText(locale, "登录账户", "Sign in")}
+            title={session?.authenticated ? session.user.name : uiText(locale, "登录账户", "Sign in")}
+          >
+            <span className="avatar" aria-hidden="true">{session?.authenticated ? session.user.name.slice(0, 1) : <UserRound size={17} />}</span>
+            <span className="topbar-user-name">{session?.authenticated ? session.user.name : uiText(locale, "登录", "Sign in")}</span>
+          </button>
+        </div>
       </header>
       <aside className="sidebar">
         <nav aria-label={uiText(locale, "主导航", "Main navigation")}>

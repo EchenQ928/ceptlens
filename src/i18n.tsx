@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { Languages } from "lucide-react";
 import type { Locale } from "./domain/content";
 
 const STORAGE_KEY = "ceptlens-locale";
@@ -45,7 +46,8 @@ export function LanguageSwitcher() {
       aria-label={locale === "en-US" ? "Switch to Chinese" : "切换到英文"}
       title={locale === "en-US" ? "切换到中文" : "Switch to English"}
     >
-      {locale === "en-US" ? "中文" : "English"}
+      <Languages size={16} aria-hidden="true" />
+      <span lang={next}>{locale === "en-US" ? "中文" : "English"}</span>
     </button>
   );
 }
