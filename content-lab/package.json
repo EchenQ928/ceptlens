@@ -4,7 +4,7 @@
   "version": "1.0.1",
   "type": "module",
   "scripts": {
-    "start": "npm run validate && node server/lab-host.mjs",
+    "start": "npm run validate && npm run build && node server/lab-host.mjs",
     "dev": "npm start",
     "build": "tsc -b && vite build",
     "validate": "tsx scripts/validate-content.ts",

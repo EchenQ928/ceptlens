@@ -15,6 +15,7 @@ const questionDirectory = resolve(root, "content-libraries/questions");
 const termDirectory = resolve(root, "content-libraries/terms");
 const templateDirectory = resolve(root, "content-libraries/templates");
 const runtimeDirectory = resolve(root, ".modelpath-runtime");
+const staticDirectory = resolve(root, "dist");
 const stageDirectory = resolve(runtimeDirectory, "stage");
 const requiredTermFiles = ["manifest.json", "view.tsx"];
 const maximumUploadBytes = 25 * 1024 * 1024;
@@ -360,6 +361,15 @@ const server = createServer(async (request, response) => {
       return response.end(archive);
     }
     if (url.pathname.startsWith("/api/")) return json(response, 404, { ok: false, error: "实验室没有此接口" });
+    // The hosted lab is served through a reverse proxy under /lab/. Serve the
+    // production build here so Vite cannot inject root-absolute dev scripts.
+    const staticName = url.pathname === "/" || !extname(url.pathname) ? "index.html" : url.pathname.slice(1);
+    try {
+      const file = await readFile(resolve(staticDirectory, staticName));
+      const contentType = staticName.endsWith(".html") ? "text/html; charset=utf-8" : staticName.endsWith(".js") ? "text/javascript; charset=utf-8" : staticName.endsWith(".css") ? "text/css; charset=utf-8" : "application/octet-stream";
+      response.writeHead(200, { "Content-Type": contentType, "Cache-Control": staticName === "index.html" ? "no-store" : "public, max-age=31536000, immutable" });
+      return response.end(file);
+    } catch { /* fall through to Vite for local source preview */ }
     return vite.middlewares(request, response, () => json(response, 404, { ok: false, error: "Not found" }));
   } catch (error) {
     const status = error?.status ?? 400;
@@ -368,7 +378,7 @@ const server = createServer(async (request, response) => {
     if (ownsPublish) publishing = false;
   }
 });
-vite = await createViteServer({ root, server: { middlewareMode: true, ws: { server } }, appType: "spa" });
+vite = await createViteServer({ root, server: { middlewareMode: true, hmr: false, ws: false }, appType: "spa" });
 for (const signal of ["SIGINT", "SIGTERM"]) process.once(signal, async () => { await vite.close(); server.close(() => process.exit(0)); server.closeAllConnections(); });
 server.on("error", async error => { console.error(error.code === "EADDRINUSE" ? `端口 ${port} 已使用，请先停止旧实验室，或用 --port 指定其他端口。` : error.message); await vite.close(); process.exitCode = 1; });
 
