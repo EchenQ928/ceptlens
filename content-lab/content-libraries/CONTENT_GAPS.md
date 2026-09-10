@@ -5,4 +5,3 @@
 | 词条 ID | 名称 | 依赖来源 | 补充原因 |
 |---|---|---|---|
 | kv-cache | KV Cache | 题目 1001 · KV-CACHE-20260909-Q01 | 题目“KV Cache 的作用”中显式引用。 |
-| self-attention | 自注意力 | 题目 1001 · KV-CACHE-20260909-Q01 | 题目“KV Cache 的作用”中显式引用。 |
