@@ -1,45 +1,45 @@
-# Lens UI direction
+# Lens UI — interaction and clarity
 
-A desktop-first visual redesign of CeptLens. The design starts from the owner’s supplied blue lens/lightbulb identity and uses a quieter layout than the reference composition.
+Desktop comes first. The owner’s direction is concise, polished, vivid, and focused on understanding. A screen should not contain extra copy just to look complete.
 
-## Reading hierarchy
+## Structure
 
-- The home page prioritizes the next real question, followed by the learning loop and available topic collections. All counts and progress come from the content and progress repositories.
-- The desktop study view gives the question most of the width, with one compact concept rail. Sequence navigation opens on demand; Focus removes the rail and provides a reading surface up to 900 px wide.
-- The question library puts the primary concept first and shows a two-line question excerpt. More detailed filters are disclosed on demand. Track numbering is relative to the sequence, rather than exposing authoring sort keys such as 1001.
-- Answer selection uses blue; correct answers use green with a checkmark and explicit feedback. Review feedback invites comparison with the explanation. Color is not the sole feedback signal.
-- Linked concepts remain available inside the text. Missing-package badges move out of the question’s reading flow; their names and explanations remain in the contextual disclosure and hover titles.
-- The term library starts with available lessons. Pending entries remain accessible through the existing filter.
-- Welcome, navigation, assessment, account, and content-management surfaces inherit the same typography, color, and control language.
+- A compact top navigation replaces the sidebar. Learn, Assess, and Concepts use short labels and icons; content management remains available to developers. The selected mode moves between destinations.
+- Home is a product introduction: one headline, one sentence, three direct destinations, and an interactive KV Cache preview. The preview preserves previous K/V cells while appending new ones. It plays once, supports pause and manual steps, and pauses advancement when the document is hidden. Continue appears only when there is a previous question.
+- The home route is visible without signing in. Existing sign-in/visitor entry and account controls still apply when entering other routes. The sign-in page is reduced to its form and visitor entry.
+- The question library leads with concept titles and readable excerpts. Secondary metadata is available through filters. Reset appears only when filters are active. Question ordering, featured selections, and the KV Cache track are preserved.
+- Study keeps the question prominent, with optional context and Focus. Sequence navigation is a compact disclosure. Blue indicates selection; green/check and explicit feedback indicate correctness. Related concepts are short links, not repeated summaries.
+- Concepts show available lessons first. Featured links open actual available lessons; unavailable entries remain accessible through the status filter. Symbols and accents remain consistent for a given concept when searching.
+- Assessment uses a warm introductory surface, clear question counts, timer/autosave rules, and a direct start action. Detailed scoring rules expand on demand. Incomplete papers and pending grading still withhold full scores.
 
-## Identity and motion
+## Typography and identity
 
-`public/brand/ceptlens-original.png` is the unmodified artwork supplied by the owner. `BrandIcon` frames its icon using an SVG viewBox. The wordmark uses live text for sharp rendering, and the favicon is a small vector adaptation.
+Noto Sans SC Variable is self-hosted through `@fontsource-variable/noto-sans-sc`, including the upstream OFL license. Unicode-range font subsets load only when needed, without a runtime dependency on an external font service. Controls generally use 14–16 px, learning text 16–18 px, and question stems 23–26 px. Chinese headings use normal letter spacing.
 
-The system font stack avoids third-party font requests. Blue marks primary actions, active navigation, concept links, and newly cached data. Warm warning colors remain available for real warnings and content availability.
+`public/brand/ceptlens-original.png` is the owner’s unmodified artwork. `BrandIcon` frames the symbol with an SVG viewBox; the wordmark remains live text. Tiny slogans and repeated labels have been removed.
 
-Motion is brief and tied to interaction: button and card responses, answer reveals, view entry, and newly appended KV cache cells. The hero has a one-time entrance, not a looping distraction. `prefers-reduced-motion` disables these animations and transitions. Keyboard focus indicators and a skip-to-content link are provided.
+## Motion
+
+- Shared navigation selection, page entrances, card hover/lift, and concept reveal on scroll.
+- Directional question exit/entry with answer state reset between questions.
+- Answer expansion/collapse, selection feedback, and new cache cells.
+- Expandable filters and directories, assessment question entry, submission dialog entry, and assistant/discussion drawer entry and exit.
+- Form-field entry, focused controls, buttons, and lesson preset responses.
+
+Motion uses `motion/react` and CSS. `MotionConfig` and `useReducedMotion` respect the OS preference; CSS motion is disabled for that preference. Home autoplay is disabled in reduced-motion mode, while manual steps work. Exiting drawers become inert immediately. Study content never animates continuously while a learner reads it.
 
 ## Local preview
 
-Run the existing content host on port 8765, then run:
+Run the existing content host on port 8765, then `npm run dev:ui`. Open http://127.0.0.1:8770/.
 
-```text
-npm run dev:ui
-```
+The preview reads the current local published content snapshot. It does not copy packages into Git or modify the content store. Without a local snapshot, it uses the Git seed library. `CEPTLENS_DATA_DIR` / `CEPTLENS_CONTENT_DIR` can select a different store. Restart the preview after publishing content to select the new snapshot. API calls use the local host on port 8765.
 
-Open http://127.0.0.1:8770/.
-
-The UI preview reads the current local published snapshot without copying it into Git or modifying it. With no local snapshot it falls back to the Git seed library. `CEPTLENS_DATA_DIR` / `CEPTLENS_CONTENT_DIR` can select an alternate local store. Restart the preview after publishing content to pick up a newer snapshot. API requests go to the local host on port 8765, so account and assessment actions use that host’s existing local data.
-
-This transform exists only in the development-preview config. The normal production build and persistent-content deployment workflow remain unchanged. Runtime folders are excluded from file watching to avoid Windows handles interfering with atomic snapshot operations.
+Normal production builds and deployment continue to use the existing persistent-content workflow. Accounts, assessments, logs, and authored packages remain outside this UI change. Runtime directories stay excluded from Vite watching to preserve Windows atomic file operations.
 
 ## Review
 
-Review the welcome page, home, KV Cache library, a single-choice question, a written-response question, and a linked concept. Check both languages, selected/revealed answers, Focus, sequence navigation, filters, and the return-to-question trail.
+Check desktop first (1440 px), then phone (390 px), in Chinese and English. Review home playback/pause/manual steps, library filtering, single and multiple selection, answer reveal/reset, next/previous, Focus, question directory, term search and lesson presets, drawer open/close, assessment setup, and sign-in.
 
-Desktop is the primary target. Checked at a 1440 px desktop viewport and the app’s default desktop viewport; phone layout checked at 390 px, with a single-column reading surface and bottom navigation.
+Run `npm run check` and build the current content snapshot with the UI preview config. Existing authored-content issues, such as doubled backslashes in a lesson formula, belong to the package workflow rather than platform styling.
 
-Existing content issues are separate from this visual redesign: for example, the authored KV Cache lesson still contains doubled backslashes in its capacity formula. No question or term package sources were rewritten in this branch.
-
-This branch is intended for visual review before merging and deploying to the public site.
+This branch is a local design preview; it has not been merged or deployed to the public site.

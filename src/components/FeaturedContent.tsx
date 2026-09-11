@@ -23,7 +23,6 @@ export function FeaturedContentFilter({ questions, value, onChange }: { question
     { value: 'ceptCheck', label: uiText(locale, '精选 CeptCheck', 'Featured CeptChecks') }
   ];
   return <div className="featured-filter" role="group" aria-label={uiText(locale, '精选内容', 'Featured content')}>
-    <b>{uiText(locale, '精选内容', 'Featured content')}</b>
     {options.map(option => <button type="button" key={option.value} aria-pressed={value === option.value} onClick={() => onChange(option.value)}>{option.label}<small>{questions.filter(question => matchesFeatured(question, option.value)).length}</small></button>)}
   </div>;
 }

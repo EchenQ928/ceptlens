@@ -4,5 +4,5 @@ export function BrandIcon({ className = "" }: { className?: string }) {
 }
 
 export function Brand() {
-  return <><BrandIcon /><span className="brand-copy"><strong>Cept<span>Lens</span></strong><small>SEIZE UNDERSTANDING</small></span></>;
+  return <><BrandIcon /><span className="brand-copy"><strong>Cept<span>Lens</span></strong></span></>;
 }
