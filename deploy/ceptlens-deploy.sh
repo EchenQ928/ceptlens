@@ -15,12 +15,20 @@ tar -xzf "$base/releases/$archive" --no-same-owner -C "$release"
 chown -R ceptlens:ceptlens "$release"
 cd "$release"
 runuser -u ceptlens -- npm ci --include=dev --no-audit --no-fund
-# Read only storage locations, never the environment or credentials.
-locations=$(runuser -u ceptlens -- node --env-file=/etc/ceptlens/ceptlens.env --input-type=module -e '
-  import { resolve } from "node:path";
-  import { contentStoreDirectory } from "./server/content-storage.mjs";
-  console.log(resolve(process.env.CEPTLENS_DATA_DIR || "service-data"));
-  console.log(contentStoreDirectory(process.cwd()));')
+# Read only storage paths from the actual running service. EnvironmentFile
+# locations and inline systemd Environment directives differ between hosts.
+service_pid=$(systemctl show ceptlens --property=MainPID --value)
+[[ "$service_pid" =~ ^[1-9][0-9]*$ ]] || { echo 'Start the existing service before migrating its storage' >&2; exit 1; }
+locations=$(node --input-type=module -e '
+  import { readFileSync } from "node:fs";
+  import { isAbsolute, resolve } from "node:path";
+  const entries = readFileSync(`/proc/${process.argv[1]}/environ`, "utf8").split("\0");
+  const env = Object.fromEntries(entries.filter(Boolean).map(entry => { const i = entry.indexOf("="); return [entry.slice(0, i), entry.slice(i + 1)]; }));
+  const data = env.CEPTLENS_DATA_DIR;
+  const store = env.CEPTLENS_CONTENT_DIR || (data && resolve(data, "content-store"));
+  if (!data || !isAbsolute(data) || !store || !isAbsolute(store)) throw new Error("The running service must use absolute persistent data/content paths");
+  console.log(data); console.log(store);
+' "$service_pid")
 data=$(printf '%s\n' "$locations" | head -n 1)
 store=$(printf '%s\n' "$locations" | tail -n 1)
 [[ "$data" == /* && "$store" == /* && "$store" != / ]] || exit 2
@@ -69,7 +77,7 @@ if [[ "$had_content" == 0 && -n "$previous" && -d "$previous/content-libraries" 
 fi
 seed="$release/content-libraries"
 if [[ -n "$previous" && -d "$previous/content-libraries" ]]; then seed="$previous/content-libraries"; fi
-runuser -u ceptlens -- node --env-file=/etc/ceptlens/ceptlens.env scripts/prepare-content.mjs --lock-held --seed "$seed"
+runuser -u ceptlens -- env CEPTLENS_DATA_DIR="$data" CEPTLENS_CONTENT_DIR="$store" node scripts/prepare-content.mjs --lock-held --seed "$seed"
 expected=$(node -p 'JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")).revision' "$store/current.json")
 # Stop only after a successful build. This local DB recovery copy is consistent;
 # encrypted off-host backups remain a separate operator responsibility.

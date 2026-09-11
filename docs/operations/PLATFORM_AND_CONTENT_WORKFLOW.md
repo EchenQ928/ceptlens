@@ -11,7 +11,7 @@ Updated 2026-09-11. The immediate scope is file ownership, storage, publishing, 
 | Author drafts and package tests | Independent Content Lab workspace `content-libraries/` | Author edits locally and exports JSON/ZIP |
 | Published questions/terms and their history | `<CEPTLENS_DATA_DIR>/content-store/` | Content Manager imports, updates, deletes, or restores |
 | Accounts, sessions, progress, discussions, exams | `<CEPTLENS_DATA_DIR>/ceptlens.sqlite` | Application APIs; content operations do not replace this DB |
-| Production credentials/configuration | `/etc/ceptlens/ceptlens.env` | Server configuration |
+| Production credentials/configuration | The service's systemd environment/configuration | Server configuration |
 | Production service logs | systemd journal (`journalctl -u ceptlens`) | Service output; not Git |
 | Local development logs | `.ceptlens-runtime/` | Local launch scripts; ignored by Git |
 
@@ -71,6 +71,8 @@ For platform development, use `npm start` for the full service. It automatically
 
 GitHub Actions checks the platform, uploads its Git archive, installs the versioned deployment coordinator, and invokes it on the server.
 
+The coordinator reads storage paths from the running service, so an installation does not need the example environment-file path. The existing service must be running, with an absolute `CEPTLENS_DATA_DIR`, when starting a deployment.
+
 The coordinator:
 
 1. Extracts a fresh platform release and installs locked dependencies.
@@ -86,7 +88,7 @@ Content-only restores use the current platform to rebuild the selected older con
 
 ## Recovery and backup
 
-Back up the **whole persistent data directory**, including snapshots and `current.json`, plus `/etc/ceptlens` configuration through a protected channel. Keep a copy on another machine/storage service. Deployment recovery copies on the same disk are not disaster recovery.
+Back up the **whole persistent data directory**, including snapshots and `current.json`, plus the actual systemd service configuration/environment through a protected channel. Keep a copy on another machine/storage service. Deployment recovery copies on the same disk are not disaster recovery.
 
 For a filesystem backup of SQLite, stop the service during the copy or use a consistent SQLite backup tool. Do not copy only a live `.sqlite` file and assume it includes pending WAL writes. Preserve file ownership and permissions on restore. Logs follow the journal's separate retention policy; archive them separately if needed.
 
