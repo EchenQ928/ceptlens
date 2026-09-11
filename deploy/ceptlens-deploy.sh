@@ -57,6 +57,10 @@ rollback() {
   exit 1
 }
 trap rollback ERR
+if [[ -n "$previous" && -f "$previous/.ceptlens-runtime/content-admin-token.txt" && ! -f "$store/runtime/content-admin-token.txt" ]]; then
+  install -d -o ceptlens -g ceptlens "$store/runtime"
+  install -o ceptlens -g ceptlens -m 0600 "$previous/.ceptlens-runtime/content-admin-token.txt" "$store/runtime/content-admin-token.txt"
+fi
 if [[ "$had_content" == 0 && -n "$previous" && -d "$previous/content-libraries" ]]; then
   # The legacy host does not know the new writer lock. Pause it for a consistent
   # first migration; later upgrades keep serving while the candidate builds.
