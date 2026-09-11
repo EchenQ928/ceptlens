@@ -31,3 +31,15 @@ it("shows one formatted learning answer and keeps grading guidance out of the pa
     container.remove();
   }
 });
+
+it("shows a featured CeptCheck badge without featuring the parent question", async () => {
+  (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
+  const question = hydrateQuestionPackage({ ...raw, ceptCheck: { stem: 'Compare the two computations.', featured: true } });
+  const container = document.createElement('div'); document.body.append(container);
+  const root = createRoot(container);
+  try {
+    await act(() => root.render(<MemoryRouter><QuestionPreview question={question} terms={[]} /></MemoryRouter>));
+    expect(container.querySelector('.question-panel > .question-meta .featured-badge')).toBeNull();
+    expect(container.querySelector('.cept-check .featured-badge')?.textContent).toContain('精选 CeptCheck');
+  } finally { await act(() => root.unmount()); container.remove(); }
+});

@@ -71,6 +71,7 @@ export async function createLearningApi({ root, contentRoot = () => resolve(root
   expiryTimer.unref();
 
   return {
+    canManageContent(cookie) { return accounts.canManageContent(cookie); },
     close() { clearInterval(expiryTimer); store.close(); },
     async handle(request, response, url, json) {
       if (!/^\/api\/(auth|session|progress|discussions|assistant|exams)(\/|$)/.test(url.pathname)) return false;
@@ -79,6 +80,11 @@ export async function createLearningApi({ root, contentRoot = () => resolve(root
         if (limits.size > 5000) for (const [key, value] of limits) if (now - value.at > 60000) limits.delete(key);
         const rate = limits.get(ip); const next = rate && now - rate.at < 60000 ? { at: rate.at, count: rate.count + 1 } : { at: now, count: 1 };
         limits.set(ip, next); if (next.count > 600) throw problem('请求过于频繁，请稍后重试。', 429);
+        if (/^\/api\/auth\/(login|register)$/.test(url.pathname) && request.method === 'POST') {
+          const key = `auth:${ip}`; const rate = limits.get(key);
+          const value = rate && now - rate.at < 60000 ? { at: rate.at, count: rate.count + 1 } : { at: now, count: 1 };
+          limits.set(key, value); if (value.count > 20) throw problem('Too many sign-in attempts. Please try again in a minute.', 429);
+        }
         const guest = () => store.identity(request.headers['x-ceptlens-identity'] ?? `${randomUUID().replaceAll('-', '')}${randomUUID().replaceAll('-', '')}`.slice(0, 48));
         const user = accounts.authenticate(request.headers.cookie, guest);
         const data = request.method === 'GET' ? null : await body(request);
@@ -98,7 +104,7 @@ export async function createLearningApi({ root, contentRoot = () => resolve(root
           accounts.saveProgress(user.id, data); return send({ progress: accounts.progress(user.id) });
         }
         if (url.pathname === '/api/session') {
-          if (request.method === 'POST' && data.name !== undefined) Object.assign(user, store.identity(request.headers['x-ceptlens-identity'], data.name));
+          if (request.method === 'POST' && data.name !== undefined) Object.assign(user, accounts.isAuthenticated(request.headers.cookie) ? accounts.rename(request.headers.cookie, data.name) : store.identity(request.headers['x-ceptlens-identity'], data.name));
           return send({ user, authenticated: !!accounts.authenticate(request.headers.cookie, () => null), activeExam: active(user.id)?.id ?? null, agent: agent.status() });
         }
         if (url.pathname.startsWith('/api/discussions')) {

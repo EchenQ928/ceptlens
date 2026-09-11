@@ -33,11 +33,16 @@ const subjectiveAnswerSchema = z.object({
   gradingInstruction: richText.optional()
 }).strict();
 
+const ceptCheckSchema = z.object({ stem: richText, featured: z.boolean().optional() }).strict();
+
 const questionBase = z.object({
   schemaVersion: z.literal("3.0"),
   id,
   stem: richText,
   explanation: richText,
+  ceptCheck: ceptCheckSchema.optional(),
+  featured: z.boolean().optional(),
+  highlightedTerms: z.array(id).max(32).refine(ids => new Set(ids).size === ids.length, "Highlighted term IDs must be unique").optional(),
   taxonomy: taxonomySchema,
   ordering: orderingSchema
 });
@@ -109,8 +114,8 @@ export function richTextToPlainText(text: RichText, locale: "zh-CN" | "en-US" = 
   return text.replace(explicitTermLinkPattern, (_marker, _termId, label: string) => label);
 }
 
-export function questionRichText(question: { stem: RichText; explanation: RichText; options?: Array<{ text: RichText }>; subjectiveAnswer?: { referenceAnswer: RichText; rubric: Array<{ criterion: RichText }> } }): string {
-  return [question.stem, ...(question.options ?? []).map((option) => option.text), question.explanation, question.subjectiveAnswer?.referenceAnswer ?? "", ...(question.subjectiveAnswer?.rubric.map((item) => item.criterion) ?? [])]
+export function questionRichText(question: { stem: RichText; explanation: RichText; options?: Array<{ text: RichText }>; subjectiveAnswer?: { referenceAnswer: RichText; rubric: Array<{ criterion: RichText }> }; ceptCheck?: { stem: RichText } }): string {
+  return [question.stem, ...(question.options ?? []).map((option) => option.text), question.explanation, question.subjectiveAnswer?.referenceAnswer ?? "", ...(question.subjectiveAnswer?.rubric.map((item) => item.criterion) ?? []), question.ceptCheck?.stem ?? ""]
     .flatMap((value) => [textForLocale(value, "zh-CN"), textForLocale(value, "en-US")])
     .join("\n");
 }

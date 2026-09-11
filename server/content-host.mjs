@@ -64,7 +64,7 @@ async function readBody(request) {
 }
 
 function authorized(request) {
-  return request.headers["x-content-admin-token"] === adminToken;
+  return request.headers["x-content-admin-token"] === adminToken || learningApi.canManageContent(request.headers.cookie);
 }
 
 async function transaction(changes) {

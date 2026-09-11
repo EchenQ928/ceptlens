@@ -1,8 +1,8 @@
+import { QuestionLibrary } from "./QuestionLibrary";
 import { useEffect, useRef, useState } from "react";
 import { Link, Route, Routes, useLocation, useMatch, useNavigate, useParams } from "react-router-dom";
 import { Download, Upload as UploadIcon, CheckCheck, ArrowLeft } from "lucide-react";
 import { ErrorBoundary } from "../components/ErrorBoundary";
-import { RichText } from "../components/RichText";
 import { textForLocale } from "../domain/content";
 import { useContent } from "../hooks/useContent";
 import { LanguageSwitcher, uiText, useLocale } from "../i18n";
@@ -26,7 +26,7 @@ export function LabPage() {
     <main className="lab-content"><ErrorBoundary key={location.pathname}><Routes>
       <Route path="/terms/:termId" element={<TermPage />} />
       <Route path="/learn/questions/:questionId" element={<QuestionRoute />} />
-      <Route path="/questions" element={<div className="page"><h1>{uiText(locale, "题目草稿", "Question drafts")}</h1>{questions.length ? questions.map(q => <Link className="lab-question-link" key={q.id} to={`/learn/questions/${q.id}`}><RichText text={q.stem} terms={terms} linkTerms={false} /></Link>) : <div className="empty-state">{uiText(locale, "还没有题目。可从上方导入题目 JSON。", "No questions yet. Import a question JSON above.")}</div>}</div>} />
+      <Route path="/questions" element={<QuestionLibrary />} />
       <Route path="*" element={terms.length || questions.length ? <TermLibraryPage /> : <div className="empty-state lab-empty"><h1>{uiText(locale, "开始设计一个词条", "Start designing a term")}</h1><p>{uiText(locale, "导入已有教学包，或下载模板后修改。图、公式、代码和交互均可在包内自行设计。", "Import a package or download a template. Visuals, formulas, code, and interactions can all live inside the package.")}</p><p>{uiText(locale, "完成后导出 ZIP，打开正式平台的内容管理，使用管理员提供的口令自行上传。", "When it is ready, export a ZIP and upload it through the production content workbench.")}</p></div>} />
     </Routes></ErrorBoundary></main>
   </div>;

@@ -1,0 +1,10 @@
+.featured-badges { display:flex; flex-wrap:wrap; gap:6px; margin:6px 0; }
+.featured-badge { display:inline-flex; align-items:center; gap:5px; padding:3px 8px; border:1px solid #ddc88a; border-radius:5px; background:#fff8e4; color:#735010; font-size:12px; font-weight:600; line-height:1.5; font-style:normal; width:fit-content; }
+.featured-filter { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:14px 0; font-size:14px; }
+.featured-filter > b { margin-right:8px; }
+.featured-filter button { display:inline-flex; gap:7px; align-items:center; background:white; color:var(--ink-650); border:1px solid var(--line-300); border-radius:5px; padding:7px 12px; cursor:pointer; }
+.featured-filter button[aria-pressed="true"] { background:#fff8e4; color:#735010; border-color:#b18a35; }
+.featured-filter button:focus-visible { outline:2px solid var(--brand-600); outline-offset:2px; }
+.featured-filter small { font-size:12px; }
+.cept-check { margin-top:24px; padding-top:20px; border-top:1px solid var(--line-200); }
+.cept-check > .question-meta { display:flex; align-items:center; flex-wrap:wrap; gap:10px; }

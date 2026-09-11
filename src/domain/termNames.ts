@@ -1,6 +1,12 @@
 import type { Locale } from "./content";
 
 const ENGLISH_TERM_NAMES: Record<string, string> = {
+  "autoregressive-decoding": "Autoregressive decoding",
+  "cross-attention": "Cross-attention",
+  "multi-query-attention": "Multi-query attention (MQA)",
+  "grouped-query-attention": "Grouped-query attention (GQA)",
+  "prefill": "Prefill",
+  "decode": "Decode",
   "activation-function": "Activation function",
   "attention-mechanism": "Attention mechanism",
   "autoregressive-generation": "Autoregressive generation",
@@ -111,6 +117,16 @@ function humanizeTermId(id: string): string {
 }
 
 export function termDisplayName(id: string, fallback: string, locale: Locale): string {
+  const canonical: Record<string, [string, string]> = {
+    "qkv-projection": ["QKV", "QKV"], "attention-mechanism": ["注意力", "Attention"],
+    "kv-cache": ["KV Cache", "KV Cache"], "self-attention": ["自注意力", "Self-attention"],
+    "cross-attention": ["交叉注意力", "Cross-attention"], "autoregressive-decoding": ["自回归解码", "Autoregressive decoding"],
+    "prefill": ["Prefill（预填充）", "Prefill"], "decode": ["Decode（解码）", "Decode"],
+    "causal-mask": ["因果掩码", "Causal mask"], "multi-head-attention": ["多头注意力（MHA）", "Multi-head attention (MHA)"],
+    "multi-query-attention": ["多查询注意力（MQA）", "Multi-query attention (MQA)"],
+    "grouped-query-attention": ["分组查询注意力（GQA）", "Grouped-query attention (GQA)"]
+  };
+  if (canonical[id]) return canonical[id][locale === "zh-CN" ? 0 : 1];
   if (locale === "zh-CN") return fallback;
   if (fallback.trim() && !containsChinese(fallback)) return fallback;
   return ENGLISH_TERM_NAMES[id] ?? humanizeTermId(id);

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Bot, MessageSquare, UserRound } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useContent } from "../hooks/useContent";
 import { textForLocale } from "../domain/content";
 import { uiText, useLocale } from "../i18n";
@@ -19,7 +19,8 @@ function highlightAPI(): HighlightsAPI | null {
   return api.CSS?.highlights && api.Highlight ? { registry: api.CSS.highlights, create: api.Highlight } : null;
 }
 export function LearningCompanion() {
-  const location = useLocation(); const { questions, terms } = useContent();
+  const location = useLocation();
+  const navigate = useNavigate(); const { questions, terms } = useContent();
   const { locale } = useLocale();
   const t = (zh: string, en: string) => uiText(locale, zh, en);
   const { session, error: sessionError, rename, refresh: refreshSession } = useLearningSession();
@@ -54,7 +55,7 @@ export function LearningCompanion() {
     const openProfile = () => { setName(session?.user.name ?? ""); setPanel("profile"); setMenu(null); };
     window.addEventListener("ceptlens-profile", openProfile); return () => window.removeEventListener("ceptlens-profile", openProfile);
   }, [session?.user.name]);
-  useEffect(() => { const openAuth = () => { setPanel("auth"); setMenu(null); }; window.addEventListener("ceptlens-auth", openAuth); return () => window.removeEventListener("ceptlens-auth", openAuth); }, []);
+  useEffect(() => { const openAuth = () => { navigate(`/sign-in?next=${encodeURIComponent(location.pathname+location.search)}`); setMenu(null); }; window.addEventListener("ceptlens-auth", openAuth); return () => window.removeEventListener("ceptlens-auth", openAuth); }, []);
   useEffect(() => {
     if (!page || disabled) return;
     const root = document.querySelector<HTMLElement>(page.selector); if (!root) return;

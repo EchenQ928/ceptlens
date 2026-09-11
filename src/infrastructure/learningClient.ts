@@ -1,6 +1,6 @@
 import type { TextReference } from "../domain/textReference";
 export type { TextReference } from "../domain/textReference";
-export interface UserIdentity { id: string; name: string }
+export interface UserIdentity { id: string; name: string; role?: "learner" | "developer" }
 export interface AgentStatus { enabled: boolean; model: string | null; message: string }
 export interface SessionInfo { user: UserIdentity; authenticated?: boolean; activeExam: string | null; agent: AgentStatus }
 export interface DiscussionMessage { id: string; author: UserIdentity; body: string; createdAt: number; editedAt?: number }

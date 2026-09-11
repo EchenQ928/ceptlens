@@ -6,6 +6,7 @@ import { TermExperienceProvider } from "../content-sdk";
 import type { TermNavigationItem } from "../domain/content";
 import { textForLocale } from "../domain/content";
 import { collectPendingTerms } from "../domain/contentGaps";
+import { highlightedTermIds } from "../domain/highlightedTerms";
 import { appendTrailNode, type TermNavigationState, type TermTrailNode } from "../domain/navigation";
 import { richTextToPlainText } from "../domain/schemas";
 import { termDisplayName } from "../domain/termNames";
@@ -20,6 +21,7 @@ export function TermLibraryPage() {
   const [scope, setScope] = useState<"all" | "installed" | "pending">("all");
   const normalizedQuery = query.trim().toLowerCase();
   const pendingTerms = collectPendingTerms(questions, terms, locale);
+  const highlighted = highlightedTermIds(questions);
   const installedResults = scope === "pending" ? [] : terms.filter((term) =>
     [term.id, textForLocale(term.title, locale), richTextToPlainText(term.summary, locale), ...term.aliases.map(alias => textForLocale(alias, locale))].join(" ").toLowerCase().includes(normalizedQuery)
   );
@@ -30,9 +32,10 @@ export function TermLibraryPage() {
 
   return <div className="page">
     <div className="page-heading compact">
-      <div><p className="eyebrow">SHARED KNOWLEDGE</p><h1>{uiText(locale, "共享词条库", "Shared term library")}</h1><p>{uiText(locale, "已完成教学包与待补词条统一编目；待补项不会伪装成空白词条页。", "Completed packages and pending terms are indexed together; pending items remain explicit.")}</p></div>
+      <div><p className="eyebrow">SHARED KNOWLEDGE</p><h1>{uiText(locale, "共享词条库", "Shared term library")}</h1><p>{uiText(locale, "沿着概念之间的联系，建立更完整的理解。", "Follow the connections. Build a fuller understanding.")}</p></div>
       <div className="term-library-metrics"><span><strong>{terms.length + pendingTerms.length}</strong>{uiText(locale, "全部词条", "total")}</span><span><strong>{terms.length}</strong>{uiText(locale, "已完成", "ready")}</span><span className="pending"><strong>{pendingTerms.length}</strong>{uiText(locale, "待补", "pending")}</span></div>
     </div>
+    {highlighted.length > 0 && <section className="concept-collection"><div><span className="eyebrow">IN FOCUS</span><h2>{uiText(locale,"优先探索的概念","Concepts in focus")}</h2><p>{uiText(locale,"实线标签可进入词条；虚线标签表示优先完善的内容。","Solid labels open a lesson. Dotted labels mark the next lessons to develop.")}</p></div><div className="concept-pills">{highlighted.map(id=>{const term=terms.find(t=>t.id===id); const label=termDisplayName(id,term?textForLocale(term.title,locale):id,locale);return term?<Link key={id} to={`/terms/${id}`}>{label}<ArrowRight size={13}/></Link>:<span key={id} className="concept-upcoming">{label}<small>{uiText(locale,"待完善","Upcoming")}</small></span>;})}</div></section>}
     <div className="term-library-toolbar">
       <label className="search-box standalone"><Search size={17} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={uiText(locale, "搜索词条、ID、来源题目或补充原因", "Search terms, IDs, source questions, or gap reasons")} /></label>
       <div className="mode-segment" role="group" aria-label={uiText(locale, "词条状态", "Term status")}>
@@ -43,10 +46,10 @@ export function TermLibraryPage() {
     </div>
     <div className="term-grid">
       {installedResults.map((term) => <Link className="term-card" key={term.id} to={`/terms/${term.id}`}>
-        <span className="content-status published">{uiText(locale, "教学包", "Package")}</span><h2>{textForLocale(term.title, locale)}</h2><p>{richTextToPlainText(term.summary, locale)}</p><div><span>{uiText(locale, "定制教学页面", "Custom teaching page")}</span><ArrowRight size={16} /></div>
+        <span className="content-status published">{uiText(locale, "开始探索", "Explore")}</span><h2>{textForLocale(term.title, locale)}</h2><p>{richTextToPlainText(term.summary, locale)}</p><div><span>{uiText(locale, "深入理解", "Take a closer look")}</span><ArrowRight size={16} /></div>
       </Link>)}
       {pendingResults.map((term) => <article className="term-card pending-term-card" key={term.id}>
-        <span className="content-status pending">{uiText(locale, "待补教学包", "Package pending")}</span><h2>{term.title}</h2><code>{term.id}</code><p>{term.references[0]?.reason}</p><div><span>{term.questionCount ? `${term.questionCount} ${uiText(locale, "道题", "questions")}` : ""}{term.questionCount && term.termCount ? " · " : ""}{term.termCount ? `${term.termCount} ${uiText(locale, "个词条", "terms")}` : ""}{uiText(locale, "引用", " cited")}</span><span>{uiText(locale, "未开放", "Unavailable")}</span></div>
+        <span className="content-status pending">{uiText(locale, "即将完善", "Upcoming lesson")}</span><h2>{term.title}</h2><p>{uiText(locale,"正在规划这一概念的教学内容。你可以先从引用它的题目开始。","A lesson for this concept is planned. Explore the questions that connect to it.")}</p><div className="pending-references">{term.references.filter(ref=>ref.kind==="question").slice(0,2).map(ref=><Link key={ref.id} to={`/learn/questions/${ref.id}`}>{ref.label}<ArrowRight size={14}/></Link>)}</div><div><span>{term.questionCount ? `${term.questionCount} ${uiText(locale, "道题", "questions")}` : ""}{term.questionCount && term.termCount ? " · " : ""}{term.termCount ? `${term.termCount} ${uiText(locale, "个词条", "terms")}` : ""}{uiText(locale, "引用", " cited")}</span><span>{uiText(locale, "未开放", "Unavailable")}</span></div>
       </article>)}
     </div>
     {!hasResults && <div className="empty-state"><Network /><h3>{uiText(locale, "没有匹配的词条", "No matching terms")}</h3></div>}

@@ -32,7 +32,7 @@ const subjectiveAnswerSchema = z.object({
   rubric: z.array(rubricSchema).min(1),
   gradingInstruction: richText.optional()
 }).strict();
-const ceptCheckSchema = z.object({ stem: richText }).strict();
+const ceptCheckSchema = z.object({ stem: richText, featured: z.boolean().optional() }).strict();
 
 const questionBase = z.object({
   schemaVersion: z.literal("3.0"),
@@ -40,6 +40,8 @@ const questionBase = z.object({
   stem: richText,
   explanation: richText,
   ceptCheck: ceptCheckSchema.optional(),
+  featured: z.boolean().optional(),
+  highlightedTerms: z.array(id).max(32).refine(ids => new Set(ids).size === ids.length, "Highlighted term IDs must be unique").optional(),
   taxonomy: taxonomySchema,
   ordering: orderingSchema
 });
