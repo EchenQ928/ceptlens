@@ -15,12 +15,9 @@ tar -xzf "$base/releases/$archive" --no-same-owner -C "$release"
 chown -R ceptlens:ceptlens "$release"
 cd "$release"
 runuser -u ceptlens -- npm ci --include=dev --no-audit --no-fund
-# Read only storage locations, never the environment or credentials.
-locations=$(runuser -u ceptlens -- node --env-file=/etc/ceptlens/ceptlens.env --input-type=module -e '
-  import { resolve } from "node:path";
-  import { contentStoreDirectory } from "./server/content-storage.mjs";
-  console.log(resolve(process.env.CEPTLENS_DATA_DIR || "service-data"));
-  console.log(contentStoreDirectory(process.cwd()));')
+# Inspect the actual service, including Node --env-file arguments. Only storage
+# paths leave the inspector process; production secrets never enter build logs.
+locations=$(node scripts/inspect-storage.mjs --lines --require-absolute)
 data=$(printf '%s\n' "$locations" | head -n 1)
 store=$(printf '%s\n' "$locations" | tail -n 1)
 [[ "$data" == /* && "$store" == /* && "$store" != / ]] || exit 2
@@ -69,7 +66,7 @@ if [[ "$had_content" == 0 && -n "$previous" && -d "$previous/content-libraries" 
 fi
 seed="$release/content-libraries"
 if [[ -n "$previous" && -d "$previous/content-libraries" ]]; then seed="$previous/content-libraries"; fi
-runuser -u ceptlens -- node --env-file=/etc/ceptlens/ceptlens.env scripts/prepare-content.mjs --lock-held --seed "$seed"
+runuser -u ceptlens -- env CEPTLENS_DATA_DIR="$data" CEPTLENS_CONTENT_DIR="$store" node scripts/prepare-content.mjs --lock-held --seed "$seed"
 expected=$(node -p 'JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")).revision' "$store/current.json")
 # Stop only after a successful build. This local DB recovery copy is consistent;
 # encrypted off-host backups remain a separate operator responsibility.
