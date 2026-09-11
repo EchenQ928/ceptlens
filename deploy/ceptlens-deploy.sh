@@ -15,20 +15,9 @@ tar -xzf "$base/releases/$archive" --no-same-owner -C "$release"
 chown -R ceptlens:ceptlens "$release"
 cd "$release"
 runuser -u ceptlens -- npm ci --include=dev --no-audit --no-fund
-# Read only storage paths from the actual running service. EnvironmentFile
-# locations and inline systemd Environment directives differ between hosts.
-service_pid=$(systemctl show ceptlens --property=MainPID --value)
-[[ "$service_pid" =~ ^[1-9][0-9]*$ ]] || { echo 'Start the existing service before migrating its storage' >&2; exit 1; }
-locations=$(node --input-type=module -e '
-  import { readFileSync } from "node:fs";
-  import { isAbsolute, resolve } from "node:path";
-  const entries = readFileSync(`/proc/${process.argv[1]}/environ`, "utf8").split("\0");
-  const env = Object.fromEntries(entries.filter(Boolean).map(entry => { const i = entry.indexOf("="); return [entry.slice(0, i), entry.slice(i + 1)]; }));
-  const data = env.CEPTLENS_DATA_DIR;
-  const store = env.CEPTLENS_CONTENT_DIR || (data && resolve(data, "content-store"));
-  if (!data || !isAbsolute(data) || !store || !isAbsolute(store)) throw new Error("The running service must use absolute persistent data/content paths");
-  console.log(data); console.log(store);
-' "$service_pid")
+# Inspect the actual service, including Node --env-file arguments. Only storage
+# paths leave the inspector process; production secrets never enter build logs.
+locations=$(node scripts/inspect-storage.mjs --lines --require-absolute)
 data=$(printf '%s\n' "$locations" | head -n 1)
 store=$(printf '%s\n' "$locations" | tail -n 1)
 [[ "$data" == /* && "$store" == /* && "$store" != / ]] || exit 2
