@@ -69,6 +69,12 @@ Keep the `zh-CN` and `en-US` values aligned. For subjective questions, use `subj
 
 `ordering.order` must be unique. A question prerequisite must exist and have a smaller order. Do not add `termDependencies`; explicit links are the source of truth.
 
+## Featured content
+
+Use optional `featured: true` at the question's top level to mark a **Featured question / 精选题目**. Use `ceptCheck.featured: true` to mark only its **Featured CeptCheck / 精选 CeptCheck**. These selections are independent. Omit the field or set it to `false` to remove the mark.
+
+The Questions library has separate filters for each selection. Badges appear in the list and beside the selected question or CeptCheck. This metadata travels with question exports; use a platform version that supports featured content when uploading it. Keep selections occasional and based on the insight or reasoning the content encourages.
+
 ## Import safety
 
 Import validation runs in a temporary copy and includes format checks, package source-import checks, tests, TypeScript, and a production build. A failed operation does not replace the current draft. Concurrent file edits cancel the operation instead of overwriting them.
@@ -87,3 +93,8 @@ npm run test:imports
 ```
 
 The first command validates content, runs the Lab test suite, type-checks, and builds the Lab. The second command exercises import, same-ID replacement, failed-build preservation, export filtering, and restart persistence in a temporary copy.
+
+
+## Priority concept collection
+
+Add optional `highlightedTerms: ["term-id"]` to a question to prioritize concepts for authoring. Include a matching explicit `[[term:term-id|label]]` reference in the question. The formal term library collects these selections into Concepts in focus; missing lessons remain upcoming. These selections travel with question uploads.

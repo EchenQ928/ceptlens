@@ -2,6 +2,8 @@ import { AlertTriangle, CheckCircle2, Download, FileArchive, FileJson2, KeyRound
 import { useEffect, useMemo, useRef, useState } from "react";
 import questionChoiceTemplate from "../../content-libraries/templates/question-choice.template.json";
 import questionSubjectiveTemplate from "../../content-libraries/templates/question-subjective.template.json";
+import { Link } from "react-router-dom";
+import { useLearningSession } from "../components/LearningSession";
 import { RichText } from "../components/RichText";
 import { textForLocale, type TermPackage } from "../domain/content";
 import { uiText, useLocale } from "../i18n";
@@ -12,6 +14,8 @@ import { contentHostClient, type ContentHostStatus, type ContentRevision } from 
 type Kind = "question" | "term";
 
 export function DeveloperPage() {
+  const { session } = useLearningSession();
+  const isDeveloper = session?.authenticated && session.user.role === "developer";
   const { questions, terms } = useContent();
   const { locale } = useLocale();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -63,7 +67,7 @@ export function DeveloperPage() {
 
   async function runMutation(action: () => Promise<{ message?: string }>) {
     if (!hostStatus || hostStatus.publishing || busy) return setResult({ ok: false, messages: [t("内容服务未连接或正在发布，请稍后重试。", "The content service is unavailable or publishing. Try again shortly.")] });
-    if (!token.trim()) return setResult({ ok: false, messages: [t("请输入广播主机终端显示的内容管理口令。", "Enter the content-management token shown in the service host terminal.")] });
+    if (!isDeveloper && !token.trim()) return setResult({ ok: false, messages: [t("请输入广播主机终端显示的内容管理口令。", "Enter the content-management token shown in the service host terminal.")] });
     setBusy(true);
     setResult(null);
     try {
@@ -102,6 +106,7 @@ export function DeveloperPage() {
   }
 
   const selectedTerm = kind === "term" ? selected as TermPackage | undefined : undefined;
+  if (!isDeveloper && !token) return <div className="page"><section className="panel developer-access-card"><KeyRound size={32}/><h1>{t("开发者工作台","Developer workspace")}</h1><p>{t("发布内容需要开发者账户。登录后即可上传题目和词条，无需输入内容管理口令。","Sign in with a developer account to publish questions and lessons. No content-management token is needed.")}</p><Link className="primary-button" to={session?.authenticated?"/account":"/sign-in?next=/developer"}>{session?.authenticated?t("查看账户权限","View account access"):t("登录","Sign in")}</Link><details><summary>{t("管理员维护入口","Administrator recovery access")}</summary><label>{t("内容管理口令","Content-management token")}<input type="password" value={token} onChange={e=>rememberToken(e.target.value)}/></label></details></section></div>;
   return <div className="developer-layout">
     <aside className="developer-list">
       <div className="developer-list-head"><p className="eyebrow">PORTABLE CONTENT LIBRARIES</p><h2>{t("内容资产", "Content assets")}</h2><div className="kind-tabs"><button className={kind === "question" ? "active" : ""} onClick={() => selectKind("question")}>{t("题目", "Questions")} {questions.length}</button><button className={kind === "term" ? "active" : ""} onClick={() => selectKind("term")}>{t("词条包", "Term packages")} {terms.length}</button></div></div>
@@ -120,7 +125,7 @@ export function DeveloperPage() {
           }}>{t("恢复内容", "Restore content")}</button>}
         </li>)}</ul>
       </details>
-      {hostError && <div className="lab-message error" role="alert">{hostError}</div>}{hostStatus?.publishing && <p role="status" className="practice-notice">{t("主机正在发布内容，请等待完成。", "The host is publishing content. Please wait.")}</p>}<section className="host-status-panel"><div><KeyRound size={18} /><label><span>{t("内容管理口令", "Content-management token")}</span><input type="password" value={token} onChange={(event) => rememberToken(event.target.value)} placeholder={t("查看广播主机启动终端", "See the service host terminal")} /></label></div><div className="host-metrics"><span>{hostStatus ? t("服务已连接", "Service connected") : t("服务未连接", "Service unavailable")}</span><span><b>{hostStatus?.questionCount ?? questions.length}</b> {t("题目包", "question packages")}</span><span><b>{hostStatus?.termCount ?? terms.length}</b> {t("词条教学包", "term packages")}</span><span className={hostStatus?.missingTermCount ? "warning" : ""}><b>{hostStatus?.missingTermCount ?? "—"}</b> {t("待补词条", "pending terms")}</span></div></section>
+      {hostError && <div className="lab-message error" role="alert">{hostError}</div>}{hostStatus?.publishing && <p role="status" className="practice-notice">{t("主机正在发布内容，请等待完成。", "The host is publishing content. Please wait.")}</p>}<section className="host-status-panel"><div><KeyRound size={18} />{isDeveloper ? <span className="account-role">{t("开发者权限已启用","Developer access enabled")}</span> : <label><span>{t("内容管理口令", "Content-management token")}</span><input type="password" value={token} onChange={(event) => rememberToken(event.target.value)} placeholder={t("查看广播主机启动终端", "See the service host terminal")} /></label>}</div><div className="host-metrics"><span>{hostStatus ? t("服务已连接", "Service connected") : t("服务未连接", "Service unavailable")}</span><span><b>{hostStatus?.questionCount ?? questions.length}</b> {t("题目包", "question packages")}</span><span><b>{hostStatus?.termCount ?? terms.length}</b> {t("词条教学包", "term packages")}</span><span className={hostStatus?.missingTermCount ? "warning" : ""}><b>{hostStatus?.missingTermCount ?? "—"}</b> {t("待补词条", "pending terms")}</span></div></section>
       {kind === "question" ? <>
         <div className="developer-toolbar"><button className="secondary-button" onClick={() => { setSelectedId(""); setEditor(JSON.stringify(questionChoiceTemplate, null, 2)); }}><PackagePlus size={16} /> {t("新建选择题", "New multiple-choice question")}</button><button className="secondary-button" onClick={() => { setSelectedId(""); setEditor(JSON.stringify(questionSubjectiveTemplate, null, 2)); }}><PackagePlus size={16} /> {t("新建问答题", "New short-answer question")}</button><button className="secondary-button" disabled={busy || !hostStatus || hostStatus.publishing} onClick={() => inputRef.current?.click()}><Upload size={16} /> {t("导入题目/题库", "Import questions/library")}</button><input ref={inputRef} type="file" hidden accept="application/json,.json" onChange={(event) => importFile(event.target.files?.[0])} /><a className="secondary-button" href="api/content/questions/export"><Download size={16} /> {t("导出题库", "Export library")}</a><span className="toolbar-spacer" />{selected && <button className="danger-button" disabled={busy || !hostStatus || hostStatus.publishing} onClick={remove}><Trash2 size={16} /> {t("删除", "Delete")}</button>}<button className="primary-button" disabled={busy || !hostStatus || hostStatus.publishing} onClick={saveQuestion}><Save size={16} /> {busy ? t("校验并发布中…", "Checking and publishing…") : t("保存到广播主机", "Save to service host")}</button></div>
         <div className="editor-shell"><div className="editor-title"><FileJson2 size={16} /><span>{selectedId || "question.template.json"}</span><small>{t("词条链接会自动登记", "Term links are registered automatically")}: [[term:id|text]]</small></div><textarea aria-label={t("题目 JSON 编辑器", "Question JSON editor")} disabled={busy} className="json-editor" spellCheck={false} value={editor} onChange={(event) => { setEditor(event.target.value); setResult(null); }} /></div>

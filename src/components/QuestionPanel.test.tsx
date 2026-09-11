@@ -40,3 +40,10 @@ it("shows a preview answer without writing progress or showing learning controls
   expect(container.textContent).not.toContain("收藏");
   expect(readProgress()).toEqual(before);
 });
+
+it("marks only the selected CeptCheck and leaves the question unfeatured", async () => {
+  await render({ ...choice, ceptCheck: { stem: "A thought experiment", featured: true } });
+  expect(container.querySelector('.question-toolbar .featured-badge')).toBeNull();
+  expect(container.querySelector('.cept-check .featured-badge')?.textContent).toContain('精选 CeptCheck');
+  expect(container.querySelector('.cept-check')?.textContent).toContain('A thought experiment');
+});

@@ -1,0 +1,35 @@
+name: Owner tools
+on:
+  workflow_dispatch:
+    inputs:
+      request:
+        description: JSON owner request (grant-developer, revoke-developer, or checksummed compressed question bundle)
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: production
+  cancel-in-progress: false
+jobs:
+  owner-operation:
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure existing deployment connection
+        env:
+          DEPLOY_KEY: ${{ secrets.CEPTLENS_DEPLOY_KEY }}
+          DEPLOY_HOST: ${{ secrets.CEPTLENS_DEPLOY_HOST }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/ceptlens_deploy
+          chmod 600 ~/.ssh/ceptlens_deploy
+          ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
+      - name: Run owner operation against the active release
+        env:
+          OWNER_REQUEST: ${{ inputs.request }}
+          DEPLOY_HOST: ${{ secrets.CEPTLENS_DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.CEPTLENS_DEPLOY_USER }}
+        run: |
+          printf '%s' "$OWNER_REQUEST" | ssh -i ~/.ssh/ceptlens_deploy "$DEPLOY_USER@$DEPLOY_HOST" 'sudo node /srv/ceptlens/current/scripts/owner-operation.mjs'

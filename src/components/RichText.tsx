@@ -27,7 +27,7 @@ function renderTokens(text: string, terms: TermPackage[], trail: TermTrailNode[]
       } else if (term) {
         nodes.push(<Fragment key={`${keyPrefix}-self-${index}`}>{label}</Fragment>);
       } else {
-        nodes.push(<span key={`${keyPrefix}-pending-${index}`} className="term-link-pending" title={locale === "en-US" ? `Teaching package pending: ${termId}` : `待导入教学包：${termId}`}>{label}<small>{locale === "en-US" ? "Package pending" : "待补词条"}</small></span>);
+        nodes.push(<span key={`${keyPrefix}-pending-${index}`} className="term-link-pending" title={locale === "en-US" ? `Teaching package pending: ${termId}` : `待导入教学包：${termId}`}>{label}<small className="pending-term-label">{locale === "en-US" ? "Upcoming lesson" : "词条待完善"}</small></span>);
       }
     } else if (token.startsWith("$")) {
       const html = katex.renderToString(token.slice(1, -1), { throwOnError: false, strict: "ignore" });

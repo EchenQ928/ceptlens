@@ -6,7 +6,7 @@ import { parseEnv } from 'node:util';
 
 // Node --env-file values may not appear in /proc/PID/environ, which exposes the
 // initial exec environment. Apply Node's file precedence before resolving paths.
-export function resolveServiceStorage({ cwd, initialEnv, argv, read = readFileSync }) {
+export function resolveServiceEnvironment({ cwd, initialEnv, argv, read = readFileSync }) {
   const fromFiles = {};
   for (let i = 0; i < argv.length; i++) {
     const match = /^(--env-file(?:-if-exists)?)(?:=(.*))?$/.exec(argv[i]);
@@ -16,7 +16,10 @@ export function resolveServiceStorage({ cwd, initialEnv, argv, read = readFileSy
     try { Object.assign(fromFiles, parseEnv(read(resolve(cwd, filename), 'utf8'))); }
     catch (error) { if (match[1] !== '--env-file-if-exists' || error.code !== 'ENOENT') throw error; }
   }
-  const env = { ...fromFiles, ...initialEnv };
+  return { ...fromFiles, ...initialEnv };
+}
+export function resolveServiceStorage({ cwd, initialEnv, argv, read = readFileSync }) {
+  const env = resolveServiceEnvironment({ cwd, initialEnv, argv, read });
   const data = resolve(cwd, env.CEPTLENS_DATA_DIR || 'service-data');
   const content = resolve(cwd, env.CEPTLENS_CONTENT_DIR || resolve(data, 'content-store'));
   return { data, content, absoluteConfiguration: !!env.CEPTLENS_DATA_DIR && isAbsolute(env.CEPTLENS_DATA_DIR) && (!env.CEPTLENS_CONTENT_DIR || isAbsolute(env.CEPTLENS_CONTENT_DIR)) };

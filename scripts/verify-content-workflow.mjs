@@ -6,6 +6,8 @@ import { createServer } from 'node:net';
 import { cp, mkdir, mkdtemp, readFile, readdir, symlink, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { removeInside } from '../server/content-storage.mjs';
+import { openCommunityStore } from '../server/community-store.mjs';
+import { createAccountService } from '../server/account-service.mjs';
 
 const root = resolve(import.meta.dirname, '..');
 const parent = resolve(root, '.ceptlens-runtime/workflow-tests'); await mkdir(parent, { recursive: true });
@@ -41,12 +43,20 @@ try {
   const registration = await api('/api/auth/register', { email: 'workflow@example.test', password: 'temporary-test-password', name: 'Workflow test' });
   cookie = registration.response.headers.get('set-cookie').split(';')[0];
   const userId = registration.value.user.id;
+  const denied = await fetch(`${base}/api/content/questions/import`, {method:'POST',headers:{'Content-Type':'application/json',Cookie:cookie},body:'{}'});
+  assert.equal(denied.status,401); await denied.arrayBuffer();
+  const roleStore = openCommunityStore(resolve(data,'ceptlens.sqlite'));
+  createAccountService(roleStore.db).setRole(userId,'developer'); roleStore.close();
+  assert.equal((await api('/api/session')).value.user.role,'developer');
   const progress = { completedQuestionIds: ['workflow-kept'], wrongQuestionIds: [], notes: {} };
   await api('/api/progress', progress);
   const files = (await readdir(resolve(root, 'content-libraries/questions'))).filter(name => name.endsWith('.json'));
   const question = JSON.parse(await readFile(resolve(root, 'content-libraries/questions', files[0]), 'utf8'));
   question.id = 'WORKFLOW-SERVER-ONLY'; question.ordering = { order: 9999, prerequisites: [] };
-  await api('/api/content/questions/import', question);
+  question.featured = true;
+  question.ceptCheck = { stem: { 'en-US': 'Explain why the two computations differ.', 'zh-CN': '解释两种计算为什么不同。' }, featured: true };
+  question.highlightedTerms = ['kv-cache'];
+  await api('/api/content/questions/import', question, {'X-Content-Admin-Token':''});
   const entries = {};
   for (const name of ['manifest.json', 'view.tsx', 'styles.module.css']) {
     let value = await readFile(resolve(root, 'content-libraries/terms/kv-cache', name), 'utf8');
@@ -61,6 +71,11 @@ try {
   assert.equal(uploaded.questionCount, before.questionCount + 1);
   assert.notEqual(uploaded.contentRevision, before.contentRevision);
   assert.ok((await api('/api/content/questions/export')).value.questions.some(q => q.id === question.id));
+  const exportedQuestion = (await api('/api/content/questions/export')).value.questions.find(q => q.id === question.id);
+  assert.equal(exportedQuestion.featured, true);
+  assert.deepEqual(exportedQuestion.ceptCheck, question.ceptCheck);
+  assert.deepEqual(exportedQuestion.highlightedTerms, ['kv-cache']);
+  console.log('PASS: ordinary account cannot publish; owner-granted developer publishes with its session cookie');
   const persisted = JSON.parse(await readFile(resolve(store, 'current.json'), 'utf8'));
   const html = await readFile(resolve(store, 'snapshots', persisted.revision, 'dist/index.html'), 'utf8');
   const script = html.match(/<script[^>]+src="([^"]+)"/)[1];
@@ -78,7 +93,11 @@ try {
   const upgraded = (await api('/api/content/status')).value;
   assert.equal(upgraded.version, '0.1.0-workflow-test'); assert.equal(upgraded.contentHash, uploaded.contentHash);
   assert.equal(upgraded.questionCount, uploaded.questionCount);
+  const upgradedQuestion = (await api('/api/content/questions/export')).value.questions.find(q => q.id === question.id);
+  assert.equal(upgradedQuestion.featured, true);
+  assert.deepEqual(upgradedQuestion.ceptCheck, question.ceptCheck);
   assert.equal((await api('/api/auth/me')).value.user.id, userId);
+  assert.equal((await api('/api/auth/me')).value.user.role, 'developer');
   assert.deepEqual((await api('/api/progress')).value.progress, progress);
   console.log('PASS: fresh platform release preserves server-only content and the account/session');
   const priorRevision = upgraded.contentRevision;
@@ -90,4 +109,7 @@ try {
   assert.equal((await api('/api/content/status')).value.questionCount, before.questionCount);
   assert.equal((await api('/api/auth/me')).value.user.id, userId);
   console.log('PASS: rejected import preserves the active snapshot; content restore preserves accounts');
+  const revokeStore=openCommunityStore(resolve(data,'ceptlens.sqlite'));createAccountService(revokeStore.db).setRole(userId,'learner');revokeStore.close();
+  const revoked=await fetch(`${base}/api/content/questions/import`,{method:'POST',headers:{'Content-Type':'application/json',Cookie:cookie},body:'{}'});assert.equal(revoked.status,401);await revoked.arrayBuffer();
+  console.log('PASS: revocation removes publishing authority immediately, without a service restart');
 } finally { await stop(); await removeInside(parent, testRoot); }

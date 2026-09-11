@@ -25,12 +25,16 @@ export function createAccountService(db, { clock = Date.now } = {}) {
     CREATE TABLE IF NOT EXISTS learning_progress(owner TEXT PRIMARY KEY REFERENCES users(id), data TEXT NOT NULL, updated_at INTEGER NOT NULL);
     CREATE INDEX IF NOT EXISTS idx_auth_sessions_token ON auth_sessions(token_hash);
     CREATE INDEX IF NOT EXISTS idx_audit_user ON audit_events(user_id, created_at);
+    CREATE TABLE IF NOT EXISTS account_roles(user_id TEXT PRIMARY KEY REFERENCES users(id), role TEXT NOT NULL CHECK(role IN ('learner','developer')));
   `);
+  // Registered identities must only be reachable through signed sessions. Retire
+  // legacy guest bearer hashes while preserving account IDs and all owned data.
+  db.exec("UPDATE users SET token_hash='account:' || id WHERE id IN (SELECT user_id FROM auth_accounts) AND token_hash NOT LIKE 'account:%'");
   const audit = (userId, action, metadata = {}) => db.prepare('INSERT INTO audit_events VALUES(?,?,?,?,?)').run(randomUUID(), userId ?? null, action, JSON.stringify(metadata).slice(0, 4000), clock());
-  const user = id => db.prepare('SELECT id, name FROM users WHERE id=?').get(id);
+  const user = id => db.prepare("SELECT users.id, users.name, COALESCE(account_roles.role, 'learner') AS role FROM users LEFT JOIN account_roles ON account_roles.user_id=users.id WHERE users.id=?").get(id);
   const createUser = (name, provider, subject, email = null, passwordHash = null) => {
     const id = randomUUID();
-    db.prepare('INSERT INTO users(id, token_hash, name) VALUES(?,?,?)').run(id, digest(randomUUID()), text(name, 40));
+    db.prepare('INSERT INTO users(id, token_hash, name) VALUES(?,?,?)').run(id, `account:${id}`, text(name, 40));
     db.prepare('INSERT INTO auth_accounts VALUES(?,?,?,?,?,?,?)').run(randomUUID(), id, provider, subject, email, passwordHash, clock());
     return user(id);
   };
@@ -49,6 +53,20 @@ export function createAccountService(db, { clock = Date.now } = {}) {
     cookieName,
     authenticate,
     isAuthenticated: header => !!bySession(header),
+    canManageContent: header => bySession(header)?.role === 'developer',
+    rename(header, name) {
+      const current = bySession(header); if (!current) throw problem('Please sign in.', 401);
+      db.prepare('UPDATE users SET name=? WHERE id=?').run(text(name, 40), current.id);
+      return user(current.id);
+    },
+    // Deliberately not exposed by the HTTP registration/profile API.
+    setRole(userId, role) {
+      if (!['learner', 'developer'].includes(role)) throw problem('Invalid account role.');
+      if (!db.prepare('SELECT 1 FROM auth_accounts WHERE user_id=?').get(userId)) throw problem('Registered account not found.', 404);
+      db.prepare('INSERT INTO account_roles VALUES(?,?) ON CONFLICT(user_id) DO UPDATE SET role=excluded.role').run(userId, role);
+      audit(userId, 'account.role_changed', { role, actor: 'server-owner' });
+      return user(userId);
+    },
     providers: () => ({ email: true, guest: true, github: !!(process.env.CEPTLENS_GITHUB_CLIENT_ID && process.env.CEPTLENS_GITHUB_CLIENT_SECRET), wechat: !!(process.env.CEPTLENS_WECHAT_APP_ID && process.env.CEPTLENS_WECHAT_APP_SECRET) }),
     register({ email, password, name }) {
       if (typeof email !== 'string' || !emailRe.test(email) || email.length > 200) throw problem('请输入有效邮箱。');
@@ -58,6 +76,7 @@ export function createAccountService(db, { clock = Date.now } = {}) {
       return startSession(u.id, 'account.register');
     },
     login({ email, password }) {
+      if (typeof email !== 'string' || typeof password !== 'string' || password.length > 200) throw problem('邮箱或密码不正确。', 401);
       const row = db.prepare('SELECT user_id, password_hash FROM auth_accounts WHERE provider=? AND email=?').get('email', String(email).toLowerCase());
       if (!row || !verifyPassword(password, row.password_hash)) { audit(null, 'account.login_failed'); throw problem('邮箱或密码不正确。', 401); }
       return startSession(row.user_id, 'account.login');
@@ -70,11 +89,13 @@ export function createAccountService(db, { clock = Date.now } = {}) {
     progress(userId) { const row = db.prepare('SELECT data FROM learning_progress WHERE owner=?').get(userId); return row ? JSON.parse(row.data) : null; },
     saveProgress(userId, data) { db.prepare('INSERT INTO learning_progress VALUES(?,?,?) ON CONFLICT(owner) DO UPDATE SET data=excluded.data, updated_at=excluded.updated_at').run(userId, JSON.stringify(data).slice(0, 200000), clock()); audit(userId, 'learning.progress_saved'); },
     guestToAccount(userId, { email, password, name }) {
-      if (typeof email !== 'string' || !emailRe.test(email) || typeof password !== 'string' || password.length < 10) throw problem('注册信息无效。');
+      if (typeof email !== 'string' || !emailRe.test(email) || email.length > 200 || typeof password !== 'string' || password.length < 10 || password.length > 200) throw problem('注册信息无效。');
       if (db.prepare('SELECT 1 FROM auth_accounts WHERE provider=? AND email=?').get('email', email.toLowerCase())) throw problem('该邮箱已注册。', 409);
       const existing = user(userId); if (!existing) throw problem('找不到访客身份。', 404);
+      if (db.prepare('SELECT 1 FROM auth_accounts WHERE user_id=?').get(userId)) throw problem('This identity already has an account. Please sign in.', 409);
       if (name) db.prepare('UPDATE users SET name=? WHERE id=?').run(text(name, 40), userId);
       db.prepare('INSERT INTO auth_accounts VALUES(?,?,?,?,?,?,?)').run(randomUUID(), userId, 'email', email.toLowerCase(), email.toLowerCase(), hashPassword(password), clock());
+      db.prepare('UPDATE users SET token_hash=? WHERE id=?').run(`account:${userId}`, userId);
       const result = startSession(userId, 'account.guest_upgrade'); return { ...result, user: user(userId) };
     }
   };

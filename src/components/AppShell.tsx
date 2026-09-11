@@ -1,6 +1,6 @@
 import { BookOpen, Braces, ClipboardCheck, Home, LibraryBig, Network, PanelLeftClose, PanelLeftOpen, UserRound } from "lucide-react";
 import { useState, type ReactNode } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useContent } from "../hooks/useContent";
 import { platformLabel } from "../infrastructure/version";
 import { useLearningSession } from "./LearningSession";
@@ -16,11 +16,12 @@ const navItems = [
 ];
 
 export function AppShell({ children }: { children: ReactNode }) {
+  const navigate = useNavigate(); const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
   const { questions } = useContent();
   const { session } = useLearningSession();
   const { locale } = useLocale();
-  const localizedNavItems = navItems.map((item) => ({ ...item, label: uiText(locale, item.zh, item.en) }));
+  const localizedNavItems = navItems.filter(item => item.to !== "/developer" || session?.user.role === "developer").map((item) => ({ ...item, label: uiText(locale, item.zh, item.en) }));
   return (
     <div className={`app-frame ${collapsed ? "nav-collapsed" : ""}`}>
       <header className="topbar">
@@ -38,7 +39,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <button
             type="button"
             className="topbar-user profile-trigger"
-            onClick={() => window.dispatchEvent(new Event(session?.authenticated ? "ceptlens-profile" : "ceptlens-auth"))}
+            onClick={() => navigate(session?.authenticated ? "/account" : `/sign-in?next=${encodeURIComponent(location.pathname+location.search)}`)}
             aria-label={session?.authenticated ? uiText(locale, "设置个人资料", "Edit profile") : uiText(locale, "登录账户", "Sign in")}
             title={session?.authenticated ? session.user.name : uiText(locale, "登录账户", "Sign in")}
           >

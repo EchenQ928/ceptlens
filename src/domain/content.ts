@@ -62,6 +62,8 @@ export interface SubjectiveAnswerSpec {
   gradingInstruction?: RichText;
 }
 
+export interface CeptCheckSpec { stem: RichText; featured?: boolean; }
+
 /** Runtime question. Author files omit termDependencies; the platform derives them from explicit links. */
 export interface QuestionPackage {
   schemaVersion: "3.0";
@@ -71,6 +73,9 @@ export interface QuestionPackage {
   options: QuestionOption[];
   correctAnswer: string[];
   explanation: RichText;
+  featured?: boolean;
+  highlightedTerms?: string[];
+  ceptCheck?: CeptCheckSpec;
   subjectiveAnswer?: SubjectiveAnswerSpec;
   taxonomy: QuestionTaxonomy;
   ordering: QuestionOrdering;

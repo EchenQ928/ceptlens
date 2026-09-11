@@ -1,0 +1,12 @@
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useLearningSession } from "../components/LearningSession";
+import { learningRequest } from "../infrastructure/learningClient";
+import { replaceProgress } from "../infrastructure/progressRepository";
+import { uiText,useLocale } from "../i18n";
+
+export function AccountPage(){
+ const {session,rename,refresh}=useLearningSession();const {locale}=useLocale();const t=(zh:string,en:string)=>uiText(locale,zh,en);const navigate=useNavigate();const [name,setName]=useState(session?.user.name??"");const [message,setMessage]=useState("");const [busy,setBusy]=useState(false);
+ if(!session?.authenticated)return <div className="page"><h1>{t("访客模式","Visitor mode")}</h1><Link className="primary-button" to="/sign-in?next=/account">{t("登录或创建账户","Sign in or create an account")}</Link></div>;
+ return <div className="page account-page"><div className="page-heading"><div><p className="eyebrow">YOUR SPACE</p><h1>{t("我的账户","Your account")}</h1></div></div><section className="panel account-card"><span className="account-role">{session.user.role==="developer"?t("开发者","Developer"):t("学习者","Learner")}</span><h2>{session.user.name}</h2><form className="welcome-form" onSubmit={async e=>{e.preventDefault();setBusy(true);try{await rename(name);setMessage(t("已保存","Saved"));}catch(e){setMessage(String(e));}finally{setBusy(false);}}}><label>{t("显示名","Display name")}<input value={name} required maxLength={40} onChange={e=>setName(e.target.value)}/></label><button className="secondary-button" disabled={busy}>{t("保存","Save")}</button></form><p role="status">{message}</p><div className="account-id"><span>{t("账户 ID","Account ID")}</span><code>{session.user.id}</code></div>{session.user.role==="developer"?<Link className="primary-button" to="/developer">{t("进入内容管理","Open Content Manager")}</Link>:<p>{t("开发者权限由服务器管理员分配。需要协作发布内容时，请向管理员提供上方账户 ID。","Developer access is assigned by the server owner. Share the account ID above with them to publish content as a collaborator.")}</p>}<button className="text-link" disabled={busy} onClick={async()=>{setBusy(true);try{await learningRequest("auth/logout",{});replaceProgress({completed:[],wrong:[],favorites:[],confidence:{},studyMode:"practice"});sessionStorage.removeItem("ceptlens.visitor-entry.v1");await refresh();navigate("/sign-in");}catch(e){setMessage(String(e));}finally{setBusy(false);}}}>{t("退出登录","Sign out")}</button></section></div>;
+}
