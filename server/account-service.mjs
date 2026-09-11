@@ -27,11 +27,14 @@ export function createAccountService(db, { clock = Date.now } = {}) {
     CREATE INDEX IF NOT EXISTS idx_audit_user ON audit_events(user_id, created_at);
     CREATE TABLE IF NOT EXISTS account_roles(user_id TEXT PRIMARY KEY REFERENCES users(id), role TEXT NOT NULL CHECK(role IN ('learner','developer')));
   `);
+  // Registered identities must only be reachable through signed sessions. Retire
+  // legacy guest bearer hashes while preserving account IDs and all owned data.
+  db.exec("UPDATE users SET token_hash='account:' || id WHERE id IN (SELECT user_id FROM auth_accounts) AND token_hash NOT LIKE 'account:%'");
   const audit = (userId, action, metadata = {}) => db.prepare('INSERT INTO audit_events VALUES(?,?,?,?,?)').run(randomUUID(), userId ?? null, action, JSON.stringify(metadata).slice(0, 4000), clock());
   const user = id => db.prepare("SELECT users.id, users.name, COALESCE(account_roles.role, 'learner') AS role FROM users LEFT JOIN account_roles ON account_roles.user_id=users.id WHERE users.id=?").get(id);
   const createUser = (name, provider, subject, email = null, passwordHash = null) => {
     const id = randomUUID();
-    db.prepare('INSERT INTO users(id, token_hash, name) VALUES(?,?,?)').run(id, digest(randomUUID()), text(name, 40));
+    db.prepare('INSERT INTO users(id, token_hash, name) VALUES(?,?,?)').run(id, `account:${id}`, text(name, 40));
     db.prepare('INSERT INTO auth_accounts VALUES(?,?,?,?,?,?,?)').run(randomUUID(), id, provider, subject, email, passwordHash, clock());
     return user(id);
   };
@@ -89,8 +92,10 @@ export function createAccountService(db, { clock = Date.now } = {}) {
       if (typeof email !== 'string' || !emailRe.test(email) || email.length > 200 || typeof password !== 'string' || password.length < 10 || password.length > 200) throw problem('注册信息无效。');
       if (db.prepare('SELECT 1 FROM auth_accounts WHERE provider=? AND email=?').get('email', email.toLowerCase())) throw problem('该邮箱已注册。', 409);
       const existing = user(userId); if (!existing) throw problem('找不到访客身份。', 404);
+      if (db.prepare('SELECT 1 FROM auth_accounts WHERE user_id=?').get(userId)) throw problem('This identity already has an account. Please sign in.', 409);
       if (name) db.prepare('UPDATE users SET name=? WHERE id=?').run(text(name, 40), userId);
       db.prepare('INSERT INTO auth_accounts VALUES(?,?,?,?,?,?,?)').run(randomUUID(), userId, 'email', email.toLowerCase(), email.toLowerCase(), hashPassword(password), clock());
+      db.prepare('UPDATE users SET token_hash=? WHERE id=?').run(`account:${userId}`, userId);
       const result = startSession(userId, 'account.guest_upgrade'); return { ...result, user: user(userId) };
     }
   };

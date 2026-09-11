@@ -24,5 +24,14 @@ it('keeps guest upgrades unprivileged and renames the signed-in account independ
  const guest=store.identity('a'.repeat(48)); const result=accounts.guestToAccount(guest.id,{...registration,role:'developer'});
  expect(result.user.id).toBe(guest.id);expect(result.user.role).toBe('learner');
  accounts.setRole(guest.id,'developer'); expect(accounts.rename(result.cookie,'New name')).toMatchObject({id:guest.id,name:'New name',role:'developer'});
+ expect(store.identity('a'.repeat(48)).id).not.toBe(guest.id);
+ expect(()=>accounts.guestToAccount(guest.id,{...registration,email:'other@example.test'})).toThrow();
  expect(()=>accounts.rename(undefined,'Forged')).toThrow();
+});
+it('retires legacy guest tokens on existing accounts without changing their signed sessions or roles',()=>{
+ const guest=store.identity('b'.repeat(48));const result=accounts.guestToAccount(guest.id,registration);accounts.setRole(guest.id,'developer');
+ const legacy=store.identity('c'.repeat(48));const hash=store.db.prepare('SELECT token_hash FROM users WHERE id=?').get(legacy.id).token_hash;
+ store.db.prepare('DELETE FROM users WHERE id=?').run(legacy.id);store.db.prepare('UPDATE users SET token_hash=? WHERE id=?').run(hash,guest.id);
+ accounts=createAccountService(store.db,{clock:()=>now});
+ expect(accounts.canManageContent(result.cookie)).toBe(true);expect(store.identity('c'.repeat(48)).id).not.toBe(guest.id);
 });
