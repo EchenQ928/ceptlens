@@ -29,7 +29,7 @@ export function AssistantPanel({ reference, clearReference }: { reference: TextR
       {messages.map(m => <article key={m.id} className={`chat-message ${m.role} ${m.status ?? ""}`}><b>{m.role === "user" ? t("你", "You") : t("学习助手", "Learning assistant")}</b>{m.reference?.quote && <blockquote>{m.reference.quote}</blockquote>}<p>{m.role === "assistant" ? <RichText text={m.content} terms={[]} linkTerms={false} /> : m.content}</p>
         {(m.status === "unavailable" || m.status === "error") && <button className="text-link" disabled={busy} onClick={() => { const question = messages.find(item => item.id === m.replyTo); if (question) void ask(question.content, question.reference ?? null); }}>{t("重试这个问题", "Retry this question")}</button>}
       </article>)}
-      {busy && <p role="status" className="status-note">{t("正在处理你的问题…", "Processing your question…")}</p>}{error && <p role="alert" className="service-error">{error}</p>}<div ref={end} />
+      {busy && <p role="status" className="assistant-thinking"><span className="typing-dots" aria-hidden="true"><i/><i/><i/></span>{t("正在处理你的问题…", "Processing your question…")}</p>}{error && <p role="alert" className="service-error">{error}</p>}<div ref={end} />
     </div>
     <form className="chat-composer" onSubmit={e => { e.preventDefault(); void ask(); }}>
       {reference && <div className="attached-reference"><div><b>{t("引用", "Quote")} · {reference.title}</b><p>{reference.quote || t("当前页面内容", "Current page content")}</p></div><button type="button" aria-label={t("移除引用", "Remove quote")} onClick={clearReference}><X size={16} /></button></div>}

@@ -1,5 +1,7 @@
 # Lens UI — interaction and clarity
 
+This document describes the preserved `codex/ui-lens` variant. For the current `codex/ui-aura` branch, see [AURA_DESIGN.md](AURA_DESIGN.md).
+
 Desktop comes first. The owner’s direction is concise, polished, vivid, and focused on understanding. A screen should not contain extra copy just to look complete.
 
 ## Structure

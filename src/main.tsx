@@ -10,7 +10,7 @@ import "./styles/responsive.css";
 import "./styles/learning.css";
 import "./styles/accounts.css";
 import "./styles/lens.css";
-import "./styles/optical.css";
+import "./styles/aura.css";
 import { App } from "./app/App";
 import { LocaleProvider } from "./i18n";
 
