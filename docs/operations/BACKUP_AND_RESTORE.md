@@ -2,6 +2,12 @@
 
 生产数据位于 `/var/lib/ceptlens`，与代码发布目录分离。备份必须写入服务器之外的受控存储，不能放入 iCloud 同步目录或 Git 仓库。
 
+## 内容与代码分别备份
+
+题目和词条的正式版本保存在 `/var/lib/ceptlens/content-store/`，其中 `current.json` 指向当前快照，`snapshots/` 保存正文源文件、编译产物与历史版本。必须和用户数据库一起纳入备份。GitHub 中的 `content-libraries/` 只负责首次初始化，不能用来替代服务器内容备份。
+
+部署会在内容目录的 `deploy-backups/` 保存本机恢复副本；它不是异机备份。内容管理页面可以恢复内容快照，且不会回滚账户或学习记录。完整操作说明见 [平台与内容工作流](PLATFORM_AND_CONTENT_WORKFLOW.md)。
+
 ## 最低要求
 
 - 每日备份 SQLite 数据库及其 `-wal`、`-shm` 文件（服务短暂停止或使用 SQLite 在线备份工具，保证一致性）。

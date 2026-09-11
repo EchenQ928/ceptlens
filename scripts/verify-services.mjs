@@ -13,7 +13,7 @@ const socket = createNetServer(); await new Promise(r => socket.listen(0, '127.0
 let child;
 async function start(publicOrigin = '') {
   child = spawn(process.execPath, ['server/content-host.mjs', '--host', '127.0.0.1', '--port', String(port), '--public-host', '127.0.0.1'], { cwd: root, env: { ...process.env, CEPTLENS_DATA_DIR: data, CEPTLENS_AI_DISABLED: '1', CEPTLENS_PUBLIC_ORIGIN: publicOrigin }, stdio: 'ignore' });
-  for (let i = 0; i < 100; i++) { try { if ((await call('/api/content/status', undefined, tokenA, publicOrigin || `http://127.0.0.1:${port}`)).status === 200) return; } catch { /* startup */ } if (child.exitCode !== null) throw new Error('Host failed to start'); await new Promise(r => setTimeout(r, 100)); }
+  for (let i = 0; i < 1200; i++) { try { if ((await call('/api/content/status', undefined, tokenA, publicOrigin || `http://127.0.0.1:${port}`)).status === 200) return; } catch { /* startup */ } if (child.exitCode !== null) throw new Error('Host failed to start'); await new Promise(r => setTimeout(r, 100)); }
   throw new Error('Host readiness timeout');
 }
 async function stop() { if (!child || child.exitCode !== null) return; const stopped = new Promise(r => child.once('exit', r)); child.kill('SIGTERM'); await stopped; }

@@ -15,6 +15,14 @@ Open http://127.0.0.1:8766/. On Windows, `start-lab.bat` performs the same start
 
 The first startup validates the installed runtime and package dependencies, validates local content, builds the preview, and then starts the isolated Lab host.
 
+## Keep author files separate from platform updates
+
+From a CeptLens platform checkout, create a standalone workspace with `npm run lab:workspace -- <directory-outside-the-checkout>`. Run `npm ci` and `npm start` there. Your drafts live in that workspace's `content-libraries/`.
+
+After updating the platform checkout, run `npm run lab:workspace -- <same-directory> --update`, then run `npm ci` and restart the workspace. The update preserves author content and local runtime data.
+
+Production uploads are saved in the server's persistent content store. They do not require Git commits and survive later platform deployments.
+
 ## Daily workflow
 
 1. Import one term ZIP or question JSON package. Replacing an existing ID requires confirmation.

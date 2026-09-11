@@ -15,5 +15,6 @@ jobs:
           cache-dependency-path: |
             package-lock.json
             content-lab/package-lock.json
+      - run: bash -n deploy/ceptlens-deploy.sh
       - run: npm run setup
       - run: npm run check:all

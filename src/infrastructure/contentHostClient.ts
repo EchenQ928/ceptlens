@@ -6,6 +6,8 @@ export interface ContentHostStatus {
   missingTermCount: number;
   publishing: boolean;
   persistentRoot: string;
+  contentRevision?: string;
+  contentHash?: string;
   packageFormat: string;
   environment: "lab" | "production";
 }
@@ -16,7 +18,12 @@ async function decode(response: Response) {
   return value;
 }
 
+export interface ContentRevision { revision: string; reason: string; createdAt: string; questionCount: number; termCount: number; }
 export const contentHostClient = {
+  async history(): Promise<ContentRevision[]> { return (await decode(await fetch("api/content/history", { cache: "no-store" }))).revisions; },
+  async restore(revision: string, token: string) {
+    return decode(await fetch("api/content/restore", { method: "POST", headers: { "X-Content-Admin-Token": token, "Content-Type": "application/json" }, body: JSON.stringify({ revision }) }));
+  },
   async status(): Promise<ContentHostStatus> {
     const value = await decode(await fetch("api/content/status", { cache: "no-store" }));
     return value as ContentHostStatus;

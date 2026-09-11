@@ -15,8 +15,11 @@
     "validate": "tsx scripts/validate-content.ts",
     "test": "vitest run",
     "check": "npm run validate && npm run test && npm run build",
-    "check:all": "npm run check && npm run test:services && npm --prefix content-lab run check && npm --prefix content-lab run test:imports",
-    "test:services": "node scripts/verify-services.mjs"
+    "check:all": "npm run check && npm run test:services && npm run test:content-workflow && npm --prefix content-lab run check && npm --prefix content-lab run test:imports",
+    "test:services": "node scripts/verify-services.mjs",
+    "content:prepare": "node --env-file-if-exists=.env scripts/prepare-content.mjs",
+    "lab:workspace": "node scripts/create-content-lab.mjs",
+    "test:content-workflow": "node scripts/verify-content-workflow.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "6.1.1",
