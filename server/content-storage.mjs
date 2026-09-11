@@ -86,8 +86,12 @@ export async function buildContent(root, workspace) {
   }
   await symlink(resolve(root, 'node_modules'), resolve(workspace, 'node_modules'), 'junction');
   const invocation = resolveNpmInvocation(['run', 'check']);
+  // Let Vitest select test mode and Vite select production mode independently.
+  // A live host's NODE_ENV=production otherwise disables React's test helpers.
+  const buildEnv = { ...process.env };
+  delete buildEnv.NODE_ENV;
   await new Promise((done, reject) => {
-    const child = spawn(invocation.executable, invocation.args, { cwd: workspace, env: process.env, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
+    const child = spawn(invocation.executable, invocation.args, { cwd: workspace, env: buildEnv, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
     let tail = '';
     const output = chunk => { tail = (tail + chunk.toString()).slice(-12000); process.stdout.write(chunk); };
     child.stdout.on('data', output); child.stderr.on('data', output);

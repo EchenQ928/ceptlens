@@ -20,7 +20,7 @@ async function start(directory) {
   output = '';
   child = spawn(process.execPath, ['server/content-host.mjs', '--host', '127.0.0.1', '--port', String(port)], {
     cwd: directory, windowsHide: true,
-    env: { ...process.env, CEPTLENS_DATA_DIR: data, CEPTLENS_CONTENT_DIR: store, CEPTLENS_CONTENT_TOKEN: token, CEPTLENS_AI_DISABLED: '1', CEPTLENS_PUBLIC_ORIGIN: base }, stdio: ['ignore', 'pipe', 'pipe'],
+    env: { ...process.env, NODE_ENV: 'production', CEPTLENS_DATA_DIR: data, CEPTLENS_CONTENT_DIR: store, CEPTLENS_CONTENT_TOKEN: token, CEPTLENS_AI_DISABLED: '1', CEPTLENS_PUBLIC_ORIGIN: base }, stdio: ['ignore', 'pipe', 'pipe'],
   });
   child.stdout.on('data', chunk => { output = (output + chunk).slice(-18000); }); child.stderr.on('data', chunk => { output = (output + chunk).slice(-18000); });
   for (let n = 0; n < 1200; n++) {

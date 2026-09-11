@@ -6,7 +6,7 @@ import "./styles/global.css";
 import "./styles/components.css";
 import "./styles/responsive.css";
 import "./styles/learning.css";
-import "./styles/studio.css";
+import "./styles/accounts.css";
 import { App } from "./app/App";
 import { LocaleProvider } from "./i18n";
 
