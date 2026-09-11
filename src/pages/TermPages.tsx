@@ -1,6 +1,7 @@
 import { ArrowLeft, ArrowRight, ChevronLeft, CornerDownRight, Network, Search } from "lucide-react";
 import { motion } from "motion/react";
 import { ConceptSymbol, conceptTone } from "../components/ConceptSymbol";
+import { ProductIcon } from "../components/ProductIcon";
 import { Suspense, useCallback, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { RichText } from "../components/RichText";
@@ -34,7 +35,7 @@ export function TermLibraryPage() {
 
   return <div className="page concepts-page">
     <div className="page-heading compact">
-      <div><span className="workspace-icon"><Network size={28}/></span><h1>{uiText(locale, "词条", "Concepts")}</h1></div>
+      <div><span className="workspace-icon"><ProductIcon kind="concepts"/></span><h1>{uiText(locale, "词条", "Concepts")}</h1></div>
       <span className="library-count">{terms.length} {uiText(locale,"个概念","concepts")}</span>
     </div>
     {highlighted.length > 0 && <section className="concept-collection"><div><h2>{uiText(locale,"精选概念","Featured concepts")}</h2></div><div className="concept-pills">{highlighted.map(id=>{const term=terms.find(t=>t.id===id); const label=termDisplayName(id,term?textForLocale(term.title,locale):id,locale);return term?<Link key={id} to={`/terms/${id}`}>{label}<ArrowRight size={13}/></Link>:<span key={id} className="concept-upcoming">{label}<small>{uiText(locale,"待完善","Upcoming")}</small></span>;})}</div></section>}

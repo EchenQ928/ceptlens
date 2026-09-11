@@ -3,6 +3,7 @@ import { Maximize2, Minimize2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useParams, useSearchParams } from "react-router-dom";
 import { QuestionPanel } from "../components/QuestionPanel";
+import { ProductIcon } from "../components/ProductIcon";
 import { textForLocale } from "../domain/content";
 import { dependencyReason, termDisplayName } from "../domain/termNames";
 import type { TermTrailNode } from "../domain/navigation";
@@ -56,16 +57,16 @@ export function StudyPage() {
       <div className="question-stage"><AnimatePresence initial={false} mode="wait" custom={direction}><motion.div key={`${question.id}:${mode}`} custom={direction} variants={{ enter: (d: number) => ({ opacity: 0, x: reduced ? 0 : d * 50, scale: reduced ? 1 : .985 }), center: { opacity: 1, x: 0, scale: 1 }, leave: (d: number) => ({ opacity: 0, x: reduced ? 0 : d * -35, scale: reduced ? 1 : .985 }) }} initial="enter" animate="center" exit="leave" transition={{ duration: reduced ? 0 : .24, ease: [.22, 1, .36, 1] }}><QuestionPanel question={question} terms={terms} mode={mode} previousId={sequence[index - 1]?.id} nextId={sequence[index + 1]?.id}/></motion.div></AnimatePresence></div>
     </div>
     <aside className="study-context" aria-label={t("相关知识", "Related knowledge")}>
-      <div className="context-section"><span className="eyebrow">{t("知识点", "Focus")}</span><h3>{textForLocale(question.taxonomy.primaryConcept, locale)}</h3></div>
-      <div className="context-section">
-        <span className="eyebrow">{t("前置知识", "Prerequisites")}</span>
-        {question.ordering.prerequisites.length ? question.ordering.prerequisites.map(id => {
+      <div className="context-section context-focus"><div className="context-heading"><ProductIcon kind="target"/><span>{t("知识点", "Focus")}</span></div><h3>{textForLocale(question.taxonomy.primaryConcept, locale)}</h3></div>
+      {question.ordering.prerequisites.length > 0 && <div className="context-section">
+        <div className="context-heading"><ProductIcon kind="branch"/><span>{t("前置知识", "Prerequisites")}</span></div>
+        {question.ordering.prerequisites.map(id => {
           const item = questions.find(candidate => candidate.id === id);
           return item ? <Link key={id} to={`/learn/questions/${id}?mode=${mode}`}>{textForLocale(item.taxonomy.primaryConcept, locale)}</Link> : null;
-        }) : <p>{t("可以直接从这道题开始。", "You can start right here.")}</p>}
-      </div>
+        })}
+      </div>}
       <div className="context-section">
-        <span className="eyebrow">{t("相关词条", "Concepts")}</span>
+        <div className="context-heading"><ProductIcon kind="concepts"/><span>{t("相关词条", "Concepts")}</span></div>
         {linkedTerms.filter(item => item.term).map(({ term }) => term &&
           <Link className="context-concept-link" key={term.id} to={`/terms/${term.id}`} state={{ termTrail: [questionNode, { kind: "term", id: term.id, label: textForLocale(term.title, locale), href: `/terms/${term.id}` }] }}>
             <b>{textForLocale(term.title, locale)}</b>

@@ -1,5 +1,6 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { FeaturedBadge } from "./FeaturedContent";
+import { ProductIcon } from "./ProductIcon";
 import { Check, CircleCheck, CircleHelp, ChevronLeft, ChevronRight, Eye, EyeOff, Heart, RotateCcw } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -63,7 +64,7 @@ export function QuestionPanel({ question, terms, mode, previousId, nextId, previ
         return <div key={option.key} className={`option-row ${state}`} onClick={event => { if (!(event.target as HTMLElement).closest("a, button") && !window.getSelection()?.toString()) select(option.key); }}><button className="option-key" data-annotation-ignore disabled={revealed} onClick={() => select(option.key)} aria-pressed={chosen} aria-label={`${uiText(locale, "选择", "Select")} ${option.key}`}>{revealed && answer ? <Check size={17} /> : option.key}</button><div className="option-content"><RichText text={option.text} terms={terms} sourceNode={sourceNode} /></div></div>;
       })}</div>}
       <div className="answer-actions" data-annotation-ignore>
-        {mode === "practice" && !revealed && <button className="primary-button" disabled={!preview && !isSubjective && selected.length === 0} onClick={reveal}><Eye size={17} /> {uiText(locale, "查看答案", "Show answer")}</button>}
+        {mode === "practice" && !revealed && <button className="primary-button" disabled={!preview && !isSubjective && selected.length === 0} onClick={reveal}><ProductIcon kind="reveal"/> {uiText(locale, "查看答案", "Show answer")}</button>}
         {mode === "practice" && revealed && <button className="secondary-button" onClick={() => { setSelected([]); setAnswerText(""); setRevealed(false); }}><RotateCcw size={16} /> {uiText(locale, "重做", "Try again")}</button>}
         {mode === "quick" && <button className="secondary-button" onClick={() => setRevealed((value) => !value)}>{revealed ? <EyeOff size={16} /> : <Eye size={16} />}{revealed ? uiText(locale, "隐藏答案", "Hide answer") : uiText(locale, "显示答案", "Show answer")}</button>}
       </div>

@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import { ProductIcon } from "./ProductIcon";
 import { useEffect, useRef, useState } from "react";
 import { CheckCircle2, ChevronLeft, ChevronRight, ClipboardCheck, Clock3, Cloud, LockKeyhole } from "lucide-react";
 import { answeredCount, examTypeName, type ExamAnswers, type ExamAttempt, type ExamCatalog } from "../domain/exam";
@@ -13,7 +14,7 @@ export function ExamIntroduction({ catalog, name, setName, busy, connected, erro
   const t = (zh: string, en: string) => uiText(locale, zh, en);
   const active = catalog?.exams.find(e => e.status === "active");
   return <div className="page assessment-page">
-    <div className="assessment-heading"><div><h1>{t("考核", "Assessment")}</h1><p>{t("30 分钟 · 独立作答 · 自动保存", "30 minutes · Independent work · Autosave")}</p></div><ClipboardCheck size={38} /></div>
+    <div className="assessment-heading"><div><h1>{t("考核", "Assessment")}</h1><p>{t("30 分钟 · 独立作答 · 自动保存", "30 minutes · Independent work · Autosave")}</p></div><ProductIcon kind="assess"/></div>
     <div className="assessment-start-grid"><section className="assessment-card"><h2>{t("本次考核", "Your assessment")}</h2>
       <div className="paper-spec">{catalog?.readiness.map(r => <div key={r.type}><strong>{r.required}<small>{t(" 道", " questions")}</small></strong><b>{examTypeName(r.type, locale)}</b><span className={r.available < r.required ? "warning-text" : ""}>{r.available < r.required ? t(`缺 ${r.required - r.available} 道`, `${r.required - r.available} missing`) : ""}</span></div>)}</div>
       <ul className="assessment-rules"><li><Clock3 size={18}/>{t("开始后计时，到时自动交卷。", "The timer starts immediately; time expiry submits your paper.")}</li><li><Cloud size={18}/>{t("自动保存，刷新后可继续。", "Autosaved. Resume after a refresh.")}</li></ul>

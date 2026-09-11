@@ -1,4 +1,5 @@
 import { FeaturedBadges, FeaturedContentFilter } from "../components/FeaturedContent";
+import { ProductIcon } from "../components/ProductIcon";
 import { matchesFeatured, type FeaturedFilter } from "../domain/featured";
 import { ArrowRight, BookOpenCheck, ChevronDown, Filter, Search, SlidersHorizontal } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -56,7 +57,7 @@ export function LearnCatalogPage() {
   const hasFilters = track || !!query || featured !== "all" || [family, level, engineering, status, priority].some(value => value !== "all") || Object.values(extra).some(Boolean);
   return (
     <div className="page catalog-page">
-      <div className="page-heading compact"><div><span className="workspace-icon"><BookOpenCheck size={28}/></span><h1>{uiText(locale, "学习", "Learn")}</h1></div><div className="mode-segment" role="group" aria-label={uiText(locale, "学习方式", "Learning mode")}><button className={mode === "practice" ? "active" : ""} onClick={() => chooseMode("practice")}>{uiText(locale, "做题", "Practice")}</button><button className={mode === "quick" ? "active" : ""} onClick={() => chooseMode("quick")}>{uiText(locale, "看题", "Read")}</button></div></div>
+      <div className="page-heading compact"><div><span className="workspace-icon"><ProductIcon kind="learn"/></span><h1>{uiText(locale, "学习", "Learn")}</h1></div><div className="mode-segment" role="group" aria-label={uiText(locale, "学习方式", "Learning mode")}><button className={mode === "practice" ? "active" : ""} onClick={() => chooseMode("practice")}>{uiText(locale, "做题", "Practice")}</button><button className={mode === "quick" ? "active" : ""} onClick={() => chooseMode("quick")}>{uiText(locale, "看题", "Read")}</button></div></div>
       {questions.some(q => q.id.startsWith("KV-CACHE-")) && <div className="track-switch" role="group" aria-label={uiText(locale,"学习路径","Learning track")}><button aria-pressed={!track} onClick={()=>setParams({})}>{uiText(locale,"全部题目","All questions")}</button><button aria-pressed={track} onClick={()=>setParams({track:"kv-cache"})}>KV Cache <span>{questions.filter(q=>q.id.startsWith("KV-CACHE-")).length}</span></button></div>}
       <section className="filter-panel">
         <div className="search-row"><label className="search-box"><Search size={17} /><input aria-label={uiText(locale, "搜索题目、概念或标签", "Search questions, concepts, or tags")} value={query} onChange={(event) => setQuery(event.target.value)} placeholder={uiText(locale, "搜索题目、概念或标签", "Search questions, concepts, or tags")} /></label>{first && <Link className="primary-button" to={`/learn/questions/${first.id}?mode=${mode}`}><BookOpenCheck size={17} /> {uiText(locale, "开始学习", "Start learning")}</Link>}</div>

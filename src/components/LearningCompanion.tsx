@@ -1,4 +1,5 @@
 import { AnimatePresence } from "motion/react";
+import { ProductIcon } from "./ProductIcon";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Bot, MessageSquare, UserRound } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -95,7 +96,7 @@ export function LearningCompanion() {
   }
   return <>
     {session?.activeExam && !location.pathname.startsWith("/exam") && <div className="active-exam-banner">{t("考核进行中，批注与助手已禁用。", "An assessment is in progress. Annotations and the assistant are disabled.")}<Link to={`/exam?attempt=${session.activeExam}`}>{t("返回答卷", "Return to paper")}</Link></div>}
-    {!disabled && <div className="companion-dock">{page && <button className="discussion-launch" onClick={() => open("discussions")} aria-label={`${t("本页共享讨论", "Shared discussions on this page")} ${discussions.length}`}><MessageSquare size={19} /><span>{t("讨论", "Discuss")}</span><b>{discussions.length}</b></button>}<button className="assistant-launch" onClick={() => open("assistant", page ? { ...page, quote: "", prefix: "", suffix: "", start: 0 } : null)} aria-label={t("打开学习助手", "Open learning assistant")}><Bot size={23} /><span>{t("学习助手", "Assistant")}</span></button></div>}
+    {!disabled && <div className="companion-dock">{page && <button className="discussion-launch" onClick={() => open("discussions")} aria-label={`${t("本页共享讨论", "Shared discussions on this page")} ${discussions.length}`}><ProductIcon kind="discussion"/><span>{t("讨论", "Discuss")}</span><b>{discussions.length}</b></button>}<button className="assistant-launch" onClick={() => open("assistant", page ? { ...page, quote: "", prefix: "", suffix: "", start: 0 } : null)} aria-label={t("打开学习助手", "Open learning assistant")}><ProductIcon kind="assistant"/><span>{t("学习助手", "Assistant")}</span></button></div>}
     {menu && !disabled && <div className="selection-menu" ref={menuRef} role="toolbar" aria-label={t("选区操作", "Selection actions")} style={{ left: menu.x, top: menu.y }} onMouseDown={e => e.preventDefault()}><button onClick={() => open("discussions", menu.ref)}><MessageSquare size={16} /> {t("批注", "Annotate")}</button><button onClick={() => open("assistant", menu.ref)}><Bot size={17} /> {t("问助手", "Ask assistant")}</button></div>}
     <AnimatePresence>
     {panel === "discussions" && page && !disabled && <SidePanel key="discussions" title={t("共享讨论", "Shared discussions")} subtitle={page.title} close={() => setPanel(null)}>{(error || sessionError) && <p role="alert" className="service-error">{error || sessionError}</p>}<DiscussionPanel key={page.resource} discussions={discussions} reference={reference} selectedId={selectedId} onSelect={setSelectedId} locate={locate} refresh={refresh} saved={() => setReference(null)} /></SidePanel>}
