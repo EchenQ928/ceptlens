@@ -7,7 +7,7 @@ import { textForLocale, type TermPackage } from "../domain/content";
 import { uiText, useLocale } from "../i18n";
 import { toQuestionSource } from "../domain/schemas";
 import { useContent } from "../hooks/useContent";
-import { contentHostClient, type ContentHostStatus } from "../infrastructure/contentHostClient";
+import { contentHostClient, type ContentHostStatus, type ContentRevision } from "../infrastructure/contentHostClient";
 
 type Kind = "question" | "term";
 
@@ -20,6 +20,7 @@ export function DeveloperPage() {
   const [editor, setEditor] = useState(() => JSON.stringify(questionChoiceTemplate, null, 2));
   const [token, setToken] = useState(() => sessionStorage.getItem("ceptlens.content-token") ?? "");
   const [hostStatus, setHostStatus] = useState<ContentHostStatus | null>(null);
+  const [history, setHistory] = useState<ContentRevision[]>([]);
   const [busy, setBusy] = useState(false);
   const [hostError, setHostError] = useState("");
   const [result, setResult] = useState<{ ok: boolean; messages: string[] } | null>(null);
@@ -31,6 +32,8 @@ export function DeveloperPage() {
     const refresh = () => contentHostClient.status().then(value => { setHostStatus(value); setHostError(""); }).catch(() => { setHostStatus(null); setHostError(t("内容服务未连接。请使用 npm run host 启动完整服务；仅运行前端预览无法保存内容。", "The content service is unavailable. Run npm run host; a frontend-only preview cannot save content.")); });
     void refresh(); const timer = window.setInterval(refresh, 5000); return () => window.clearInterval(timer);
   }, [locale]);
+
+  useEffect(() => { void contentHostClient.history().then(setHistory).catch(() => setHistory([])); }, [hostStatus?.contentRevision]);
 
   function rememberToken(value: string) {
     setToken(value.trim());
@@ -106,7 +109,17 @@ export function DeveloperPage() {
     </aside>
     <section className="developer-main">
       <div className="page-heading compact"><div><p className="eyebrow">HOST CONTENT WORKBENCH</p><h1>{t("广播主机内容管理", "Service-host content manager")}</h1><p>{t("题目只填写正文、分类和顺序；词条只强制清单与定制页面两个文件。", "Questions contain only their body, taxonomy, and order; term packages require only the manifest and custom page.")}</p></div><a className="secondary-button" href="docs/DEVELOPER_GUIDE.md" download><Download size={16} /> {t("开发指南", "Developer guide")}</a></div>
-      <details className="agent-developer-panel"><summary>{t("共享数据与 Agent 接入", "Shared data and agent integration")}</summary><p>{t("批注、回复、私人助手对话和答卷保存在", "Annotations, replies, private assistant conversations, and papers are stored in")} <code>service-data/ceptlens.sqlite</code>{t("，不放进题目包或词条包。升级前请停止服务，备份并迁移整个", " rather than in question or term packages. Before an upgrade, stop the service, back up, and migrate the entire")} <code>service-data/</code> {t("文件夹。", "directory.")}</p><p>{t("模型配置放在主机", "Model configuration lives on the host at")} <code>agent-runtime/config.json</code>{t("，API Key 通过主机环境变量提供，前端不保存密钥。专用提示词、只读工具、MCP 与 Skill 对接入口为", "; API keys are supplied through host environment variables and are never stored in the frontend. Prompts, read-only tools, MCP, and Skill integration are exposed through")} <code>agent-runtime/extension.mjs</code>{t("。", ".")}</p><a className="secondary-button" href="docs/COLLABORATION_AND_AGENT.md" download><Download size={16} /> {t("下载接口与部署指南", "Download integration and deployment guide")}</a></details>
+      <details className="agent-developer-panel"><summary>{t("内容存储与版本记录", "Content storage and revisions")}</summary>
+        <p>{t("上传的内容独立保存在服务器中，平台代码更新会保留内容、账户和学习记录。", "Uploaded content is stored independently on the server. Platform updates preserve content, accounts, and learning records.")}</p>
+        <p>{t("内容目录", "Content directory")}: <code>{hostStatus?.persistentRoot ?? "—"}</code></p>
+        <p>{t("当前版本", "Current revision")}: <code>{hostStatus?.contentRevision ?? "—"}</code></p>
+        <ul>{history.slice(0, 10).map(revision => <li key={revision.revision}>
+          <time>{new Date(revision.createdAt).toLocaleString(locale)}</time> · {revision.questionCount} {t("题目", "questions")} · {revision.termCount} {t("词条", "terms")}
+          {revision.revision === hostStatus?.contentRevision ? <span> · {t("当前", "Current")}</span> : <button className="secondary-button" disabled={busy || !hostStatus || hostStatus.publishing} onClick={() => {
+            if (window.confirm(t("恢复这份内容快照？系统会创建新版本，账户和学习记录保持不变。", "Restore this content snapshot? A new revision will be created; accounts and learning records will be preserved."))) void runMutation(() => contentHostClient.restore(revision.revision, token));
+          }}>{t("恢复内容", "Restore content")}</button>}
+        </li>)}</ul>
+      </details>
       {hostError && <div className="lab-message error" role="alert">{hostError}</div>}{hostStatus?.publishing && <p role="status" className="practice-notice">{t("主机正在发布内容，请等待完成。", "The host is publishing content. Please wait.")}</p>}<section className="host-status-panel"><div><KeyRound size={18} /><label><span>{t("内容管理口令", "Content-management token")}</span><input type="password" value={token} onChange={(event) => rememberToken(event.target.value)} placeholder={t("查看广播主机启动终端", "See the service host terminal")} /></label></div><div className="host-metrics"><span>{hostStatus ? t("服务已连接", "Service connected") : t("服务未连接", "Service unavailable")}</span><span><b>{hostStatus?.questionCount ?? questions.length}</b> {t("题目包", "question packages")}</span><span><b>{hostStatus?.termCount ?? terms.length}</b> {t("词条教学包", "term packages")}</span><span className={hostStatus?.missingTermCount ? "warning" : ""}><b>{hostStatus?.missingTermCount ?? "—"}</b> {t("待补词条", "pending terms")}</span></div></section>
       {kind === "question" ? <>
         <div className="developer-toolbar"><button className="secondary-button" onClick={() => { setSelectedId(""); setEditor(JSON.stringify(questionChoiceTemplate, null, 2)); }}><PackagePlus size={16} /> {t("新建选择题", "New multiple-choice question")}</button><button className="secondary-button" onClick={() => { setSelectedId(""); setEditor(JSON.stringify(questionSubjectiveTemplate, null, 2)); }}><PackagePlus size={16} /> {t("新建问答题", "New short-answer question")}</button><button className="secondary-button" disabled={busy || !hostStatus || hostStatus.publishing} onClick={() => inputRef.current?.click()}><Upload size={16} /> {t("导入题目/题库", "Import questions/library")}</button><input ref={inputRef} type="file" hidden accept="application/json,.json" onChange={(event) => importFile(event.target.files?.[0])} /><a className="secondary-button" href="api/content/questions/export"><Download size={16} /> {t("导出题库", "Export library")}</a><span className="toolbar-spacer" />{selected && <button className="danger-button" disabled={busy || !hostStatus || hostStatus.publishing} onClick={remove}><Trash2 size={16} /> {t("删除", "Delete")}</button>}<button className="primary-button" disabled={busy || !hostStatus || hostStatus.publishing} onClick={saveQuestion}><Save size={16} /> {busy ? t("校验并发布中…", "Checking and publishing…") : t("保存到广播主机", "Save to service host")}</button></div>

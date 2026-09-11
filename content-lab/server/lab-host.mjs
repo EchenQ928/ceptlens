@@ -301,21 +301,23 @@ const server = createServer(async (request, response) => {
       const buffer = await readBody(request);
       const transactionRoot = resolve(stageDirectory, `question-upload-${Date.now()}`);
       await mkdir(transactionRoot, { recursive: true });
+      let staged;
       try {
-        const staged = await stageQuestions(buffer, transactionRoot);
+        staged = await stageQuestions(buffer, transactionRoot);
         await transaction(staged.changes);
-        return json(response, 200, { ok: true, imported: staged.count, ids: staged.ids, message: `已保存 ${staged.count} 道题到本机实验室。` });
-      } finally { await rm(transactionRoot, { recursive: true, force: true }); }
+      } finally { await rm(transactionRoot, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 }).catch(error => console.warn(`Upload staging cleanup deferred: ${error.message}`)); }
+      return json(response, 200, { ok: true, imported: staged.count, ids: staged.ids, message: `已保存 ${staged.count} 道题到本机实验室。` });
     }
     if (url.pathname === "/api/content/terms/import" && request.method === "POST") {
       const buffer = await readBody(request);
       const transactionRoot = resolve(stageDirectory, `term-upload-${Date.now()}`);
       await mkdir(transactionRoot, { recursive: true });
+      let staged;
       try {
-        const staged = await stageTermZip(buffer, transactionRoot);
+        staged = await stageTermZip(buffer, transactionRoot);
         await transaction([{ target: resolve(termDirectory, staged.id), source: staged.stage }]);
-        return json(response, 200, { ok: true, imported: 1, id: staged.id, message: `词条教学包“${staged.title}”已保存到本机实验室。未修改正式站。` });
-      } finally { await rm(transactionRoot, { recursive: true, force: true }); }
+      } finally { await rm(transactionRoot, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 }).catch(error => console.warn(`Upload staging cleanup deferred: ${error.message}`)); }
+      return json(response, 200, { ok: true, imported: 1, id: staged.id, message: `词条教学包“${staged.title}”已保存到本机实验室。未修改正式站。` });
     }
     const deleteMatch = url.pathname.match(/^\/api\/content\/(questions|terms)\/([a-zA-Z0-9][a-zA-Z0-9._-]*)$/);
     if (deleteMatch && request.method === "DELETE") {

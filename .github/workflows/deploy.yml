@@ -50,8 +50,14 @@ jobs:
       - name: Upload release
         if: ${{ inputs.operation != 'inspect' }}
         run: scp -i ~/.ssh/ceptlens_deploy /tmp/ceptlens-${GITHUB_SHA}.tar.gz "${{ secrets.CEPTLENS_DEPLOY_USER }}@${{ secrets.CEPTLENS_DEPLOY_HOST }}:/srv/ceptlens/releases/"
+      - name: Install deployment coordinator
+        if: ${{ inputs.operation != 'inspect' }}
+        run: |
+          scp -i ~/.ssh/ceptlens_deploy deploy/ceptlens-deploy.sh "${{ secrets.CEPTLENS_DEPLOY_USER }}@${{ secrets.CEPTLENS_DEPLOY_HOST }}:/srv/ceptlens/releases/ceptlens-deploy-${GITHUB_SHA}.sh"
+          ssh -i ~/.ssh/ceptlens_deploy "${{ secrets.CEPTLENS_DEPLOY_USER }}@${{ secrets.CEPTLENS_DEPLOY_HOST }}" \
+            "sudo install -o root -g root -m 0755 /srv/ceptlens/releases/ceptlens-deploy-${GITHUB_SHA}.sh /usr/local/bin/ceptlens-deploy-v3"
       - name: Activate release and health check
         if: ${{ inputs.operation != 'inspect' }}
         run: |
           ssh -i ~/.ssh/ceptlens_deploy "${{ secrets.CEPTLENS_DEPLOY_USER }}@${{ secrets.CEPTLENS_DEPLOY_HOST }}" \
-            "sudo /usr/local/bin/ceptlens-deploy-v2 ceptlens-${GITHUB_SHA}.tar.gz ${GITHUB_SHA}"
+            "sudo /usr/local/bin/ceptlens-deploy-v3 ceptlens-${GITHUB_SHA}.tar.gz ${GITHUB_SHA}"

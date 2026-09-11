@@ -20,16 +20,16 @@ function validateReference(input, requireQuote = false) {
   return { resource: input.resource, title: text(input.title, 240), quote: requireQuote ? text(input.quote, 2400) : String(input.quote ?? '').slice(0, 2400), prefix: String(input.prefix ?? '').slice(-80), suffix: String(input.suffix ?? '').slice(0, 80), start: Number.isSafeInteger(input.start) && input.start >= 0 ? input.start : 0, ...(!requireQuote && typeof input.pageText === 'string' ? { pageText: input.pageText.slice(0, 24000) } : {}) };
 }
 
-export async function createLearningApi({ root, databasePath = resolve(root, 'service-data/ceptlens.sqlite'), clock = Date.now, agent: suppliedAgent }) {
+export async function createLearningApi({ root, contentRoot = () => resolve(root, 'content-libraries'), databasePath = resolve(root, 'service-data/ceptlens.sqlite'), clock = Date.now, agent: suppliedAgent }) {
   const store = openCommunityStore(databasePath);
   const accounts = createAccountService(store.db, { clock });
   const pending = new Set();
   const limits = new Map();
-  const listQuestions = async () => Promise.all((await readdir(resolve(root, 'content-libraries/questions'))).filter(n => n.endsWith('.json')).map(async n => JSON.parse(await readFile(resolve(root, 'content-libraries/questions', n), 'utf8'))));
+  const listQuestions = async () => { const directory = resolve(contentRoot(), 'questions'); return Promise.all((await readdir(directory)).filter(n => n.endsWith('.json')).map(async n => JSON.parse(await readFile(resolve(directory, n), 'utf8')))); };
   async function readContent(resource) {
     const match = resourcePattern.exec(resource ?? ''); if (!match) return null;
     if (match[1] === 'question') return (await listQuestions()).find(q => q.id === match[2]) ?? null;
-    try { return JSON.parse(await readFile(resolve(root, 'content-libraries/terms', match[2], 'manifest.json'), 'utf8')); }
+    try { return JSON.parse(await readFile(resolve(contentRoot(), 'terms', match[2], 'manifest.json'), 'utf8')); }
     catch (e) { if (e.code === 'ENOENT') return null; throw e; }
   }
   const platformTools = { readContent, async search(query) {

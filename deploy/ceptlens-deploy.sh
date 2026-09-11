@@ -1,31 +1,51 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
-
 archive=${1:?archive required}
 version=${2:?commit SHA required}
 [[ "$version" =~ ^[0-9a-f]{40}$ && "$archive" == "ceptlens-$version.tar.gz" ]] || exit 2
 base=/srv/ceptlens
-release="$base/releases/$version"
+release=""
 previous=$(readlink -f "$base/current" || true)
 exec 9>/run/lock/ceptlens-deploy.lock
 flock -n 9 || { echo 'Another deployment is running' >&2; exit 1; }
-
 node -e 'const [major, minor] = process.versions.node.split(".").map(Number); if (major < 22 || (major === 22 && minor < 18)) process.exit(1)'
-[[ ! -e "$release" ]] || { echo 'Release already exists; use a new commit' >&2; exit 1; }
+release=$(mktemp -d "$base/releases/$version-XXXXXX")
 install -d -o ceptlens -g ceptlens "$release"
 tar -xzf "$base/releases/$archive" --no-same-owner -C "$release"
 chown -R ceptlens:ceptlens "$release"
 cd "$release"
 runuser -u ceptlens -- npm ci --include=dev --no-audit --no-fund
-runuser -u ceptlens -- npm run build
-
-healthy() {
-  curl -fsS --max-time 5 http://127.0.0.1:8765/api/content/status | node -e '
-    let text = ""; process.stdin.on("data", chunk => text += chunk);
-    process.stdin.on("end", () => { const data = JSON.parse(text); if (!data.ok || !data.questionCount || !data.termCount) process.exit(1); });'
-}
+# Read only storage locations, never the environment or credentials.
+locations=$(runuser -u ceptlens -- node --env-file=/etc/ceptlens/ceptlens.env --input-type=module -e '
+  import { resolve } from "node:path";
+  import { contentStoreDirectory } from "./server/content-storage.mjs";
+  console.log(resolve(process.env.CEPTLENS_DATA_DIR || "service-data"));
+  console.log(contentStoreDirectory(process.cwd()));')
+data=$(printf '%s\n' "$locations" | head -n 1)
+store=$(printf '%s\n' "$locations" | tail -n 1)
+[[ "$data" == /* && "$store" == /* && "$store" != / ]] || exit 2
+install -d -o ceptlens -g ceptlens "$store"
+runuser -u ceptlens -- node --input-type=module -e '
+  import { openSync, writeFileSync, closeSync } from "node:fs";
+  const fd = openSync(process.argv[1], "wx", 0o600);
+  writeFileSync(fd, JSON.stringify({pid: Number(process.argv[2]), kind: "deployment", startedAt: new Date().toISOString()})); closeSync(fd);
+' "$store/publication.lock" "$$"
+trap 'rm -f -- "$store/publication.lock"' EXIT
+backup="$store/deploy-backups/$(basename "$release")"
+install -d -o ceptlens -g ceptlens "$backup"
+had_content=0
+if [[ -f "$store/current.json" ]]; then
+  cp -p "$store/current.json" "$backup/current.json"
+  had_content=1
+fi
 rollback() {
   trap - ERR
+  if [[ "$had_content" == 1 ]]; then
+    cp -p "$backup/current.json" "$store/current.rollback"
+    mv -f "$store/current.rollback" "$store/current.json"
+  else
+    rm -f -- "$store/current.json"
+  fi
   if [[ -n "$previous" && -d "$previous" ]]; then
     ln -sfn "$previous" "$base/current.next"
     mv -Tf "$base/current.next" "$base/current"
@@ -33,22 +53,37 @@ rollback() {
   else
     systemctl stop ceptlens || true
   fi
-  echo 'Deployment failed; previous release restored when available' >&2
+  echo 'Deployment failed; previous code/content selection restored. User database was not replaced.' >&2
   exit 1
 }
 trap rollback ERR
+if [[ "$had_content" == 0 && -n "$previous" && -d "$previous/content-libraries" ]]; then
+  # The legacy host does not know the new writer lock. Pause it for a consistent
+  # first migration; later upgrades keep serving while the candidate builds.
+  systemctl stop ceptlens
+  cp -a "$previous/content-libraries" "$backup/legacy-content-libraries"
+fi
+seed="$release/content-libraries"
+if [[ -n "$previous" && -d "$previous/content-libraries" ]]; then seed="$previous/content-libraries"; fi
+runuser -u ceptlens -- node --env-file=/etc/ceptlens/ceptlens.env scripts/prepare-content.mjs --lock-held --seed "$seed"
+expected=$(node -p 'JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")).revision' "$store/current.json")
+# Stop only after a successful build. This local DB recovery copy is consistent;
+# encrypted off-host backups remain a separate operator responsibility.
+systemctl stop ceptlens
+for file in "$data"/ceptlens.sqlite*; do [[ ! -f "$file" ]] || cp -p "$file" "$backup/"; done
 ln -sfn "$release" "$base/current.next"
 mv -Tf "$base/current.next" "$base/current"
-systemctl restart ceptlens
+systemctl start ceptlens
 ready=0
 for attempt in {1..30}; do
-  if healthy >/dev/null 2>&1 && curl -fsS --max-time 5 http://127.0.0.1:8765/ >/dev/null; then
-    ready=1
-    break
+  if curl -fsS --max-time 5 http://127.0.0.1:8765/api/content/status | node -e '
+    let text = ""; process.stdin.on("data", chunk => text += chunk);
+    process.stdin.on("end", () => { const x = JSON.parse(text); if (!x.ok || x.contentRevision !== process.argv[1]) process.exit(1); });' "$expected"; then
+    if curl -fsS --max-time 5 http://127.0.0.1:8765/ >/dev/null; then ready=1; break; fi
   fi
   sleep 1
 done
 [[ "$ready" == 1 ]]
 systemctl is-active --quiet ceptlens
 trap - ERR
-printf 'Activated release %s\n' "$version"
+printf 'Activated platform %s with content %s\n' "$version" "$expected"
