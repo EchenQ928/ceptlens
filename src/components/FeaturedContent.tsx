@@ -16,6 +16,7 @@ export function FeaturedBadges({ question }: { question: QuestionPackage }) {
 
 export function FeaturedContentFilter({ questions, value, onChange }: { questions: QuestionPackage[]; value: FeaturedFilter; onChange: (value: FeaturedFilter) => void }) {
   const { locale } = useLocale();
+  if (!questions.some(question => question.featured || question.ceptCheck?.featured)) return null;
   const options: Array<{ value: FeaturedFilter; label: string }> = [
     { value: 'all', label: uiText(locale, '全部', 'All') },
     { value: 'question', label: uiText(locale, '精选题目', 'Featured questions') },

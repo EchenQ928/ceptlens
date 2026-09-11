@@ -7,6 +7,7 @@
     "setup": "node scripts/setup.mjs",
     "start": "node --env-file-if-exists=.env server/content-host.mjs --host 127.0.0.1 --port 8765",
     "dev": "vite --host 0.0.0.0 --port 8765",
+    "dev:ui": "vite --config scripts/vite-ui.config.ts",
     "build": "tsc -b && vite build",
     "build:staged": "tsc -b && vite build --outDir .dist-next --emptyOutDir",
     "host": "node server/content-host.mjs --host 127.0.0.1 --port 8765",

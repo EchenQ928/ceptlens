@@ -1,5 +1,5 @@
 import { FeaturedBadge } from "./FeaturedContent";
-import { Check, ChevronLeft, ChevronRight, Eye, EyeOff, Heart, RotateCcw } from "lucide-react";
+import { Check, CircleCheck, CircleHelp, ChevronLeft, ChevronRight, Eye, EyeOff, Heart, RotateCcw } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import type { QuestionPackage, TermPackage } from "../domain/content";
@@ -66,6 +66,7 @@ export function QuestionPanel({ question, terms, mode, previousId, nextId, previ
         {mode === "quick" && <button className="secondary-button" onClick={() => setRevealed((value) => !value)}>{revealed ? <EyeOff size={16} /> : <Eye size={16} />}{revealed ? uiText(locale, "隐藏答案", "Hide answer") : uiText(locale, "显示答案", "Show answer")}</button>}
       </div>
       {revealed && isSubjective && <p className="practice-notice">{uiText(locale, "本题仅展示参考作答，不自动判断对错。请对照评分要点自评。", "This practice view shows a reference answer only. Compare your response with the guidance yourself.")}</p>}
+      {revealed && mode === "practice" && !isSubjective && <div role="status" className={`answer-feedback ${correct ? "is-correct" : "needs-review"}`}>{correct ? <CircleCheck size={19}/> : <CircleHelp size={19}/>}<div><strong>{correct ? uiText(locale,"答对了，继续理解为什么。","Correct. Now explore the why.") : uiText(locale,"还有值得再想一想的地方。","There’s more to think through.")}</strong><span>{correct ? uiText(locale,"对照解析，检验你的推理过程。","Compare the explanation with your reasoning.") : uiText(locale,"对照参考答案，找到理解中的差异。","Compare your selection with the reference answer below.")}</span></div></div>}
       {revealed && <section className="answer-panel"><div className="answer-heading"><span>{uiText(locale, "参考答案", "Reference answer")}</span><strong>{question.correctAnswer.join("、") || uiText(locale, "见评分要点", "See guidance")}</strong></div>{!isSubjective && <p><RichText text={question.explanation} terms={terms} sourceNode={sourceNode} /></p>}{question.subjectiveAnswer && <div className="rubric"><p><RichText text={question.subjectiveAnswer.referenceAnswer} terms={terms} sourceNode={sourceNode} /></p><div className="scoring-guidance"><b>{uiText(locale, "评分要点", "Scoring guidance")} · {subjectiveMaxScore(question)} {uiText(locale, "分", "points")}</b><ol>{question.subjectiveAnswer.rubric.map((item, index) => <li key={`${index}-${textForLocale(item.criterion, locale)}`}><RichText text={item.criterion} terms={terms} sourceNode={sourceNode} />（{item.points} {uiText(locale, "分", "points")}）</li>)}</ol></div></div>}</section>}
       {question.ceptCheck && <section className="cept-check"><div className="question-meta"><span>CeptCheck</span>{question.ceptCheck.featured && <FeaturedBadge kind="ceptCheck" />}</div><h2><RichText text={question.ceptCheck.stem} terms={terms} sourceNode={sourceNode} /></h2></section>}
       {!preview && <footer className="question-footer" data-annotation-ignore>

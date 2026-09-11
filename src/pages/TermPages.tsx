@@ -18,7 +18,7 @@ export function TermLibraryPage() {
   const { terms, questions } = useContent();
   const { locale } = useLocale();
   const [query, setQuery] = useState("");
-  const [scope, setScope] = useState<"all" | "installed" | "pending">("all");
+  const [scope, setScope] = useState<"all" | "installed" | "pending">("installed");
   const normalizedQuery = query.trim().toLowerCase();
   const pendingTerms = collectPendingTerms(questions, terms, locale);
   const highlighted = highlightedTermIds(questions);
@@ -32,12 +32,12 @@ export function TermLibraryPage() {
 
   return <div className="page">
     <div className="page-heading compact">
-      <div><p className="eyebrow">SHARED KNOWLEDGE</p><h1>{uiText(locale, "共享词条库", "Shared term library")}</h1><p>{uiText(locale, "已完成教学包与待补词条统一编目；待补项不会伪装成空白词条页。", "Completed packages and pending terms are indexed together; pending items remain explicit.")}</p></div>
+      <div><p className="eyebrow">SHARED KNOWLEDGE</p><h1>{uiText(locale, "共享词条库", "Shared term library")}</h1><p>{uiText(locale, "拆解一个概念，在解释与交互中，把知识连起来。", "Unpack an idea through explanations and interactions. See how the concepts connect.")}</p></div>
       <div className="term-library-metrics"><span><strong>{terms.length + pendingTerms.length}</strong>{uiText(locale, "全部词条", "total")}</span><span><strong>{terms.length}</strong>{uiText(locale, "已完成", "ready")}</span><span className="pending"><strong>{pendingTerms.length}</strong>{uiText(locale, "待补", "pending")}</span></div>
     </div>
     {highlighted.length > 0 && <section className="concept-collection"><div><span className="eyebrow">IN FOCUS</span><h2>{uiText(locale,"优先探索的概念","Concepts in focus")}</h2><p>{uiText(locale,"实线标签可进入词条；虚线标签表示优先完善的内容。","Solid labels open a lesson. Dotted labels mark the next lessons to develop.")}</p></div><div className="concept-pills">{highlighted.map(id=>{const term=terms.find(t=>t.id===id); const label=termDisplayName(id,term?textForLocale(term.title,locale):id,locale);return term?<Link key={id} to={`/terms/${id}`}>{label}<ArrowRight size={13}/></Link>:<span key={id} className="concept-upcoming">{label}<small>{uiText(locale,"待完善","Upcoming")}</small></span>;})}</div></section>}
     <div className="term-library-toolbar">
-      <label className="search-box standalone"><Search size={17} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={uiText(locale, "搜索词条、ID、来源题目或补充原因", "Search terms, IDs, source questions, or gap reasons")} /></label>
+      <label className="search-box standalone"><Search size={17} /><input aria-label={uiText(locale, "搜索词条", "Search concepts")} value={query} onChange={(event) => setQuery(event.target.value)} placeholder={uiText(locale, "搜索词条、ID、来源题目或补充原因", "Search terms, IDs, source questions, or gap reasons")} /></label>
       <div className="mode-segment" role="group" aria-label={uiText(locale, "词条状态", "Term status")}>
         <button className={scope === "all" ? "active" : ""} onClick={() => setScope("all")}>{uiText(locale, "全部", "All")}</button>
         <button className={scope === "installed" ? "active" : ""} onClick={() => setScope("installed")}>{uiText(locale, "已完成", "Ready")}</button>
@@ -90,10 +90,10 @@ export function TermPage({ preview = false }: { preview?: boolean }) {
     <article className="term-article">
       <div className="term-page-tools" data-annotation-ignore>
         {!preview && <button className="back-link" onClick={() => previousNode ? navigate(previousNode.href, { state: { termTrail: trail.slice(0, -1) } }) : navigate("/terms")}><ChevronLeft size={17} /> {previousNode ? uiText(locale, "返回上一节点", "Back to previous node") : uiText(locale, "返回词条库", "Back to term library")}</button>}
-        <nav className="term-inline-toc" aria-label={uiText(locale, "本页内容", "On this page")}>{sections.map((section, index) => <button type="button" key={section.id} onClick={() => document.getElementById(section.id)?.scrollIntoView({ behavior: "smooth", block: "start" })}><span>{String(index + 1).padStart(2, "0")}</span>{section.title}</button>)}</nav>
+        <nav className="term-inline-toc" aria-label={uiText(locale, "本页内容", "On this page")}>{sections.map((section, index) => <button type="button" key={section.id} onClick={() => document.getElementById(section.id)?.scrollIntoView({ behavior: "smooth", block: "start" })}><span>{String(index + 1).padStart(2, "0")}</span><RichText text={section.title} terms={terms} linkTerms={false}/></button>)}</nav>
       </div>
       <header className="term-hero">
-        {!preview && <div className="term-hero-meta"><span className="content-status published">{uiText(locale, "定制教学包", "Custom package")}</span><span>{term.id}</span><span>SDK {term.sdkVersion}</span></div>}
+        {!preview && <div className="term-hero-meta"><span className="content-status published">{uiText(locale, "定制教学包", "Custom package")}</span><span>CEPTLENS · CONCEPT LESSON</span></div>}
         <h1>{textForLocale(term.title, locale)}</h1>
         <p className="term-summary"><RichText text={term.summary} terms={terms} sourceNode={currentNode} /></p>
         {prerequisites.length > 0 && <div className="prerequisite-row"><b>{uiText(locale, "阅读前置", "Prerequisites")}</b>{prerequisites.map(({ id, term: prerequisite }) => prerequisite ? <Link key={id} to={`/terms/${id}`} state={termState({ kind: "term", id, label: textForLocale(prerequisite.title, locale), href: `/terms/${id}` })}>{textForLocale(prerequisite.title, locale)}</Link> : <span className="prerequisite-pending" key={id}>{termDisplayName(id, term.termDependencies.find((item) => item.id === id)?.title ?? id, locale)} · {uiText(locale, "待导入", "pending")}</span>)}</div>}
