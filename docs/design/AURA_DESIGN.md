@@ -40,6 +40,10 @@ The new gradient field uses a 24-second alternating cycle with 2% drift and no J
 
 Acceptance checks: verify text contrast on selected/correct/wrong options and the new K/V cache cell; verify animation pause freezes the gradient; check no horizontal page overflow at 390 px; check question changes clear the answer panel. Account and authoring styles inherit the same tokens; privileged account actions are not part of visual QA.
 
+## Persistent learning catalog
+
+The study catalog is a sticky left rail with its own scroll area, current-question highlighting (`aria-current="page"`), and a link back to the full library. It follows the current learning sequence and preserves practice/quick mode when selecting a question. Navigation brings the active row into view without scrolling the reading page. Focus mode hides the catalog and related-knowledge rail; exiting focus restores them. At widths below 701 px, the catalog remains visible as a compact scrollable panel above the question rather than squeezing the reading column. Its layout lives in `src/styles/study-catalog.css`.
+
 ## Preview and QA
 
 Run the existing content host on 8765, then in this worktree:

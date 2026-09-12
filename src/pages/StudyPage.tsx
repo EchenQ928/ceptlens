@@ -1,6 +1,6 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { Maximize2, Minimize2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ArrowLeft, ListTree, Maximize2, Minimize2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useParams, useSearchParams } from "react-router-dom";
 import { QuestionPanel } from "../components/QuestionPanel";
 import { ProductIcon } from "../components/ProductIcon";
@@ -21,10 +21,21 @@ export function StudyPage() {
   const { locale } = useLocale();
   const t = (zh: string, en: string) => uiText(locale, zh, en);
   const [focused, setFocused] = useState(false);
+  const catalogRef = useRef<HTMLDivElement>(null);
   const question = questions.find(item => item.id === questionId);
   useEffect(() => {
     if (question) updateProgress(progress => { progress.lastQuestionId = question.id; });
   }, [question]);
+  useEffect(() => {
+    const list = catalogRef.current;
+    const active = list?.querySelector<HTMLElement>('[aria-current="page"]');
+    if (!list || !active || focused) return;
+    const bounds = list.getBoundingClientRect();
+    const row = active.getBoundingClientRect();
+    if (row.top < bounds.top || row.bottom > bounds.bottom) {
+      list.scrollTop += row.top - bounds.top - (bounds.height - row.height) / 2;
+    }
+  }, [question?.id, focused]);
   const mode: StudyMode = params.get("mode") === "quick" ? "quick" : "practice";
   if (!question) return <div className="page"><div className="empty-state"><h2>{t("题目不存在或已被删除", "Question not found or deleted")}</h2><Link to="/learn">{t("返回题库", "Back to library")}</Link></div></div>;
 
@@ -38,21 +49,22 @@ export function StudyPage() {
     href: `/learn/questions/${question.id}?mode=${mode}`
   };
   return <div className={`study-layout ${focused ? "is-focused" : ""}`}>
+    <nav className="study-catalog" aria-label={t("题目目录", "Question catalog")} hidden={focused}>
+      <div className="study-catalog-heading"><ListTree size={19}/><h2>{t("目录", "Catalog")}</h2><span>{sequence.length}</span></div>
+      <p className="study-catalog-track">{question.id.startsWith("KV-CACHE-") ? "KV Cache" : t("学习题库", "Learning library")}</p>
+      <div ref={catalogRef} className="study-question-list">{sequence.map((item, sequenceIndex) =>
+        <Link key={item.id} to={`/learn/questions/${item.id}?mode=${mode}`} state={{ questionDirection: sequenceIndex < index ? -1 : 1 }} className={item.id === question.id ? "active" : ""} aria-current={item.id === question.id ? "page" : undefined}>
+          <span>{String(sequenceIndex + 1).padStart(2, "0")}</span><div><b>{textForLocale(item.taxonomy.primaryConcept, locale)}</b></div>
+        </Link>
+      )}</div>
+      <Link className="study-catalog-back" to="/learn"><ArrowLeft size={15}/>{t("全部题目", "All questions")}</Link>
+    </nav>
     <div className="study-main">
       <div className="study-tools">
         <span className="study-step">{question.id.startsWith("KV-CACHE-") ? "KV CACHE" : t("学习题库", "LEARNING LIBRARY")} · <b>{index + 1}</b> / {sequence.length}</span>
         <button className="focus-toggle" aria-pressed={focused} onClick={() => setFocused(value => !value)}>
           {focused ? <Minimize2 size={14}/> : <Maximize2 size={14}/>} {focused ? t("退出专注", "Exit focus") : t("专注", "Focus")}
         </button>
-      <details className="study-sequence-menu">
-        <summary aria-label={t("题目导航", "Question navigation")}>{t("目录", "Browse")}</summary>
-        <div className="study-question-list">{sequence.map((item, sequenceIndex) =>
-          <Link key={item.id} to={`/learn/questions/${item.id}?mode=${mode}`} className={item.id === question.id ? "active" : ""} onClick={event => { event.currentTarget.closest("details")?.removeAttribute("open"); }}>
-            <span>{String(sequenceIndex + 1).padStart(2, "0")}</span><div><b>{textForLocale(item.taxonomy.primaryConcept, locale)}</b></div>
-          </Link>
-        )}</div>
-        <Link className="sequence-library-link text-link" to="/learn">{t("返回完整题库", "Back to the full library")}</Link>
-      </details>
       </div>
       <div className="question-stage"><AnimatePresence initial={false} mode="wait" custom={direction}><motion.div key={`${question.id}:${mode}`} custom={direction} variants={{ enter: (d: number) => ({ opacity: 0, x: reduced ? 0 : d * 18, scale: 1 }), center: { opacity: 1, x: 0, scale: 1 }, leave: (d: number) => ({ opacity: 0, x: reduced ? 0 : d * -12, scale: 1 }) }} initial="enter" animate="center" exit="leave" transition={{ duration: reduced ? 0 : .24, ease: [.22, 1, .36, 1] }}><QuestionPanel question={question} terms={terms} mode={mode} previousId={sequence[index - 1]?.id} nextId={sequence[index + 1]?.id}/></motion.div></AnimatePresence></div>
     </div>
