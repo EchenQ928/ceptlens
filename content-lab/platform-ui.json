@@ -12,7 +12,7 @@
     "public/spectral/auth.webp": "81b17bffa6f6462980243e19036ab1ac1f684f7679caa3749628641be68114ff",
     "public/spectral/home.webp": "21e14995a5df904b9e0fd838349b55f637c6751c3f52f18cef016f118ad4b2dc",
     "public/spectral/workspace.webp": "6020105201bf2c4bdbb4213531041f15f227370c47b1546d10394cdac1a3f523",
-    "src/components/Brand.tsx": "db4ecb83d699bef0fa031eccb1280a3050246da84ec9cd3a2c27b0dfe572aa0d",
+    "src/components/Brand.tsx": "031030072e0ed93ff5a1a7fd35ace8b8676a3939fa19c6467b678215afe098ba",
     "src/components/ConceptSymbol.tsx": "bacb4ea4753c7987662a6b14eec2648265052b1bb3b97c54951b883913dbed1e",
     "src/components/FeaturedContent.tsx": "7c9ebd8d35b7ddbbde3a1f2c2c0be5162ba36ad8823a82a2e75973e85fb69f4e",
     "src/components/LiquidSelection.tsx": "167fc00a530000c6375cfed5faf491e80e0ebb7d2453639d8d7557342a784704",
