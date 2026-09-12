@@ -1,3 +1,7 @@
+import { BrandIcon } from '../components/Brand';
+import { LiquidSelection } from '../components/LiquidSelection';
+import { SpectralBackdrop } from '../components/spectral/SpectralBackdrop';
+import { PlatformPreview } from '../components/PlatformPreview';
 import { QuestionLibrary } from "./QuestionLibrary";
 import { useEffect, useRef, useState } from "react";
 import { Link, Route, Routes, useLocation, useMatch, useNavigate, useParams } from "react-router-dom";
@@ -13,22 +17,32 @@ import { QuestionPreview } from "./QuestionPreview";
 export function LabPage() {
   const { terms, questions } = useContent();
   const { locale } = useLocale();
+  const [previewPaused, setPreviewPaused] = useState(false);
+  useEffect(() => {
+    const onMessage = (event: MessageEvent) => { if (event.source === window.parent && event.origin === window.location.origin && event.data?.type === 'ceptlens-preview-pause') setPreviewPaused(event.data.paused === true); };
+    const onKey = (event: KeyboardEvent) => { if (event.key === 'Escape' && window.parent !== window) window.parent.postMessage({ type: 'ceptlens-preview-escape' }, window.location.origin); };
+    window.addEventListener('message', onMessage); window.addEventListener('keydown', onKey);
+    if (window.parent !== window) window.parent.postMessage({ type: 'ceptlens-preview-ready' }, window.location.origin);
+    return () => { window.removeEventListener('message', onMessage); window.removeEventListener('keydown', onKey); };
+  }, []);
   const location = useLocation(); const navigate = useNavigate();
   const term = useMatch("/terms/:termId"); const question = useMatch("/learn/questions/:questionId");
   const id = term?.params.termId ?? question?.params.questionId;
   const kind = question || location.pathname === "/questions" ? "questions" : "terms";
   const items = kind === "terms" ? terms.map(t => ({ id: t.id, title: textForLocale(t.title, locale) })) : questions.map(q => ({ id: q.id, title: `${q.ordering.order} · ${textForLocale(q.taxonomy.primaryConcept, locale)}` }));
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('preview') === '1') return <div className="app-frame lab-platform-preview"><SpectralBackdrop preset={kind === 'questions' ? 'learn' : 'concepts'} paused={previewPaused}/><main className="main-content"><ErrorBoundary key={location.pathname}><Routes><Route path="/terms/:termId" element={<TermPage/>}/><Route path="/learn/questions/:questionId" element={<QuestionRoute/>}/><Route path="*" element={<TermLibraryPage/>}/></Routes></ErrorBoundary></main></div>;
   return <div className="lab-workspace">
-    <header className="lab-topbar"><Link className="lab-brand" to="/"><span className="brand-mark"><span /></span><strong>CeptLens <small>{uiText(locale, "内容实验室", "Content Lab")}</small></strong></Link><span className="lab-local">{uiText(locale, "本机草稿 · 不连接正式站", "Local drafts · separate from production")}</span><a href="/docs/LAB_GUIDE.md" target="_blank" rel="noreferrer">{uiText(locale, "开发指南", "Lab guide")}</a><LanguageSwitcher /></header>
-    <div className="lab-selector"><nav aria-label={uiText(locale, "内容类型", "Content type")}><Link className={kind === "terms" ? "active" : ""} to="/terms">{uiText(locale, "词条", "Terms")}</Link><Link className={kind === "questions" ? "active" : ""} to="/questions">{uiText(locale, "题目", "Questions")}</Link></nav><label><span className="sr-only">{uiText(locale, "选择预览内容", "Select preview content")}</span><select value={id ?? ""} onChange={event => navigate(kind === "terms" ? `/terms/${event.target.value}` : `/learn/questions/${event.target.value}`)}><option value="">{uiText(locale, "选择预览内容", "Select preview content")} · {items.length}</option>{items.map(item => <option key={item.id} value={item.id}>{item.title}</option>)}</select></label></div>
+    <header className="lab-topbar"><Link className="lab-brand" to="/"><BrandIcon/><strong>CeptLens <small>{uiText(locale, "内容实验室", "Content Lab")}</small></strong></Link><span className="lab-local">{uiText(locale, "本机草稿", "Local drafts")}</span><a href="/docs/LAB_GUIDE.md" target="_blank" rel="noreferrer">{uiText(locale, "开发指南", "Lab guide")}</a><LanguageSwitcher /></header>
+    <div className="lab-selector"><LiquidSelection className="mode-segment" value={kind} navigation label={uiText(locale, "内容类型", "Content type")}><Link className={kind === "terms" ? "active" : ""} to="/terms">{uiText(locale, "词条", "Terms")}</Link><Link className={kind === "questions" ? "active" : ""} to="/questions">{uiText(locale, "题目", "Questions")}</Link></LiquidSelection><label><span className="sr-only">{uiText(locale, "选择预览内容", "Select preview content")}</span><select value={id ?? ""} onChange={event => navigate(kind === "terms" ? `/terms/${event.target.value}` : `/learn/questions/${event.target.value}`)}><option value="">{uiText(locale, "选择预览内容", "Select preview content")} · {items.length}</option>{items.map(item => <option key={item.id} value={item.id}>{item.title}</option>)}</select></label></div>
     <LabActions kind={kind} selectedId={id} existingTerms={terms.map(t => t.id)} existingQuestions={questions.map(q => q.id)} />
     {id && <details className="lab-path"><summary>{uiText(locale, "编辑位置与缺失词条", "Edit locations and missing terms")}</summary><p>{uiText(locale, "编辑本实验室目录下的", "Edit in the lab directory:")} <code>{kind === "terms" ? `content-libraries/terms/${id}/view.tsx` : `content-libraries/questions/*-${id}.json`}</code>。{uiText(locale, "全部保存后点击“校验与刷新”；ZIP 导入成功后当前页面自动刷新。", "Save your files, then run “Check and refresh”; the page reloads after a ZIP import.")}</p><p>{uiText(locale, "缺失的显式链接会标为“待补词条”，不要求把整个正式词条库复制进来。需要联动预览时，再导入相关教学包。", "Explicit links to packages that are not present are shown as pending; import only the packages needed for a linked preview.")}</p><Link to="/terms">{uiText(locale, "查看已导入和待补词条", "View installed and pending terms")}</Link></details>}
-    <main className="lab-content"><ErrorBoundary key={location.pathname}><Routes>
+    {id ? <PlatformPreview path={location.pathname} kind={kind}/> : <main className="lab-content"><ErrorBoundary key={location.pathname}><Routes>
       <Route path="/terms/:termId" element={<TermPage />} />
       <Route path="/learn/questions/:questionId" element={<QuestionRoute />} />
       <Route path="/questions" element={<QuestionLibrary />} />
       <Route path="*" element={terms.length || questions.length ? <TermLibraryPage /> : <div className="empty-state lab-empty"><h1>{uiText(locale, "开始设计一个词条", "Start designing a term")}</h1><p>{uiText(locale, "导入已有教学包，或下载模板后修改。图、公式、代码和交互均可在包内自行设计。", "Import a package or download a template. Visuals, formulas, code, and interactions can all live inside the package.")}</p><p>{uiText(locale, "完成后导出 ZIP，打开正式平台的内容管理，使用管理员提供的口令自行上传。", "When it is ready, export a ZIP and upload it through the production content workbench.")}</p></div>} />
-    </Routes></ErrorBoundary></main>
+    </Routes></ErrorBoundary></main>}
   </div>;
 }
 
@@ -61,7 +75,7 @@ export function LabActions({ kind, selectedId, existingTerms, existingQuestions,
   return <section className="lab-actions" aria-label={uiText(locale, "教学包操作", "Package actions")}>
     <div className="lab-action-row">
       <button className="primary-button" disabled={!!busy} onClick={() => input.current?.click()}><UploadIcon size={17} />{kind === "terms" ? uiText(locale, "导入／替换词条 ZIP", "Import / replace term ZIP") : uiText(locale, "导入／替换题目 JSON", "Import / replace question JSON")}</button>
-      <input ref={input} className="sr-only" type="file" aria-label={uiText(locale, "选择内容包", "Choose content package")} accept={kind === "terms" ? ".zip" : ".json"} onChange={event => { const file = event.target.files?.[0]; event.target.value = ""; if (file) void run(uiText(locale, "正在读取包清单…", "Reading package manifest…"), async () => { setPending(await describeUpload(file, kind)); }); }} />
+      <input ref={input} className="sr-only" type="file" aria-label={uiText(locale, "选择内容包", "Choose content package")} accept={kind === "terms" ? ".zip" : ".json"} onChange={event => { const file = event.target.files?.[0]; event.target.value = ""; if (file) void run(uiText(locale, "正在读取包清单…", "Reading package manifest…"), async () => { setPending(await describeUpload(file, kind, locale)); }); }} />
       <button className="secondary-button" disabled={!!busy} onClick={() => void run(uiText(locale, "正在校验、测试和构建…", "Checking, testing, and building…"), async () => { await labClient.check(); reload(); })}><CheckCheck size={17} />{uiText(locale, "校验与刷新", "Check and refresh")}</button>
       <button className="secondary-button" disabled={!!busy || (kind === "terms" ? !selectedId : !existingQuestions.length)} onClick={() => void run(uiText(locale, "导出前校验、测试和构建…", "Checking, testing, and building before export…"), async () => { await labClient.download(kind === "terms" ? `/api/content/terms/${selectedId}/export` : "/api/content/questions/export", kind === "terms" ? `${selectedId}.term.zip` : "ceptlens-question-library.json"); setNotice(uiText(locale, "已导出。请到正式平台的内容管理输入口令后上传；实验室不会代为发布。", "Exported. Upload it through the production workbench with its access token; the lab never publishes directly.")); })}><Download size={17} />{kind === "terms" ? uiText(locale, "导出当前词条", "Export term") : uiText(locale, "导出题目包", "Export question package")}</button>
       <button className="icon-text-button" disabled={!!busy} onClick={() => void run(uiText(locale, "正在下载模板…", "Downloading template…"), async () => { await labClient.download("/api/content/templates/term", "term-teaching-package-template.zip"); })}>{uiText(locale, "下载词条模板", "Download term template")}</button>
@@ -75,4 +89,4 @@ export function LabActions({ kind, selectedId, existingTerms, existingQuestions,
   </section>;
 }
 
-function QuestionRoute() { const { questionId } = useParams(); const { questions, terms } = useContent(); const { locale } = useLocale(); const question = questions.find(q => q.id === questionId); return question ? <div className="lab-question"><Link className="back-link" to="/questions"><ArrowLeft size={16} />{uiText(locale, "题目草稿", "Question drafts")}</Link><QuestionPreview key={question.id} question={question} terms={terms} /></div> : <div className="empty-state">{uiText(locale, "没有找到这道题。", "Question not found.")}</div>; }
+function QuestionRoute() { const { questionId } = useParams(); const { questions, terms } = useContent(); const { locale } = useLocale(); const question = questions.find(q => q.id === questionId); return question ? <div className="study-layout is-focused"><main className="study-main"><QuestionPreview key={question.id} question={question} terms={terms} /></main></div> : <div className="empty-state">{uiText(locale, "没有找到这道题。", "Question not found.")}</div>; }

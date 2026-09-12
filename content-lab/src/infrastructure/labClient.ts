@@ -1,9 +1,10 @@
 import { unzipSync } from "fflate";
+import type { Locale } from '../domain/content';
 
 const API_PREFIX = typeof window !== "undefined" && window.location.pathname.startsWith("/lab/") ? "/lab/api" : "/api";
 
 export type Upload = { file: File; kind: "terms" | "questions"; items: { id: string; title: string }[] };
-export async function describeUpload(file: File, kind: Upload["kind"]): Promise<Upload> {
+export async function describeUpload(file: File, kind: Upload["kind"], locale: Locale = 'zh-CN'): Promise<Upload> {
   if (file.size > 25 * 1024 * 1024) throw new Error("教学包不能超过 25 MB。");
   let data;
   if (kind === "terms") {
@@ -20,7 +21,15 @@ export async function describeUpload(file: File, kind: Upload["kind"]): Promise<
   } else data = JSON.parse(await file.text());
   const rows = kind === "questions" && data.kind === "question-bundle" ? data.questions : [data];
   if (!Array.isArray(rows) || !rows.length || rows.some(row => row.schemaVersion !== "3.0" || !/^[a-zA-Z0-9][a-zA-Z0-9._-]*$/.test(row.id ?? ""))) throw new Error("请选择 3.0 格式的完整内容包。");
-  return { file, kind, items: rows.map(row => ({ id: row.id, title: row.title ?? row.taxonomy?.primaryConcept ?? row.id })) };
+  const titleFor = (value: unknown, id: string) => {
+    if (typeof value === 'string') return value;
+    if (value && typeof value === 'object') {
+      const title = value as Record<string, unknown>;
+      for (const key of [locale, 'zh-CN', 'en-US']) if (typeof title[key] === 'string') return title[key] as string;
+    }
+    return id;
+  };
+  return { file, kind, items: rows.map(row => ({ id: row.id, title: titleFor(row.title ?? row.taxonomy?.primaryConcept, row.id) })) };
 }
 
 async function checked(response: Response) {

@@ -16,11 +16,13 @@
     "validate": "tsx scripts/validate-content.ts",
     "test": "vitest run",
     "check": "npm run validate && npm run test && npm run build",
-    "check:all": "npm run check && npm run test:services && npm run test:content-workflow && npm --prefix content-lab run check && npm --prefix content-lab run test:imports",
+    "check:all": "npm run ui:check && npm run check && npm run test:services && npm run test:content-workflow && npm --prefix content-lab run check && npm --prefix content-lab run test:imports",
     "test:services": "node scripts/verify-services.mjs",
     "content:prepare": "node --env-file-if-exists=.env scripts/prepare-content.mjs",
-    "lab:workspace": "node scripts/create-content-lab.mjs",
-    "test:content-workflow": "node scripts/verify-content-workflow.mjs"
+    "lab:workspace": "npm run ui:check && node scripts/create-content-lab.mjs",
+    "test:content-workflow": "node scripts/verify-content-workflow.mjs",
+    "ui:sync": "node scripts/sync-content-lab-ui.mjs",
+    "ui:check": "node scripts/sync-content-lab-ui.mjs --check"
   },
   "dependencies": {
     "@fontsource-variable/noto-sans-sc": "^5.3.0",

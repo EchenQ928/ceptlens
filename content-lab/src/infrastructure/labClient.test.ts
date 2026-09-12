@@ -1,6 +1,13 @@
 import { expect, it } from "vitest";
 import { zipSync, strToU8 } from "fflate";
 import { describeUpload } from "./labClient";
+it('resolves bilingual question and term titles before rendering an import dialog', async () => {
+  const title = { 'zh-CN':'缓存机制', 'en-US':'Cache mechanics' };
+  const file = new File([JSON.stringify({ schemaVersion:'3.0',id:'cache-q',taxonomy:{primaryConcept:title} })],'question.json');
+  expect((await describeUpload(file,'questions','en-US')).items[0].title).toBe('Cache mechanics');
+  const zip = zipSync({ 'manifest.json':strToU8(JSON.stringify({schemaVersion:'3.0',id:'cache',title})), 'view.tsx':strToU8('code') });
+  expect((await describeUpload(new File([zip],'term.zip'),'terms','zh-CN')).items[0].title).toBe('缓存机制');
+});
 it("reads a teaching-package manifest without requiring the platform source", async () => {
   const zip = zipSync({ "demo/manifest.json": strToU8(JSON.stringify({ schemaVersion: "3.0", id: "demo", title: "示例" })), "demo/view.tsx": strToU8("code") });
   const result = await describeUpload(new File([zip], "demo.zip"), "terms");

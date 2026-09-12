@@ -16,13 +16,13 @@ export function FeaturedBadges({ question }: { question: QuestionPackage }) {
 
 export function FeaturedContentFilter({ questions, value, onChange }: { questions: QuestionPackage[]; value: FeaturedFilter; onChange: (value: FeaturedFilter) => void }) {
   const { locale } = useLocale();
+  if (!questions.some(question => question.featured || question.ceptCheck?.featured)) return null;
   const options: Array<{ value: FeaturedFilter; label: string }> = [
     { value: 'all', label: uiText(locale, '全部', 'All') },
     { value: 'question', label: uiText(locale, '精选题目', 'Featured questions') },
     { value: 'ceptCheck', label: uiText(locale, '精选 CeptCheck', 'Featured CeptChecks') }
   ];
   return <div className="featured-filter" role="group" aria-label={uiText(locale, '精选内容', 'Featured content')}>
-    <b>{uiText(locale, '精选内容', 'Featured content')}</b>
     {options.map(option => <button type="button" key={option.value} aria-pressed={value === option.value} onClick={() => onChange(option.value)}>{option.label}<small>{questions.filter(question => matchesFeatured(question, option.value)).length}</small></button>)}
   </div>;
 }
