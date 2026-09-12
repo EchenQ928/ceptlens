@@ -59,7 +59,7 @@ jobs:
           scp -i ~/.ssh/ceptlens_deploy scripts/inspect-storage.mjs "${{ secrets.CEPTLENS_DEPLOY_USER }}@${{ secrets.CEPTLENS_DEPLOY_HOST }}:/srv/ceptlens/releases/inspect-storage-${GITHUB_SHA}.mjs"
           ssh -i ~/.ssh/ceptlens_deploy "${{ secrets.CEPTLENS_DEPLOY_USER }}@${{ secrets.CEPTLENS_DEPLOY_HOST }}" \
             "sudo node /srv/ceptlens/releases/inspect-storage-${GITHUB_SHA}.mjs"
-      - name: Upload release
+      - name: Inspect HTTPS routing and certificates
         if: ${{ inputs.operation == 'inspect' }}
         run: |
           scp -i ~/.ssh/ceptlens_deploy scripts/inspect-https.sh "${{ secrets.CEPTLENS_DEPLOY_USER }}@${{ secrets.CEPTLENS_DEPLOY_HOST }}:/srv/ceptlens/releases/inspect-https-${GITHUB_SHA}.sh"
