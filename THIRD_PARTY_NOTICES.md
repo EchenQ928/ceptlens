@@ -1,5 +1,13 @@
 # Third-party notices
 
+## Paper Shaders
+
+The spectral renderer uses `ShaderMount` from `@paper-design/shaders` 0.0.80 (Apache-2.0).
+Source: https://github.com/paper-design/shaders
+Copyright 2026 Paper. The original LICENSE and NOTICE are retained in
+`public/spectral/PAPER-LICENSE.txt` and `public/spectral/PAPER-NOTICE.txt`.
+CeptLens's spectral composition and SVG icon paths are original application code.
+
 ## Magic UI
 
 `FlowLink` in `src/components/AuraPrimitives.tsx` and its styling adapt the expanding-fill and translating-label pattern in Magic UI's Interactive Hover Button. Source: https://github.com/magicuidesign/magicui/blob/main/apps/www/registry/magicui/interactive-hover-button.tsx
