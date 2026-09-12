@@ -33,7 +33,18 @@ jobs:
         run: npm run check:all
       - name: Prepare release
         if: ${{ inputs.operation != 'inspect' }}
-        run: git archive --format=tar.gz --output="/tmp/ceptlens-${GITHUB_SHA}.tar.gz" "$GITHUB_SHA"
+        run: |
+          git archive --format=tar.gz --output="/tmp/ceptlens-${GITHUB_SHA}.tar.gz" "$GITHUB_SHA"
+          # Only package cache content, never npm config, credentials or logs.
+          tar -czf "/tmp/ceptlens-npm-${GITHUB_SHA}.tar.gz" -C "$(npm config get cache)" _cacache
+      - name: Verify offline dependency installation
+        if: ${{ inputs.operation != 'inspect' }}
+        run: |
+          verify="$RUNNER_TEMP/ceptlens-offline"
+          mkdir -p "$verify/source" "$verify/cache"
+          tar -xzf "/tmp/ceptlens-${GITHUB_SHA}.tar.gz" -C "$verify/source"
+          tar -xzf "/tmp/ceptlens-npm-${GITHUB_SHA}.tar.gz" -C "$verify/cache"
+          npm ci --prefix "$verify/source" --offline --cache "$verify/cache" --include=dev --no-audit --no-fund
       - name: Configure SSH
         env:
           DEPLOY_KEY: ${{ secrets.CEPTLENS_DEPLOY_KEY }}
@@ -50,7 +61,7 @@ jobs:
             "sudo node /srv/ceptlens/releases/inspect-storage-${GITHUB_SHA}.mjs"
       - name: Upload release
         if: ${{ inputs.operation != 'inspect' }}
-        run: scp -i ~/.ssh/ceptlens_deploy /tmp/ceptlens-${GITHUB_SHA}.tar.gz "${{ secrets.CEPTLENS_DEPLOY_USER }}@${{ secrets.CEPTLENS_DEPLOY_HOST }}:/srv/ceptlens/releases/"
+        run: scp -i ~/.ssh/ceptlens_deploy /tmp/ceptlens-${GITHUB_SHA}.tar.gz /tmp/ceptlens-npm-${GITHUB_SHA}.tar.gz "${{ secrets.CEPTLENS_DEPLOY_USER }}@${{ secrets.CEPTLENS_DEPLOY_HOST }}:/srv/ceptlens/releases/"
       - name: Install deployment coordinator
         if: ${{ inputs.operation != 'inspect' }}
         run: |

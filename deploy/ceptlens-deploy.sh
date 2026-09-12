@@ -14,7 +14,19 @@ install -d -o ceptlens -g ceptlens "$release"
 tar -xzf "$base/releases/$archive" --no-same-owner -C "$release"
 chown -R ceptlens:ceptlens "$release"
 cd "$release"
-runuser -u ceptlens -- npm ci --include=dev --no-audit --no-fund
+cache_archive="$base/releases/ceptlens-npm-$version.tar.gz"
+if [[ -f "$cache_archive" ]]; then
+  # npm verifies each package against package-lock.json. Platform-specific
+  # packages must be present in the CI cache; no node_modules are copied.
+  cache="$release/.npm-cache"
+  install -d -o ceptlens -g ceptlens "$cache"
+  tar -xzf "$cache_archive" --no-same-owner -C "$cache"
+  chown -R ceptlens:ceptlens "$cache"
+  runuser -u ceptlens -- npm ci --offline --cache "$cache" --include=dev --no-audit --no-fund
+else
+  # Existing manual releases remain compatible with the original interface.
+  runuser -u ceptlens -- npm ci --include=dev --no-audit --no-fund
+fi
 # Inspect the actual service, including Node --env-file arguments. Only storage
 # paths leave the inspector process; production secrets never enter build logs.
 locations=$(node scripts/inspect-storage.mjs --lines --require-absolute)
