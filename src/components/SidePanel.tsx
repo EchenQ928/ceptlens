@@ -1,8 +1,11 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { X } from "lucide-react";
+import { motion, useIsPresent, useReducedMotion } from "motion/react";
 import { uiText, useLocale } from "../i18n";
 export function SidePanel({ title, subtitle, close, children }: { title: string; subtitle?: string; close: () => void; children: ReactNode }) {
   const { locale } = useLocale();
+  const reduced = useReducedMotion();
+  const present = useIsPresent();
   const ref = useRef<HTMLElement>(null); const closeRef = useRef(close); closeRef.current = close;
   useEffect(() => {
     const previous = document.activeElement as HTMLElement | null;
@@ -20,8 +23,8 @@ export function SidePanel({ title, subtitle, close, children }: { title: string;
     return () => { document.removeEventListener("keydown", escape); if (previous?.isConnected) previous.focus(); };
   }, []);
   // Non-modal on purpose: readers can still scroll and inspect the source alongside it.
-  return <aside ref={ref} className="learning-drawer" role="dialog" aria-label={title} tabIndex={-1}>
+  return <motion.aside ref={ref} inert={!present} className="learning-drawer" role="dialog" aria-label={title} tabIndex={-1} initial={{ opacity: 0, x: reduced ? 0 : 45 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: reduced ? 0 : 45 }} transition={{ duration: reduced ? 0 : .3, ease: [.22, 1, .36, 1] }}>
     <header className="drawer-header"><div><h2>{title}</h2>{subtitle && <p>{subtitle}</p>}</div><button className="icon-text-button" onClick={close} aria-label={uiText(locale, `关闭${title}`, `Close ${title}`)}><X size={20} /></button></header>
     {children}
-  </aside>;
+  </motion.aside>;
 }
