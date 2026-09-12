@@ -53,7 +53,7 @@ button:active:not(:disabled) { transform:scale(.96); }
 .mode-segment button.active { box-shadow:0 2px 6px #2c477214; }
 .mode-segment button:hover:not(.active) { background:#ffffff77; }
 .track-switch { display:flex; gap:12px; margin:4px 0 24px; }
-.track-switch button { display:flex; align-items:center; gap:12px; padding:14px 22px; border:1px solid #dce4f3; border-radius:14px; background:white; font-size:17px; cursor:pointer; }
+.track-switch button { display:flex; align-items:center; gap:12px; padding:14px 22px; border:1px solid #dce4f3; border-radius:14px; background:var(--surface-0); font-size:17px; cursor:pointer; }
 .track-switch button[aria-pressed=true] { color:white; background:#2468e9; border-color:#2468e9; box-shadow:0 5px 15px #2468e928; }
 .track-switch button:nth-child(2):not([aria-pressed=true]) { background:linear-gradient(120deg,#e9f1ff,#efebff); color:#285cac; border-color:#d3dff7; }
 .track-switch span { font-size:14px; opacity:.8; }
@@ -76,7 +76,7 @@ button:active:not(:disabled) { transform:scale(.96); }
 .filter-count { display:grid; place-items:center; width:22px; height:22px; border-radius:50%; color:white; background:#2168ee; }
 .catalog-summary { font-size:15px; margin:22px 4px 12px; }
 .question-table { border:1px solid #e1e6ef; border-radius:18px; overflow:hidden; }
-.question-list-row { display:grid; grid-template-columns:44px minmax(0,1fr) 44px 86px 24px; align-items:center; min-width:0; gap:20px; min-height:104px; padding:20px 24px; font-size:14px; background:white; }
+.question-list-row { display:grid; grid-template-columns:44px minmax(0,1fr) 44px 86px 24px; align-items:center; min-width:0; gap:20px; min-height:104px; padding:20px 24px; font-size:14px; background:var(--surface-0); }
 .question-list-row>span { display:block; }.question-list-row .question-title-cell { display:flex; }
 .question-list-row:hover { background:#f1f6ff; box-shadow:inset 4px 0 #3879f0; }
 .order-cell { color:#8090aa; font-size:17px; }
@@ -111,14 +111,14 @@ a.term-card:hover { transform:translateY(-6px); border-color:var(--concept-color
 .study-tools .study-sequence-menu { margin:0; max-width:none; }
 .study-tools .study-sequence-menu[open] { order:3; flex-basis:100%; }
 .study-step { font-size:15px; color:#6a7c99; }.study-step b { color:#2168ee; font-size:20px; }
-.focus-toggle { display:flex; align-items:center; gap:7px; padding:9px 13px; border:1px solid #dfe5ef; border-radius:12px; background:white; cursor:pointer; font-size:14px; }
+.focus-toggle { display:flex; align-items:center; gap:7px; padding:9px 13px; border:1px solid #dfe5ef; border-radius:12px; background:var(--surface-0); cursor:pointer; font-size:14px; }
 .focus-toggle[aria-pressed=true] { color:#2168ee; background:#e9f1ff; }
-.study-sequence-menu { display:block; max-width:940px; margin:0 auto 18px; border:1px solid #e0e6f0; border-radius:12px; background:white; }
+.study-sequence-menu { display:block; max-width:940px; margin:0 auto 18px; border:1px solid #e0e6f0; border-radius:12px; background:var(--surface-0); }
 .study-sequence-menu summary { font-size:15px; color:#5a6f90; padding:11px 16px; cursor:pointer; }
 .study-sequence-menu[open] .study-question-list { display:grid; grid-template-columns:1fr 1fr; max-height:300px; overflow:auto; gap:5px; padding:10px; }
 .study-question-list>a { border-radius:9px; padding:12px; }.study-question-list b { font-size:14px; line-height:1.7; white-space:normal; }.sequence-library-link { margin:12px 20px; }
 .question-stage { position:relative; max-width:940px; margin:auto; }
-.question-panel { max-width:none; padding:34px; border:1px solid #dce5f3; border-top:4px solid #4b85ee; border-radius:21px; background:white; box-shadow:0 8px 35px #294b8208; }
+.question-panel { max-width:none; padding:34px; border:1px solid #dce5f3; border-top:4px solid #4b85ee; border-radius:21px; background:var(--surface-0); box-shadow:0 8px 35px #294b8208; }
 .question-toolbar { margin-bottom:25px; align-items:flex-start; gap:14px; }.question-meta { font-size:14px; gap:12px; line-height:1.7; }.type-chip { border-radius:8px; font-size:14px; background:#eaf1ff; color:#2168ee; }.question-toolbar .icon-text-button { font-size:14px; flex-shrink:0; }
 .question-stem { font-size:26px; line-height:1.8; font-weight:550; margin:0 0 28px; letter-spacing:0; }
 .option-list { gap:13px; }

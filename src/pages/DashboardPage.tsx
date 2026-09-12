@@ -33,7 +33,7 @@ export function DashboardPage() {
     </section>
     <section className="aura-pathways" aria-label={t("学习方式", "Ways to learn")}>
       <div className="pathways-heading"><div><span className="aura-eyebrow">THE LEARNING EXPERIENCE</span><h2>{t("从知道，到理解。", "Beyond knowing.")}</h2></div><p>{t("选择你的方式，深入一点。", "Choose a way in. Go a little deeper.")}</p></div>
-      <div className="aura-mode-grid">{modes.map(({ to, kind, title, description, meta }, i) => <motion.div key={to} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .15 }} transition={{ duration: .55, delay: i * .08 }}><Link className={`aura-mode-card aura-mode-${kind}`} to={to}>
+      <div className="aura-mode-grid">{modes.map(({ to, kind, title, description, meta }, i) => <motion.div key={to} initial={reduced ? false : { opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .15 }} transition={{ duration: .55, delay: i * .08 }}><Link className={`aura-mode-card aura-mode-${kind}`} to={to}>
         <div className="aura-mode-top"><span className="aura-icon-tile"><ProductIcon kind={kind}/></span><span className="mode-number">0{i + 1}</span></div>
         <h3>{title}</h3><p>{description}</p>
         <div className={`mode-art art-${kind}`} aria-hidden="true">{kind === "learn" ? <><i/><i/><i/><span>A</span><span>B</span><span>C</span></> : kind === "assess" ? <><b>30<span> MIN</span></b><i/><i/><i/><i/><i/></> : <><i/><i/><i/><i/><i/><svg viewBox="0 0 240 100"><path d="M30 68L94 26L160 64L215 25M94 26L120 87L160 64"/></svg></>}</div>

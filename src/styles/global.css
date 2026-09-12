@@ -27,7 +27,7 @@ button:disabled { cursor:not-allowed; opacity:.6; }
 .nav-collapsed .topbar { grid-template-columns: var(--sidebar-collapsed) 1fr auto; }
 .brand { height: 100%; display: flex; align-items: center; gap: 11px; padding: 0 18px; border-right: 1px solid var(--line-200); overflow: hidden; }
 .brand-mark { position: relative; flex: 0 0 28px; width: 28px; height: 28px; background: var(--brand-600); transform: skew(-12deg); }
-.brand-mark::before, .brand-mark::after, .brand-mark span { content: ""; position: absolute; left: 6px; right: 6px; height: 2px; background: white; transform: skew(12deg); }
+.brand-mark::before, .brand-mark::after, .brand-mark span { content: ""; position: absolute; left: 6px; right: 6px; height: 2px; background:var(--surface-0); transform: skew(12deg); }
 .brand-mark::before { top: 8px; }.brand-mark span { top: 13px; }.brand-mark::after { top: 18px; }
 .brand-copy { min-width: 0; display: flex; flex-direction: column; line-height: 1.2; white-space: nowrap; }
 .brand-copy strong { font-size: 16px; letter-spacing: .02em; }.brand-copy small { margin-top: 4px; color: var(--ink-500); font-size: 10px; }
@@ -58,7 +58,7 @@ button:disabled { cursor:not-allowed; opacity:.6; }
 .secondary-button { background: var(--surface-0); border-color: var(--line-300); }.secondary-button:hover { border-color: var(--ink-650); background: var(--surface-50); }
 .danger-button { color: var(--brand-600); border-color: #f2b8bc; background: var(--brand-050); }.icon-text-button { min-height: 34px; padding: 0 8px; background: transparent; color: var(--ink-650); }.icon-text-button.active { color: var(--brand-600); }
 .text-link { display: inline-flex; align-items: center; gap: 5px; color: var(--brand-600); font-weight: 700; font-size: 12px; }
-.search-box { display: flex; align-items: center; gap: 9px; height: 42px; padding: 0 13px; border: 1px solid var(--line-300); border-radius: var(--radius-sm); background: white; color: var(--ink-500); }
+.search-box { display: flex; align-items: center; gap: 9px; height: 42px; padding: 0 13px; border: 1px solid var(--line-300); border-radius: var(--radius-sm); background:var(--surface-0); color: var(--ink-500); }
 .search-box input { width: 100%; border: 0; outline: 0; background: transparent; }.search-box:focus-within { border-color: var(--brand-600); box-shadow: 0 0 0 3px rgb(199 0 11 / 8%); }
 .search-box.standalone { max-width: 560px; margin-bottom: 22px; }
 .compact-tags { display: flex; flex-wrap: wrap; gap: 6px; }.compact-tags span, .alias-chip { padding: 3px 8px; border: 1px solid var(--line-200); border-radius: 999px; color: var(--ink-650); background: var(--surface-50); font-size: 11px; }

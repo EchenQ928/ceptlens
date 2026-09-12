@@ -42,6 +42,7 @@ export function AuraScene({ compact = false, paused = false }: { compact?: boole
     y.set((event.clientY - rect.top - rect.height / 2) * .025);
   }
   return <div ref={ref} className={`aura-scene ${compact ? "compact" : ""} ${!paused && pageVisible && visible && !reduced ? "scene-live" : ""}`} onPointerMove={follow} onPointerLeave={() => { x.set(0); y.set(0); }} aria-hidden="true">
+    <div className="aura-atmosphere"/>
     <motion.div className="aura-optics" style={{ x: springX, y: springY }}><div className="aura-haze"/><div className="aura-ray"/><div className="aura-orbit orbit-outer"/><div className="aura-orbit orbit-inner"/><div className="aura-core"/><div className="aura-glint"/></motion.div>
   </div>;
 }

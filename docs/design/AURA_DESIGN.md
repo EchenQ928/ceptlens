@@ -2,7 +2,7 @@
 
 ## Context and goals
 
-The owner's September 12 references establish atmospheric product presentation, precise typography, subtle glass edges, and fluid controls. Home introduces CeptLens; learning surfaces prioritize reading. This branch is `codex/ui-aura`; the earlier `codex/ui-lens` design is preserved separately.
+The owner's September 12 references establish atmospheric product presentation, precise typography, subtle glass edges, and fluid controls. The follow-up explicitly requests the same dark visual language throughout the platform: flowing gradients, Gaussian blur, micro-grain, hairline edges, soft glow and restrained motion. Home introduces CeptLens; learning surfaces prioritize reading. This branch is `codex/ui-aura`; the earlier `codex/ui-lens` design is preserved separately.
 
 ## Research and open-source foundations
 
@@ -17,7 +17,11 @@ The supplied Overflow, bird, Grok, and SoundCore screenshots are visual referenc
 
 ## Tokens and components
 
-- Dark presentation: `#080b13`; reading surfaces: `#f7f8fb` and white; action blue: `#4268ee`.
+- [RedSun](https://ovo-redsun.webflow.io/), Pro fico Academy and Grabient references inform the diffuse cyan/violet/warm light, fine boundaries and low visual noise. RedSun's public page was inspected; its interactive browser preview timed out. No template source or proprietary assets copied.
+- The installed Glassmorphism skill supplies semantic surfaces, explicit states and legibility constraints; the owner's dark palette takes precedence over its default light palette.
+- `src/styles/aura-dark.css` is the final theme layer. Canvas `#090b13`, opaque reading surface `#131722`, elevated surface `#181e2c`, text `#eff1f8`, secondary text `#acb7cd`, fine boundaries `#2a3244`. Link blue `#9baeff` and filled-action blue `#536dd5` are separate to preserve text contrast.
+- Legacy plain white surface declarations now use `--surface-0`, including shared teaching visuals and authoring controls. Future teaching packages should use these tokens rather than fixed white backgrounds. Existing opaque bitmap assets are never inverted.
+- Home, learning catalog, question/answer panels, term library, teaching article/visuals, assessment, login, account and companion controls share these foundations. Cyan, violet and muted warm accents establish hierarchy; green and rose identify answer feedback.
 - Body and teaching copy 16–18 px; controls 14–15 px; small editorial labels are secondary only.
 - Controls 46–50 px high; cards 16–20 px radius; restrained 1 px borders.
 - Home: layered CSS light field, concise introduction, real links to three modes, actual library counts. Card illustrations communicate question selection, timed assessment, and concept relationships.
@@ -31,6 +35,10 @@ The supplied Overflow, bird, Grok, and SoundCore screenshots are visual referenc
 Semantic links/buttons retain names. Duplicated visual button labels are aria-hidden. Typing exposes the full sentence to assistive technology without character-by-character announcements. It runs once, reserves its final dimensions, and immediately shows full text under reduced motion. Background motion has an explicit pause control and stops when offscreen or the document is hidden. Inputs remain native, including IME, keyboard submission, password autocomplete and focus.
 
 Do not delay question/answer content behind typing effects; do not add decorative motion to reading text; do not repurpose status colors as decorations. Reduced-motion preferences disable CSS animations and transitions.
+
+The new gradient field uses a 24-second alternating cycle with 2% drift and no JavaScript render loop. Study backgrounds and grain remain static. Question travel is limited to 18 px on entry and 12 px on exit, with no scale change; answer selection uses a fading halo instead of a bounce. Hover lift is capped at 2 px on overview cards and removed from reading controls. Native focus, disabled and error states remain explicit.
+
+Acceptance checks: verify text contrast on selected/correct/wrong options and the new K/V cache cell; verify animation pause freezes the gradient; check no horizontal page overflow at 390 px; check question changes clear the answer panel. Account and authoring styles inherit the same tokens; privileged account actions are not part of visual QA.
 
 ## Preview and QA
 
