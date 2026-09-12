@@ -37,6 +37,12 @@ async function api(path, body, extra = {}) {
   if (!response.ok) throw new Error(`${path}: ${response.status} ${JSON.stringify(value)}`);
   return { value, response };
 }
+async function uploadFiles(kind, files) {
+  const form = new FormData();
+  for (const [name, bytes] of files) form.append('files', new Blob([bytes]), name);
+  const response = await fetch(`${base}/api/content/${kind}/import-files`, { method: 'POST', headers: { Cookie: cookie }, body: form });
+  return { status: response.status, value: await response.json() };
+}
 try {
   await start(root);
   const before = (await api('/api/content/status')).value;
@@ -45,6 +51,7 @@ try {
   const userId = registration.value.user.id;
   const denied = await fetch(`${base}/api/content/questions/import`, {method:'POST',headers:{'Content-Type':'application/json',Cookie:cookie},body:'{}'});
   assert.equal(denied.status,401); await denied.arrayBuffer();
+  for (const kind of ['questions','terms']) assert.equal((await uploadFiles(kind, [['not-authorized.json','{}']])).status,401);
   const roleStore = openCommunityStore(resolve(data,'ceptlens.sqlite'));
   createAccountService(roleStore.db).setRole(userId,'developer'); roleStore.close();
   assert.equal((await api('/api/session')).value.user.role,'developer');
@@ -76,6 +83,54 @@ try {
   assert.deepEqual(exportedQuestion.ceptCheck, question.ceptCheck);
   assert.deepEqual(exportedQuestion.highlightedTerms, ['kv-cache']);
   console.log('PASS: ordinary account cannot publish; owner-granted developer publishes with its session cookie');
+
+  // Independent question files: update one existing ID and add a dependent question,
+  // intentionally selecting the dependent file first. Only one snapshot is created.
+  const secondQuestion = { ...question, id:'WORKFLOW-BATCH-SECOND', ordering:{order:10000,prerequisites:[question.id]} };
+  const updatedQuestion = { ...question, featured:false };
+  const questionFiles = [['second.json',JSON.stringify(secondQuestion)],['first.json',JSON.stringify(updatedQuestion)]];
+  const historyBeforeBatch = (await api('/api/content/history')).value.revisions.length;
+  const questionBatch = await uploadFiles('questions',questionFiles);
+  assert.equal(questionBatch.status,200,JSON.stringify(questionBatch.value));assert.equal(questionBatch.value.imported,2);
+  assert.equal((await api('/api/content/history')).value.revisions.length,historyBeforeBatch+1);
+  const batchQuestions=(await api('/api/content/questions/export')).value.questions;
+  assert.equal(batchQuestions.find(q=>q.id===question.id).featured,false);
+  assert.deepEqual(batchQuestions.find(q=>q.id===secondQuestion.id).ordering.prerequisites,[question.id]);
+  const questionRevision=(await api('/api/content/status')).value.contentRevision;
+  const duplicate=await uploadFiles('questions',[questionFiles[0],['duplicate.json',JSON.stringify(secondQuestion)]]);
+  assert.equal(duplicate.status,400);assert.match(duplicate.value.error,/重复/);
+  const invalid=await uploadFiles('questions',[questionFiles[0],['broken.json','{bad']]);
+  assert.equal(invalid.status,400);assert.match(invalid.value.error,/broken.json/);
+  const dangling={...question,id:'WORKFLOW-BATCH-INVALID',ordering:{order:10001,prerequisites:['MISSING-QUESTION']}};
+  const failedBatch=await uploadFiles('questions', [['valid.json',JSON.stringify({...question,featured:true})],['invalid.json',JSON.stringify(dangling)]]);
+  assert.equal(failedBatch.status,400);
+  assert.equal((await api('/api/content/status')).value.contentRevision,questionRevision);
+  assert.equal((await api('/api/content/questions/export')).value.questions.find(q=>q.id===question.id).featured,false);
+
+  // Separate term ZIPs also share one snapshot and can update/add in one selection.
+  const secondEntries={};
+  for(const [path,bytes] of Object.entries(entries)){
+    let source=new TextDecoder().decode(bytes);
+    if(path.endsWith('/manifest.json')){const m=JSON.parse(source);m.id='workflow-term-second';source=JSON.stringify(m);}
+    if(path.endsWith('/view.tsx'))source=source.replaceAll('workflow-term','workflow-term-second');
+    secondEntries[path.replace('workflow-term/','workflow-term-second/')]=new TextEncoder().encode(source);
+  }
+  const termFiles=[['existing.zip',zipSync(entries)],['second.zip',zipSync(secondEntries)]];
+  const termHistory=(await api('/api/content/history')).value.revisions.length;
+  const termBatch=await uploadFiles('terms',termFiles);
+  assert.equal(termBatch.status,200,JSON.stringify(termBatch.value));assert.equal(termBatch.value.imported,2);
+  assert.equal((await api('/api/content/history')).value.revisions.length,termHistory+1);
+  const termRevision=(await api('/api/content/status')).value.contentRevision;
+  assert.equal((await uploadFiles('terms',[termFiles[0],['duplicate.zip',zipSync(entries)]])).status,400);
+  const corrupt=await uploadFiles('terms',[termFiles[0],['corrupt.zip','not a zip']]);
+  assert.equal(corrupt.status,400);assert.match(corrupt.value.error,/corrupt.zip/);
+  const brokenEntries={...secondEntries,'workflow-term-second/view.tsx':new TextEncoder().encode('export default function Broken( {')};
+  assert.equal((await uploadFiles('terms',[termFiles[0],['broken.zip',zipSync(brokenEntries)]])).status,400);
+  assert.equal((await api('/api/content/status')).value.contentRevision,termRevision);
+  const afterBatches=(await api('/api/content/status')).value;
+  assert.equal(afterBatches.questionCount,before.questionCount+2);assert.equal(afterBatches.termCount,before.termCount+2);
+  Object.assign(uploaded,afterBatches);
+  console.log('PASS: multi-file question and term imports publish once, update existing IDs, validate shared dependencies, and reject whole invalid batches');
   const persisted = JSON.parse(await readFile(resolve(store, 'current.json'), 'utf8'));
   const html = await readFile(resolve(store, 'snapshots', persisted.revision, 'dist/index.html'), 'utf8');
   const script = html.match(/<script[^>]+src="([^"]+)"/)[1];
@@ -94,7 +149,7 @@ try {
   assert.equal(upgraded.version, '0.1.0-workflow-test'); assert.equal(upgraded.contentHash, uploaded.contentHash);
   assert.equal(upgraded.questionCount, uploaded.questionCount);
   const upgradedQuestion = (await api('/api/content/questions/export')).value.questions.find(q => q.id === question.id);
-  assert.equal(upgradedQuestion.featured, true);
+  assert.equal(upgradedQuestion.featured, false);
   assert.deepEqual(upgradedQuestion.ceptCheck, question.ceptCheck);
   assert.equal((await api('/api/auth/me')).value.user.id, userId);
   assert.equal((await api('/api/auth/me')).value.user.role, 'developer');
