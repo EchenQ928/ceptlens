@@ -1,0 +1,56 @@
+/* Optical movement: foreground labels stay crisp above the changing material. */
+.app-frame:has(>.spectral-backdrop[data-running="true"]) [data-liquid-surface="true"],
+.welcome-page:has(>.spectral-backdrop[data-running="true"]) [data-liquid-surface="true"] {
+  /* The single GPU scene now supplies diffusion, refraction and curved-edge glare. */
+  backdrop-filter:none; -webkit-backdrop-filter:none;
+  box-shadow:inset 0 1px #edfbff25,inset 1px 0 #dbe9ff16,0 16px 42px #0002;
+}
+.topbar,.aura-landing .topbar { background:linear-gradient(#0b1123ad,#0b1123b8); backdrop-filter:blur(18px) saturate(160%); }
+.liquid-selection-track { position:relative; isolation:isolate; }
+.top-navigation.liquid-selection-track { gap:5px; padding:5px; border:1px solid #d3e8ff24; border-radius:999px; background:linear-gradient(145deg,#acd6ff0c,#11182730); box-shadow:inset 0 1px #ffffff0c; }
+.top-navigation.liquid-selection-track a { border-radius:999px; min-height:42px; padding:9px 19px; }
+.top-navigation.liquid-selection-track a:is(:hover,.active),.aura-landing .top-navigation.liquid-selection-track a:hover { background:transparent; }
+.liquid-selection-track>.liquid-selection {
+  position:absolute; left:0; top:0; z-index:0; pointer-events:none; border-radius:999px;
+  border:1px solid #d0ecff75; opacity:1;
+  background:radial-gradient(ellipse at 28% 0%,#dbf9ff38,transparent 62%),linear-gradient(135deg,#8ebdeb28,#6579b223);
+  backdrop-filter:blur(7px) saturate(185%);
+  box-shadow:inset 0 1px 1px #fff9,inset 0 -2px 3px #6a8bdb4f,inset 2px 0 3px #c5eeff30,0 3px 12px #0003;
+  transform-origin:center; transition:opacity .16s; will-change:transform;
+}
+.liquid-selection[data-visible="false"] { opacity:0; }
+.liquid-selection::before { content:""; position:absolute; inset:2px 15% auto; height:1px; background:linear-gradient(90deg,transparent,#f4fdffb3,transparent); }
+.liquid-selection-track>a,.liquid-selection-track>button { z-index:1; position:relative; }
+.mode-segment.liquid-selection-track { border-color:#c1dbfa2e; background:#111a285c; padding:5px; overflow:visible; }
+.mode-segment.liquid-selection-track button.active,.mode-segment.liquid-selection-track button:hover:not(.active) { background:transparent; box-shadow:none; }
+.mode-segment.liquid-selection-track button { border-radius:999px; }
+/* Cursor light and fluid press apply to controls, not paragraphs or whole articles. */
+:is(.primary-button,.secondary-button,.focus-toggle,.companion-dock button,.concept-pills a) {
+  position:relative; isolation:isolate;
+  background-image:radial-gradient(ellipse at var(--liquid-x,30%) var(--liquid-y,0%),#d3efff26,transparent 68%),linear-gradient(140deg,#adcfff08,#8297d10c);
+  transition:border-color .18s,box-shadow .22s,background-color .2s;
+}
+:is(.primary-button,.secondary-button,.focus-toggle,.companion-dock button,.concept-pills a):is(:hover,:focus-visible) {
+  border-color:#c6e9ff99; box-shadow:inset 0 1px 1px #ecfaff66,inset 0 -1px #729bdc66,0 5px 24px #487bad26;
+}
+.primary-button { background-color:#3c577f; }
+.primary-button:hover:not(:disabled) { background-image:radial-gradient(ellipse at var(--liquid-x,30%) var(--liquid-y,0%),#d3efff45,transparent 68%),linear-gradient(140deg,#7099c51f,#a5a1ec15); }
+.secondary-button,.focus-toggle { background-color:#17233a99; backdrop-filter:blur(8px) saturate(150%); }
+.companion-dock .assistant-launch { background-color:#343c6399; }
+.option-row .option-key { transform-origin:center; }
+.term-card .concept-symbol,.aura-mode-card .aura-icon-tile { transform-origin:center; }
+.term-card:hover .concept-symbol,.aura-mode-card:hover .aura-icon-tile { box-shadow:inset 0 1px #f1fcff66,0 4px 22px #94d0ef24; }
+.term-card { background:radial-gradient(ellipse at var(--liquid-x,100%) var(--liquid-y,0%),#b6c3ef19,transparent 65%),var(--spectral-panel); }
+.companion-dock .assistant-launch:is(:hover,:focus-visible) .icon-form { animation:none; }
+.flow-link:active,.primary-button:active:not(:disabled),button:active:not(:disabled) { transform:none; }
+@media(max-width:700px) {
+  .top-navigation.liquid-selection-track { padding:3px; justify-self:center; overflow-x:auto; overflow-y:hidden; max-width:100%; gap:1px; }
+  .top-navigation.liquid-selection-track a { padding:8px 12px; min-height:39px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .liquid-selection-track>.liquid-selection { will-change:auto; transition:opacity .12s; }
+}
+@media(prefers-reduced-transparency:reduce),(prefers-contrast:more) {
+  .liquid-selection-track>.liquid-selection { background:#33465e; backdrop-filter:none; }
+  .topbar,.aura-landing .topbar { background:#0b1123; backdrop-filter:none; }
+}

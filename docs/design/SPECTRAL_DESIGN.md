@@ -1,5 +1,8 @@
 # Frosted Spectrum / 磨砂光谱
 
+The next motion iteration is documented in [Liquid motion](LIQUID_MOTION.md).
+The static material reviewed here is preserved on `codex/ui-spectral-static`.
+
 ## Direction and material
 
 This iteration lives on `codex/ui-spectral`, based on public release `d67a417`.
