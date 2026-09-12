@@ -5,11 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#f5f8fd" />
     <link rel="icon" type="image/svg+xml" href="/brand/favicon.svg" />
+    <link rel="preload" as="image" href="/brand/ceptlens-original.webp" type="image/webp" fetchpriority="high" />
+    <link rel="preload" as="image" href="/spectral/home.webp" type="image/webp" fetchpriority="high" />
     <meta name="description" content="CeptLens AI model engineering learning and assessment platform" />
     <title>CeptLens · AI Model Engineering</title>
+    <style>
+      /* Critical boot paint: this appears before the app bundle and is replaced
+         by React as soon as the learning session is ready. */
+      .boot-screen{min-height:100svh;display:grid;place-items:center;background:#070c15;color:#f5f8ff;font:600 24px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif}
+      .boot-screen__content{display:grid;justify-items:center;gap:14px;animation:boot-breathe 1.6s ease-in-out infinite alternate}
+      .boot-screen img{width:64px;height:64px;object-fit:contain}
+      @keyframes boot-breathe{from{opacity:.68;transform:translateY(2px)}to{opacity:1;transform:translateY(-2px)}}
+      @media(prefers-reduced-motion:reduce){.boot-screen__content{animation:none}}
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"><div class="boot-screen" role="status" aria-label="Loading CeptLens"><div class="boot-screen__content"><img src="/brand/ceptlens-original.webp" width="64" height="64" alt="" decoding="async" /><span>CeptLens</span></div></div></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

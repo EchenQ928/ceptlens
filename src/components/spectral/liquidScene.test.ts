@@ -39,3 +39,12 @@ it('damps scroll response and disconnects event observation on disposal', () => 
   expect(start).toBeGreaterThan(0); expect(later).toBeGreaterThan(start); expect(later).toBeLessThan(1);
   scene.dispose(); expect(remove).toHaveBeenCalledWith('scroll',expect.any(Function),true);
 });
+it('re-measures pane geometry during mobile compositor scrolling', () => {
+  vi.stubGlobal('matchMedia', () => ({ matches: true }));
+  const visible = pane(120); const scene = createLiquidScene(backdrop);
+  expect(scene.read(0, 16).u_glass[0]).toEqual([250, 210, 150, 90]);
+  // No scroll event is dispatched here: this models inertial/compositor scroll.
+  visible.bounds.mockReturnValue(rectangle(100, 40, 300, 180));
+  expect(scene.read(1000, 16).u_glass[0]).toEqual([250, 130, 150, 90]);
+  scene.dispose();
+});

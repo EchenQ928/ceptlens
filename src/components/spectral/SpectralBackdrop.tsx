@@ -13,7 +13,6 @@ export function SpectralBackdrop({ preset = "home", paused = false, intensity = 
   const [visible, setVisible] = useState(() => !document.hidden);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [activated, setActivated] = useState(false);
   const mobile = useRef(window.matchMedia("(max-width: 700px)").matches);
   const initialPreset = useRef(preset);
   const live = canAnimate({ paused, reduced, visible, inView, failed });
@@ -30,14 +29,16 @@ export function SpectralBackdrop({ preset = "home", paused = false, intensity = 
   const rendererKey = `liquid-refraction-v2:${frame ?? 'live'}`;
   const posterOnly = devParams?.get("spectralPoster") === "1";
   const running = live && frame === null;
-  useEffect(() => { if (inView) setActivated(true); }, [inView]);
   useEffect(() => {
     const changed = () => setVisible(!document.hidden);
     document.addEventListener("visibilitychange", changed);
     return () => document.removeEventListener("visibilitychange", changed);
   }, []);
   useEffect(() => {
-    if (reduced || posterOnly || !activated || failed || !mount.current || renderer.current) return;
+    // Start fetching the renderer after commit so the poster can paint first. Do
+    // not gate this on intersection state: fixed app backdrops can report a
+    // false initial intersection while the mobile browser is settling its URL bar.
+    if (reduced || posterOnly || failed || !mount.current || renderer.current) return;
     let cancelled = false;
     const target = mount.current;
     let instance: ShaderMount | null = null;
@@ -63,7 +64,7 @@ export function SpectralBackdrop({ preset = "home", paused = false, intensity = 
       renderer.current = null;
       setReady(false);
     };
-  }, [reduced, posterOnly, activated, failed, rendererKey]);
+  }, [reduced, posterOnly, failed, rendererKey]);
   useEffect(() => {
     const instance = renderer.current;
     if (!instance || !ready) return;

@@ -41,7 +41,7 @@ export function BrandExperience() {
       <motion.div className="scene-fragment fragment-left" animate={{ x:phase===0?-18:phase===1?25:5, y:phase===0?18:-12, rotate:phase===0?-14:-6, opacity:phase===0?.6:1 }} transition={{ duration:1.4,ease:[.22,1,.36,1] }}><span className="fragment-glyph">?</span><div className="fragment-lines"><i/><i/><i/></div></motion.div>
       <motion.div className="scene-fragment fragment-top" animate={{ x:phase===0?20:-8, y:phase===1?14:-8, rotate:phase===0?15:5 }} transition={{ duration:1.5,ease:[.22,1,.36,1] }}><ProductIcon kind="learn"/></motion.div>
       <motion.div className="hero-optic" animate={{ y:phase===1?-10:0, rotate:phase===0?-5:phase===1?2:-2, scale:phase===1?1.035:1 }} transition={{ duration:2.2,ease:[.22,1,.36,1] }}>
-        <img src={`${import.meta.env.BASE_URL}brand/ceptlens-optic-hero.png`} alt="" width="1254" height="1254" fetchPriority="high"/>
+        <img src={`${import.meta.env.BASE_URL}brand/ceptlens-optic-hero.webp`} alt="" width="1200" height="1200" fetchPriority="high" decoding="async"/>
         <div className="optic-caustic"/>
       </motion.div>
       <motion.div className="scene-fragment fragment-right" animate={{ x:phase===0?22:0, y:phase===0?8:-10, rotate:phase===0?12:4 }} transition={{ duration:1.4,ease:[.22,1,.36,1] }}><AnimatePresence mode="wait" initial={false}><motion.div key={phase===2?"resolved":"exploring"} initial={{ opacity:0,scale:.75 }} animate={{ opacity:1,scale:1 }} exit={{ opacity:0,scale:.8 }} transition={{ duration:.35 }}><ProductIcon kind={phase===2?"assess":"concepts"}/></motion.div></AnimatePresence></motion.div>

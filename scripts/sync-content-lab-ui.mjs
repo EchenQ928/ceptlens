@@ -11,7 +11,7 @@ for (const name of ['QuestionPanel.tsx','ProductIcon.tsx','ConceptSymbol.tsx','B
 files.set('src/pages/TermReader.tsx', 'src/pages/TermReader.tsx');
 for (const name of await readdir(resolve(root, 'src/components/spectral'))) if (!name.includes('.test.') && !name.includes('Lab')) files.set(`src/components/spectral/${name}`, `src/components/spectral/${name}`);
 for (const name of await readdir(resolve(root, 'src/content-sdk'))) if (!name.includes('.test.')) files.set(`src/content-sdk/${name}`, `src/content-sdk/${name}`);
-for (const path of ['src/hooks/useProgress.ts','src/infrastructure/progressRepository.ts','public/brand/ceptlens-original.png','THIRD_PARTY_NOTICES.md']) files.set(path, path);
+for (const path of ['src/hooks/useProgress.ts','src/infrastructure/progressRepository.ts','public/brand/ceptlens-original.png','public/brand/ceptlens-original.webp','public/brand/ceptlens-optic-hero.webp','THIRD_PARTY_NOTICES.md']) files.set(path, path);
 for (const name of await readdir(resolve(root, 'public/spectral'))) if (/\.(webp|txt)$/.test(name)) files.set(`public/spectral/${name}`, `public/spectral/${name}`);
 const hashes = {};
 const stale = [];

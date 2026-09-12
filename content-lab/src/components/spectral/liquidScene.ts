@@ -10,15 +10,20 @@ export function liquidShaderUniforms(material: ReturnType<typeof emptyLiquidUnif
 }
 export function createLiquidScene(backdrop: HTMLElement) {
   const scope = backdrop.closest('.app-frame,.welcome-page') ?? backdrop.parentElement!;
+  const mobile = typeof window.matchMedia === 'function' && window.matchMedia('(max-width: 700px)').matches;
   let dirty = true, changedUntil = 0, elements: HTMLElement[] = [];
   let active = new Set<HTMLElement>();
-  let targetScroll = window.scrollY, scroll = targetScroll, velocity = 0;
+  const readScrollTop = () => {
+    const documentScroll = document.scrollingElement?.scrollTop ?? 0;
+    return documentScroll || window.scrollY || 0;
+  };
+  let targetScroll = readScrollTop(), scroll = targetScroll, velocity = 0;
   let previousScroll = targetScroll, lastScrollTime = performance.now();
   let data = emptyLiquidUniforms();
   const invalidate = () => { dirty = true; changedUntil = performance.now() + 650; };
   const scan = () => { elements = Array.from(scope.querySelectorAll<HTMLElement>(surfaces)); invalidate(); };
   const onScroll = () => {
-    const now = performance.now(), y = window.scrollY;
+    const now = performance.now(), y = readScrollTop();
     velocity = Math.max(-2, Math.min(2, (y - previousScroll) / Math.max(16, now - lastScrollTime)));
     previousScroll = y; lastScrollTime = now; targetScroll = y; invalidate();
   };
@@ -28,13 +33,20 @@ export function createLiquidScene(backdrop: HTMLElement) {
   resize?.observe(scope);
   window.addEventListener('resize', invalidate);
   document.addEventListener('scroll', onScroll, { capture: true, passive: true });
+  const viewport = window.visualViewport;
+  viewport?.addEventListener('resize', invalidate);
+  viewport?.addEventListener('scroll', invalidate, { passive: true });
   scan();
   return {
     read(now: number, elapsed: number) {
       const damping = 1 - Math.exp(-elapsed / 120);
       scroll += (targetScroll - scroll) * damping;
       velocity *= Math.exp(-elapsed / 180);
-      if (dirty || now < changedUntil) {
+      // On touch devices the page and the visual viewport can move on the
+      // compositor thread without dispatching a matching window scroll event.
+      // Measuring the small set of glass panes every frame while mobile keeps
+      // refraction attached to the panes during inertial scrolling.
+      if (dirty || mobile || now < changedUntil) {
         const frame = backdrop.getBoundingClientRect();
         const width = Math.max(1, frame.width), height = Math.max(1, frame.height);
         const visible = elements.map(element => ({ element, rect: element.getBoundingClientRect() }))
@@ -55,6 +67,6 @@ export function createLiquidScene(backdrop: HTMLElement) {
       }
       return { ...data, u_scroll: [scroll / Math.max(1, innerHeight), velocity] };
     },
-    dispose() { mutation.disconnect(); resize?.disconnect(); window.removeEventListener('resize', invalidate); document.removeEventListener('scroll', onScroll, true); active.forEach(element => { delete element.dataset.liquidSurface; }); }
+    dispose() { mutation.disconnect(); resize?.disconnect(); window.removeEventListener('resize', invalidate); document.removeEventListener('scroll', onScroll, true); viewport?.removeEventListener('resize', invalidate); viewport?.removeEventListener('scroll', invalidate); active.forEach(element => { delete element.dataset.liquidSurface; }); }
   };
 }
