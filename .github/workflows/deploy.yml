@@ -60,6 +60,12 @@ jobs:
           ssh -i ~/.ssh/ceptlens_deploy "${{ secrets.CEPTLENS_DEPLOY_USER }}@${{ secrets.CEPTLENS_DEPLOY_HOST }}" \
             "sudo node /srv/ceptlens/releases/inspect-storage-${GITHUB_SHA}.mjs"
       - name: Upload release
+        if: ${{ inputs.operation == 'inspect' }}
+        run: |
+          scp -i ~/.ssh/ceptlens_deploy scripts/inspect-https.sh "${{ secrets.CEPTLENS_DEPLOY_USER }}@${{ secrets.CEPTLENS_DEPLOY_HOST }}:/srv/ceptlens/releases/inspect-https-${GITHUB_SHA}.sh"
+          ssh -i ~/.ssh/ceptlens_deploy "${{ secrets.CEPTLENS_DEPLOY_USER }}@${{ secrets.CEPTLENS_DEPLOY_HOST }}" \
+            "sudo bash /srv/ceptlens/releases/inspect-https-${GITHUB_SHA}.sh"
+      - name: Upload release
         if: ${{ inputs.operation != 'inspect' }}
         run: scp -i ~/.ssh/ceptlens_deploy /tmp/ceptlens-${GITHUB_SHA}.tar.gz /tmp/ceptlens-npm-${GITHUB_SHA}.tar.gz "${{ secrets.CEPTLENS_DEPLOY_USER }}@${{ secrets.CEPTLENS_DEPLOY_HOST }}:/srv/ceptlens/releases/"
       - name: Install deployment coordinator
