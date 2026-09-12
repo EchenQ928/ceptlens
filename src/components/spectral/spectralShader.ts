@@ -9,15 +9,19 @@ uniform float u_workspace;
 uniform float u_intensity;
 uniform float u_tone;
 uniform vec2 u_pointer;
+uniform vec4 u_glass[12];
+uniform vec2 u_glassRadius[12];
+uniform float u_glassCount;
+uniform vec2 u_viewport;
+uniform vec2 u_scroll;
 out vec4 fragColor;
 const float TAU = 6.28318530718;
 float bell(float d, float width) { return exp(-d*d/(width*width)); }
 float grain(vec2 p) { return fract(52.9829189 * fract(dot(p, vec2(.06711056,.00583715)))); }
-void main() {
-  vec2 uv = gl_FragCoord.xy / u_resolution;
-  uv.y = 1. - uv.y;
+vec3 lightField(vec2 uv) {
   float phase = TAU * u_time / 16.;
   vec2 q = uv - u_pointer;
+  q.y += atan(u_scroll.x * .6) * .13;
   // Preserve a wide composition when the viewport is tall or narrow.
   float aspect = u_resolution.x / u_resolution.y;
   q.x = (q.x - .69) * max(1., aspect / 1.85) + .69;
@@ -54,7 +58,7 @@ void main() {
   color *= 1. - .32*bell(d-.24,.075)*open;
   float vignette = 1. - .22*pow(length((uv-.5)*vec2(.8,1.)),2.);
   color *= vignette;
-  // Workspace light remains at the perimeter, behind opaque reading surfaces.
+  // Workspace light remains at the perimeter, behind translucent reading surfaces.
   float side = pow(abs(uv.x-.5)*2.,2.);
   float crown = .7*(1.-smoothstep(.05,.55,uv.y));
   float perimeter = clamp(.22 + .6*side + crown,0.,1.);
@@ -66,7 +70,56 @@ void main() {
   color += u_tone * vec3(.035,-.009,.035) * max(color.r,color.b);
   color = mix(vec3(.025,.038,.065),color,u_intensity);
   color = 1. - exp(-color * 1.14);
+  return color;
+}
+float paneDistance(vec2 point, vec4 pane, float radius) {
+  vec2 d = abs(point - pane.xy) - pane.zw + radius;
+  return length(max(d, 0.)) + min(max(d.x,d.y),0.) - radius;
+}
+void main() {
+  vec2 uv = gl_FragCoord.xy / u_resolution;
+  uv.y = 1. - uv.y;
+  vec3 color = lightField(uv);
+  vec2 point = uv * u_viewport;
+  float distanceToPane = 1e5;
+  vec4 pane = vec4(0.);
+  float radius = 0., strength = 1.;
+  for (int i = 0; i < 12; i++) {
+    if (float(i) >= u_glassCount) break;
+    float d = paneDistance(point, u_glass[i], u_glassRadius[i].x);
+    if (d < 1.5 && abs(d) < abs(distanceToPane)) {
+      distanceToPane = d; pane = u_glass[i]; radius = u_glassRadius[i].x; strength = u_glassRadius[i].y;
+    }
+  }
+  float inside = 1. - smoothstep(-.6,1.,distanceToPane);
+  if (inside > 0.) {
+    float depth = max(0.,-distanceToPane);
+    vec2 normal = normalize(vec2(
+      paneDistance(point+vec2(.5,0.),pane,radius)-paneDistance(point-vec2(.5,0.),pane,radius),
+      paneDistance(point+vec2(0.,.5),pane,radius)-paneDistance(point-vec2(0.,.5),pane,radius)
+    ) + vec2(.00001));
+    // Curved-edge refraction adapted from Liquid Glass Studio, MIT (Charles Yin).
+    // See public/spectral/LIQUID-GLASS-LICENSE.txt. Foreground DOM is never sampled.
+    float thickness = 26. * strength;
+    float ratio = clamp(1. - depth / thickness, 0., .985);
+    float incident = asin(ratio * ratio);
+    float transmitted = asin(sin(incident) / 1.45);
+    float bend = -tan(transmitted - incident);
+    vec2 offset = -normal * bend * (19. + abs(u_scroll.y)*4.) / u_viewport;
+    vec3 glass = lightField(uv + offset);
+    // Chromatic separation confined to the curved lip, not the reading plane.
+    if (depth < thickness) {
+      glass.r = lightField(uv + offset * 1.045).r;
+      glass.b = lightField(uv + offset * .955).b;
+    }
+    float fresnel = pow(clamp(1. - depth / 18.,0.,1.),4.);
+    vec2 light = normalize(vec2(-.6 + .18*sin(u_time*.35),-1. + u_scroll.y*.16));
+    float glare = pow(abs(dot(normal,light)),5.);
+    glass += vec3(.48,.68,.85) * fresnel * (.13 + glare*.48) * strength;
+    glass += vec3(.17,.25,.36) * bell(depth-6.,4.) * glare * .20;
+    color = mix(color,glass,inside);
+  }
   float n = grain(gl_FragCoord.xy / max(1.,u_pixelRatio));
-  color += (n-.5) * (.021 + .055 * smoothstep(.05,.5,max(color.r,max(color.g,color.b))));
+  color += (n-.5) * (.021 + .055 * smoothstep(.05,.5,max(color.r,max(color.g,color.b)))) * mix(1.,.18,inside);
   fragColor = vec4(clamp(color,0.,1.),1.);
 }`;

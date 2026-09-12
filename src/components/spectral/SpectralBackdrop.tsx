@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { useInView, useReducedMotion } from "motion/react";
 import type { ShaderMount } from "@paper-design/shaders";
 import { canAnimate, nextQuality, spectralPresets, type SpectralPreset } from "./motionPolicy";
+import { createLiquidScene, liquidShaderUniforms } from "./liquidScene";
 
 export function SpectralBackdrop({ preset = "home", paused = false, intensity = 1 }: { preset?: SpectralPreset; paused?: boolean; intensity?: number }) {
   const root = useRef<HTMLDivElement>(null);
@@ -25,6 +26,8 @@ export function SpectralBackdrop({ preset = "home", paused = false, intensity = 
   // Development-only deterministic frames let the exported posters and recordings match the shader exactly.
   const devParams = import.meta.env.DEV ? new URLSearchParams(window.location.search) : null;
   const frame = devParams?.has("spectralFrame") ? Number(devParams.get("spectralFrame")) : null;
+  // Changing the uniform ABI must recreate contexts retained by development HMR.
+  const rendererKey = `liquid-refraction-v2:${frame ?? 'live'}`;
   const posterOnly = devParams?.get("spectralPoster") === "1";
   const running = live && frame === null;
   useEffect(() => { if (inView) setActivated(true); }, [inView]);
@@ -60,11 +63,12 @@ export function SpectralBackdrop({ preset = "home", paused = false, intensity = 
       renderer.current = null;
       setReady(false);
     };
-  }, [reduced, posterOnly, activated, failed, frame]);
+  }, [reduced, posterOnly, activated, failed, rendererKey]);
   useEffect(() => {
     const instance = renderer.current;
     if (!instance || !ready) return;
     instance.setSpeed(0);
+    if (!running) instance.setUniforms({ u_glassCount: 0 });
   }, [ready, running, preset]);
   // Route tint blends without mounting a second canvas. Motion never forces a React render each frame.
   useEffect(() => {
@@ -86,6 +90,7 @@ export function SpectralBackdrop({ preset = "home", paused = false, intensity = 
   }, [preset, intensity, reduced, ready, running]);
   useEffect(() => {
     if (!running || !ready || !renderer.current) return;
+    const scene = root.current ? createLiquidScene(root.current) : null;
     let raf = 0, start = performance.now(), last = start, lastDraw = start, frames = 0;
     const interval = 1000 / (mobile.current ? 30 : 60);
     const monitor = (now: number) => {
@@ -94,6 +99,14 @@ export function SpectralBackdrop({ preset = "home", paused = false, intensity = 
       const elapsed = now-last;
       lastDraw = now - ((now-lastDraw) % interval);
       last = now; frames += 1;
+      if (scene) {
+        const material = scene.read(now, elapsed);
+        renderer.current.setUniforms(liquidShaderUniforms(material));
+        if (import.meta.env.DEV && root.current && now-start > 3000) {
+          root.current.dataset.glassCount = String(material.u_glassCount);
+          root.current.dataset.scroll = material.u_scroll[0].toFixed(3);
+        }
+      }
       if (now-start > 3000) {
         const fps = frames * 1000 / (now-start);
         const next = nextQuality(mobile.current ? fps*2 : fps,quality.current);
@@ -124,7 +137,7 @@ export function SpectralBackdrop({ preset = "home", paused = false, intensity = 
     const leave = () => { pointer.current.targetX = 0; pointer.current.targetY = 0; };
     window.addEventListener("pointermove",move,{ passive:true });
     document.documentElement.addEventListener("pointerleave",leave);
-    return () => { cancelAnimationFrame(raf); window.removeEventListener("pointermove",move); document.documentElement.removeEventListener("pointerleave",leave); };
+    return () => { cancelAnimationFrame(raf); scene?.dispose(); window.removeEventListener("pointermove",move); document.documentElement.removeEventListener("pointerleave",leave); };
   }, [running, ready, preset]);
   const workspace = preset !== "home" && preset !== "auth";
   const poster = workspace ? "workspace" : preset;

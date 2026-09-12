@@ -1,5 +1,16 @@
 # Third-party notices
 
+## Liquid Glass Studio
+
+The curved-edge refraction calculation in `src/components/spectral/spectralShader.ts`
+is adapted from `iyinchao/liquid-glass-studio`, `src/shaders/fragment-main.glsl`.
+The velocity-to-deformation design in `LiquidSelection` also draws on that project's
+spring controller. Source: https://github.com/iyinchao/liquid-glass-studio
+
+MIT License, Copyright (c) 2024 Charles Yin. The full license is distributed in
+`public/spectral/LIQUID-GLASS-LICENSE.txt`. No upstream photographs, videos, sample
+backgrounds, UI controls or application bundle are included.
+
 ## Paper Shaders
 
 The spectral renderer uses `ShaderMount` from `@paper-design/shaders` 0.0.80 (Apache-2.0).
