@@ -2,7 +2,9 @@
 
 The production beta runs on a Linux ECS host with Nginx and systemd. Node serves the application and API on loopback; Nginx provides the public HTTPS origin. Production content and service data must stay on local server storage, not in an iCloud-synchronized directory.
 
-GitHub Actions runs `npm run setup` and `npm run check:all` for the deployment workflow. A release archive is created from the exact Git commit, uploaded to `/srv/ceptlens/releases/`, and activated by `/usr/local/bin/ceptlens-deploy-v2`.
+GitHub Actions runs `npm run setup` and `npm run check:all` for the deployment workflow. A release archive is created from the exact Git commit, uploaded to `/srv/ceptlens/releases/`, and activated by `/usr/local/bin/ceptlens-deploy-v3`.
+
+The workflow also transfers the npm package cache populated by the validated build. It archives only `_cacache`, excluding npm configuration, credentials and logs, and verifies a fresh offline installation from those exact archives before uploading. The server runs `npm ci --offline` with that isolated cache and still checks package integrity against the lockfile. A missing or corrupt package fails before activation; the old site continues serving. Manual releases without a cache archive retain the online installation path.
 
 ## GitHub production secrets
 
