@@ -26,7 +26,9 @@ it("restores an existing favorite and can remove it", async () => {
 it("does not convert an ungraded subjective answer into a correct answer", async () => {
   updateProgress(p => p.wrong.push(subjective.id)); await render(subjective); await click("查看答案");
   expect(readProgress().wrong).toContain(subjective.id);
-  expect(container.textContent).toContain("不自动判断对错");
+  expect(container.querySelector(".reference-answer")).not.toBeNull();
+  expect(container.textContent).not.toContain("评分要点");
+  expect(container.querySelector(".scoring-guidance")).toBeNull();
 });
 it("selects an option by its text and records an incorrect attempt", async () => {
   await render(choice);
