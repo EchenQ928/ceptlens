@@ -44,4 +44,6 @@ This is an early beta, not a high-assurance examination system. The assistant is
 
 ## Contributing
 
+`main` is the development baseline for the Frosted Spectrum / liquid-glass UI, including Content Manager and the matching Content Lab preview. Start future work from the latest `main`. Earlier UI branches remain design archives and rollback references. After changing shared presentation components, run `npm run ui:sync` and `npm run check:all` to keep the standalone Lab aligned.
+
 Read [`CONTRIBUTING.md`](CONTRIBUTING.md) before opening a pull request. Behavior and security reporting details are in [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) and [`SECURITY.md`](SECURITY.md).

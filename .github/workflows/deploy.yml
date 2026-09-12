@@ -73,3 +73,23 @@ jobs:
         run: |
           ssh -i ~/.ssh/ceptlens_deploy "${{ secrets.CEPTLENS_DEPLOY_USER }}@${{ secrets.CEPTLENS_DEPLOY_HOST }}" \
             "sudo /usr/local/bin/ceptlens-deploy-v3 ceptlens-${GITHUB_SHA}.tar.gz ${GITHUB_SHA}"
+      - name: Verify public HTTPS delivery
+        if: ${{ inputs.operation != 'inspect' }}
+        run: |
+          curl --fail --silent --show-error --retry 3 --retry-delay 3 --max-time 30 https://ceptlens.com/api/content/status > "$RUNNER_TEMP/ceptlens-public-status.json"
+          node -e 'const s=require(process.argv[1]); if(!s.ok || !s.contentRevision) process.exit(1); console.log(JSON.stringify({ok:s.ok,contentRevision:s.contentRevision,questionCount:s.questionCount,termCount:s.termCount}));' "$RUNNER_TEMP/ceptlens-public-status.json"
+          curl --fail --silent --show-error --retry 3 --retry-delay 3 --max-time 30 https://ceptlens.com/ > "$RUNNER_TEMP/ceptlens-public.html"
+          node --input-type=module -e '
+            import { readFileSync } from "node:fs";
+            const html=readFileSync(process.argv[1], "utf8");
+            const scripts=[...html.matchAll(/<script[^>]*src="([^"]+)"/g)].map(m=>m[1]);
+            const styles=[...html.matchAll(/<link[^>]*href="([^"]+\.css)"/g)].map(m=>m[1]);
+            if(!scripts.length || !styles.length) throw new Error("Public entry assets missing");
+            for(const path of [...scripts,...styles]) {
+              const url=new URL(path,"https://ceptlens.com/");
+              if(url.origin!=="https://ceptlens.com") throw new Error("Unexpected asset origin");
+              const response=await fetch(url);
+              if(!response.ok) throw new Error(`Public asset failed: ${url.pathname} ${response.status}`);
+              console.log(`Public asset OK: ${url.pathname}`);
+            }
+          ' "$RUNNER_TEMP/ceptlens-public.html"

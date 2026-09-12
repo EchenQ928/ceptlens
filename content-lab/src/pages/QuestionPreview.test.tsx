@@ -7,7 +7,7 @@ import raw from "../../content-libraries/templates/question-subjective.template.
 import { hydrateQuestionPackage } from "../domain/schemas";
 import { QuestionPreview } from "./QuestionPreview";
 
-it("matches the platform answer and self-assessment rubric without recording learning progress", async () => {
+it("matches the platform authored answer without grading panels or recording learning progress", async () => {
   (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
   const question = hydrateQuestionPackage(raw);
   question.explanation = "INTERNAL_EXPLANATION";
@@ -29,9 +29,9 @@ it("matches the platform answer and self-assessment rubric without recording lea
     expect(answer.querySelectorAll("strong").length).toBeGreaterThan(0);
     expect(answer.querySelectorAll("br").length).toBeGreaterThan(0);
     expect(container.textContent).not.toContain("INTERNAL_EXPLANATION");
-    for (const item of question.subjectiveAnswer!.rubric) expect(container.textContent).toContain(item.criterion);
+    for (const item of question.subjectiveAnswer!.rubric) expect(container.textContent).not.toContain(item.criterion);
     expect(container.textContent).not.toContain(question.subjectiveAnswer!.gradingInstruction);
-    expect(answer.querySelector("ol")).not.toBeNull();
+    expect(container.querySelector(".scoring-guidance, .rubric, .practice-notice")).toBeNull();
     expect(localStorage.getItem('ceptlens.progress.v1')).toBe(progressBefore);
   } finally {
     await act(() => root.unmount());

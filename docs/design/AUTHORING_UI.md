@@ -1,6 +1,6 @@
 # Authoring UI and platform preview
 
-Content Manager and Content Lab now use the Frosted Spectrum / liquid-glass presentation. The changes live on `codex/ui-authoring`, based on `codex/ui-liquid-motion` at `698bfb7`. This is a local preview update, not a production deployment.
+Content Manager and Content Lab use the Frosted Spectrum / liquid-glass presentation. The design was developed on `codex/ui-authoring`, based on `codex/ui-liquid-motion` at `698bfb7`, and selected as the `main` development baseline on 2026-09-12. Future work starts from the latest `main`; the earlier design branches remain comparison and rollback references. GitHub's Deploy workflow publishes the integrated platform revision to production.
 
 ## Content Manager
 
@@ -26,7 +26,7 @@ Preview parity is with the platform source revision bundled in this branch. Depl
 - `npm --prefix content-lab run test:imports`: isolated import, replacement, failed-build preservation, checked export, and restart persistence passed.
 - Browser: manager at 390/1440/1920px, question/package switching, inspector, invalid JSON and visible errors; Lab desktop and 390px content viewports, single-choice answer feedback, Chinese free-text input, Read mode, term step interaction, package selection, pause/resize, Escape, and import/remove cancellation.
 - Bilingual titles previously crashed the import confirmation (an object reached React as a child). They are now resolved to the selected locale before display, covered by a regression test.
-- Platform RichText now preserves the same explicit line breaks as Lab. Answer guidance matches the platform's self-assessment rubric; internal grading instructions remain hidden.
+- Platform RichText and Lab preserve authored line breaks, including CRLF and blank lines. The release integration retains main's question-display behavior: Learn and Lab show the authored answer; rubrics and scoring remain in Assess.
 
 The inherited main-bundle size warnings remain (platform about 1.1 MB, Lab about 0.89 MB before gzip). The shader stays in a separate lazy chunk (~22 KB); no second environment canvas is added to the Lab shell.
 

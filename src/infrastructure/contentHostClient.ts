@@ -19,7 +19,17 @@ async function decode(response: Response) {
 }
 
 export interface ContentRevision { revision: string; reason: string; createdAt: string; questionCount: number; termCount: number; }
+async function importFiles(kind: "questions" | "terms", files: File[], token: string) {
+  if (!files.length) throw new Error("Select at least one file.");
+  const body = new FormData();
+  for (const file of files) body.append("files", file, file.name);
+  return decode(await fetch(`api/content/${kind}/import-files`, {
+    method: "POST", headers: { "X-Content-Admin-Token": token }, body,
+  }));
+}
 export const contentHostClient = {
+  importQuestionFiles: (files: File[], token: string) => importFiles("questions", files, token),
+  importTermPackages: (files: File[], token: string) => importFiles("terms", files, token),
   async history(): Promise<ContentRevision[]> { return (await decode(await fetch("api/content/history", { cache: "no-store" }))).revisions; },
   async restore(revision: string, token: string) {
     return decode(await fetch("api/content/restore", { method: "POST", headers: { "X-Content-Admin-Token": token, "Content-Type": "application/json" }, body: JSON.stringify({ revision }) }));

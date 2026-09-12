@@ -8,10 +8,9 @@ import { useLocale } from "../i18n";
 const tokenPattern = /(\[\[term:[a-zA-Z0-9][a-zA-Z0-9._-]*\|[^\]]+\]\]|\$[^$\n]+\$|\*\*[^*]+\*\*)/g;
 const termTokenPattern = /^\[\[term:([a-zA-Z0-9][a-zA-Z0-9._-]*)\|([^\]]+)\]\]$/;
 
-function renderPlainText(text: string, keyPrefix: string): ReactNode[] {
-  return text.split("\n").flatMap((line, index, lines) => index < lines.length - 1
-    ? [<Fragment key={`${keyPrefix}-${index}`}>{line}</Fragment>, <br key={`${keyPrefix}-br-${index}`} />]
-    : [<Fragment key={`${keyPrefix}-${index}`}>{line}</Fragment>]);
+/** Preserve authored line and paragraph breaks without applying whitespace rules to KaTeX. */
+function renderPlainText(text: string): ReactNode[] {
+  return text.split(/\r\n|\r|\n/).map((line, index) => <Fragment key={index}>{index > 0 && <br />}{line}</Fragment>);
 }
 
 function renderTokens(text: string, terms: TermPackage[], trail: TermTrailNode[], sourceNode?: TermTrailNode, keyPrefix = "rich", linkTerms = true, locale: "zh-CN" | "en-US" = "zh-CN"): ReactNode[] {
@@ -19,7 +18,7 @@ function renderTokens(text: string, terms: TermPackage[], trail: TermTrailNode[]
   let cursor = 0;
   [...text.matchAll(tokenPattern)].forEach((match, index) => {
     const start = match.index ?? 0;
-    if (start > cursor) nodes.push(...renderPlainText(text.slice(cursor, start), `${keyPrefix}-plain-${index}`));
+    if (start > cursor) nodes.push(<Fragment key={`${keyPrefix}-plain-${index}`}>{renderPlainText(text.slice(cursor, start))}</Fragment>);
     const token = match[0];
     const termToken = token.match(termTokenPattern);
     if (termToken) {
@@ -43,7 +42,7 @@ function renderTokens(text: string, terms: TermPackage[], trail: TermTrailNode[]
     }
     cursor = start + token.length;
   });
-  if (cursor < text.length) nodes.push(...renderPlainText(text.slice(cursor), `${keyPrefix}-tail`));
+  if (cursor < text.length) nodes.push(<Fragment key={`${keyPrefix}-tail`}>{renderPlainText(text.slice(cursor))}</Fragment>);
   return nodes;
 }
 
