@@ -1,5 +1,5 @@
 import { HashRouter, Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
-import { useLayoutEffect } from "react";
+import { lazy, Suspense, useLayoutEffect } from "react";
 import { SignInPage } from "../pages/SignInPage";
 import { AccountPage } from "../pages/AccountPage";
 import { ErrorBoundary } from "../components/ErrorBoundary";
@@ -13,9 +13,11 @@ import { StudyPage } from "../pages/StudyPage";
 import { TermLibraryPage, TermPage } from "../pages/TermPages";
 import { LearningSession, useLearningSession } from "../components/LearningSession";
 import { uiText, useLocale } from "../i18n";
+import { VisualEnvironment } from "../components/spectral/VisualEnvironment";
+const SpectralLab = import.meta.env.DEV ? lazy(() => import("../pages/SpectralLab")) : null;
 
 export function App() {
-  return <HashRouter><LearningSession><AppRoutes /></LearningSession></HashRouter>;
+  return <HashRouter><LearningSession><VisualEnvironment><AppRoutes /></VisualEnvironment></LearningSession></HashRouter>;
 }
 
 function AppRoutes() {
@@ -23,6 +25,7 @@ function AppRoutes() {
   const { locale } = useLocale();
   const { session, error } = useLearningSession();
   useLayoutEffect(()=>{window.scrollTo(0,0);},[location.pathname]);
+  if (SpectralLab && location.pathname === "/__spectral") return <Suspense fallback={null}><SpectralLab/></Suspense>;
   if (location.pathname === "/sign-in") return <SignInPage/>;
   if (!session && !error) return <div className="session-loading" role="status"><BrandIcon/><span>CeptLens</span><small>{uiText(locale,"正在打开你的学习空间…","Opening your learning space…")}</small></div>;
   if (location.pathname !== "/" && !session?.authenticated && sessionStorage.getItem("ceptlens.visitor-entry.v1") !== "true") return <Navigate to={`/sign-in?next=${encodeURIComponent(location.pathname+location.search)}`} replace/>;

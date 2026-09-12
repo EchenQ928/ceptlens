@@ -13,6 +13,7 @@ import "./styles/lens.css";
 import "./styles/aura.css";
 import "./styles/aura-dark.css";
 import "./styles/study-catalog.css";
+import "./styles/spectral.css";
 import { App } from "./app/App";
 import { LocaleProvider } from "./i18n";
 

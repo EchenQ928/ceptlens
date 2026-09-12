@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useParams, useSearchParams } from "react-router-dom";
 import { QuestionPanel } from "../components/QuestionPanel";
 import { ProductIcon } from "../components/ProductIcon";
+import { useVisualEnvironment } from "../components/spectral/VisualEnvironment";
 import { textForLocale } from "../domain/content";
 import { dependencyReason, termDisplayName } from "../domain/termNames";
 import type { TermTrailNode } from "../domain/navigation";
@@ -21,6 +22,8 @@ export function StudyPage() {
   const { locale } = useLocale();
   const t = (zh: string, en: string) => uiText(locale, zh, en);
   const [focused, setFocused] = useState(false);
+  const { setFocused: setEnvironmentFocused } = useVisualEnvironment();
+  useEffect(() => { setEnvironmentFocused(focused); return () => setEnvironmentFocused(false); }, [focused, setEnvironmentFocused]);
   const catalogRef = useRef<HTMLDivElement>(null);
   const question = questions.find(item => item.id === questionId);
   useEffect(() => {

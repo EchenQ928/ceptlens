@@ -7,6 +7,8 @@ import { LearningCompanion } from "./LearningCompanion";
 import { LanguageSwitcher, useLocale, uiText } from "../i18n";
 import { Brand } from "./Brand";
 import { ProductIcon, type ProductIconKind } from "./ProductIcon";
+import { SpectralBackdrop } from "./spectral/SpectralBackdrop";
+import { useVisualEnvironment } from "./spectral/VisualEnvironment";
 
 const navItems: { to: string; zh: string; en: string; kind: ProductIconKind }[] = [
   { to: "/learn", zh: "学习", en: "Learn", kind: "learn" },
@@ -20,7 +22,10 @@ export function AppShell({ children }: { children: ReactNode }) {
   const location = useLocation();
   const { session } = useLearningSession();
   const { locale } = useLocale();
+  const { paused, focused } = useVisualEnvironment();
+  const preset = location.pathname.startsWith("/terms") ? "concepts" : location.pathname.startsWith("/exam") ? "assess" : location.pathname.startsWith("/learn") ? "learn" : "account";
   return <div className={`app-frame ${location.pathname === "/" ? "aura-landing" : "aura-workspace"}`}>
+    {location.pathname !== "/" && <SpectralBackdrop preset={preset} paused={paused || focused}/>}
     <a className="skip-link" href="#main-content" onClick={event => { event.preventDefault(); document.getElementById("main-content")?.focus(); }}>{uiText(locale, "跳到主要内容", "Skip to content")}</a>
     <header className="topbar">
       <NavLink to="/" className="brand" aria-label={uiText(locale, "CeptLens 首页", "CeptLens home")}><Brand /></NavLink>

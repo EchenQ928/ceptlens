@@ -66,19 +66,6 @@ button:active:not(:disabled) { transform:scale(.985); }
   .topbar>.topbar-actions { justify-self:end; }
 }
 
-/* Low frequency light, paused by the existing visibility and pause controls. */
-.aura-atmosphere { position:absolute; inset:-12%; filter:blur(55px); opacity:.75;
-  background:radial-gradient(ellipse 30% 40% at 88% 18%,#156879aa,transparent 85%),
-    radial-gradient(ellipse 38% 30% at 48% 2%,#81466570,transparent 80%),
-    radial-gradient(ellipse 36% 45% at 72% 90%,#4342a481,transparent 80%);
-  animation:atmosphere-flow 24s ease-in-out infinite alternate paused;
-}
-.scene-live .aura-atmosphere { animation-play-state:running; }
-@keyframes atmosphere-flow { to { transform:translate3d(-2%,2%,0) scale(1.035); opacity:.95; } }
-.aura-hero { background:#090b13; }
-.aura-hero::after { content:""; position:absolute; bottom:0; left:0; right:0; height:100px; background:linear-gradient(transparent,#090b13); pointer-events:none; }
-.aura-haze { background:radial-gradient(ellipse,#638bbd33 10%,#4a548650 35%,transparent 68%); }
-.hero-grain { opacity:.18; }
 .aura-home { background:transparent; }
 .aura-pathways { position:relative; }
 .aura-pathways::before { content:""; position:absolute; inset:15% -15% -5%; pointer-events:none; z-index:-1; filter:blur(55px); background:radial-gradient(ellipse at 15% 70%,#2067772b,transparent 48%),radial-gradient(ellipse at 90% 75%,#a65e7226,transparent 48%); }
@@ -92,16 +79,6 @@ button:active:not(:disabled) { transform:scale(.985); }
 .aura-mode-concepts .aura-icon-tile { color:#c4b5f7; border-color:#b5a2df30; background:#8e74c216; }
 .aura-mode-card:hover .mode-open { background:#344976; transform:none; }
 .mode-number { color:#94a0b6; }
-.art-learn { transform:none; }
-.art-learn>i { background:#161d2d; border-color:#33405b; }
-.art-learn>i:nth-child(2) { background:#283858; border-color:#6887c7; }
-.art-learn>span:nth-of-type(2) { color:#cadbff; }
-.aura-mode-card:hover .art-learn { transform:none; }
-.art-assess b { color:#c6b6ae; }
-.art-assess i { background:#34354c; }.art-assess i:nth-of-type(3) { background:#ab91a7; }
-.aura-mode-card:hover .art-assess i { transform:scaleY(1.06); }
-.art-concepts svg { stroke:#605778; }.art-concepts>i { background:#201e34; border-color:#9586c2; }
-.aura-mode-card:hover .art-concepts>i { background:#b2a1ea; transform:none; }
 .aura-footer,.aura-footer>span:first-child { color:var(--ink-500); }
 
 /* Buttons and input states: edge light, fill and press; no moving targets. */
@@ -222,5 +199,5 @@ button:active:not(:disabled) { transform:scale(.985); }
 @keyframes selection-pop { from { box-shadow:0 0 0 3px #a4bfff18; } to { box-shadow:0 0 0 0 #a4bfff00; } }
 @keyframes surface-arrive { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:none; } }
 @keyframes cache-arrive { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
-@media(max-width:600px) { .aura-atmosphere { filter:blur(35px); }.term-card:hover,.aura-mode-card:hover { transform:none; } }
-@media(prefers-reduced-motion:reduce) { .aura-atmosphere { animation:none; } }
+@media(max-width:600px) {.term-card:hover,.aura-mode-card:hover { transform:none; } }
+
