@@ -7,7 +7,7 @@ import raw from "../../content-libraries/templates/question-subjective.template.
 import { hydrateQuestionPackage } from "../domain/schemas";
 import { QuestionPreview } from "./QuestionPreview";
 
-it("shows one formatted learning answer and keeps grading guidance out of the page", async () => {
+it("matches the platform authored answer without grading panels or recording learning progress", async () => {
   (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
   const question = hydrateQuestionPackage(raw);
   question.explanation = "INTERNAL_EXPLANATION";
@@ -19,9 +19,10 @@ it("shows one formatted learning answer and keeps grading guidance out of the pa
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
+  const progressBefore = localStorage.getItem('ceptlens.progress.v1');
   try {
     await act(() => root.render(<MemoryRouter><QuestionPreview question={question} terms={[]} /></MemoryRouter>));
-    const show = [...container.querySelectorAll("button")].find(button => button.textContent === "查看答案")!;
+    const show = [...container.querySelectorAll("button")].find(button => button.textContent?.trim() === "查看答案")!;
     await act(() => show.click());
     const answer = container.querySelector(".answer-panel")!;
     expect(answer.textContent?.match(/Prefill：批量计算，建立缓存/g)).toHaveLength(1);
@@ -30,7 +31,8 @@ it("shows one formatted learning answer and keeps grading guidance out of the pa
     expect(container.textContent).not.toContain("INTERNAL_EXPLANATION");
     for (const item of question.subjectiveAnswer!.rubric) expect(container.textContent).not.toContain(item.criterion);
     expect(container.textContent).not.toContain(question.subjectiveAnswer!.gradingInstruction);
-    expect(answer.querySelector("ol")).toBeNull();
+    expect(container.querySelector(".scoring-guidance, .rubric, .practice-notice")).toBeNull();
+    expect(localStorage.getItem('ceptlens.progress.v1')).toBe(progressBefore);
   } finally {
     await act(() => root.unmount());
     container.remove();

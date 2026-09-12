@@ -1,0 +1,40 @@
+/* New account and curation controls use the platform's existing design tokens. */
+.welcome-page { min-height:100vh; padding:0 24px; }
+.welcome-header { display:flex; align-items:center; justify-content:space-between; gap:20px; max-width:960px; height:80px; margin:auto; border-bottom:1px solid var(--line-200); }
+.welcome-brand { display:flex; align-items:center; gap:12px; font-size:24px; font-weight:700; }
+.welcome-grid { max-width:440px; margin:40px auto; }
+.welcome-form-card { padding:28px; border:1px solid var(--line-300); background:var(--surface-0); }
+.welcome-form-card h2 { margin:12px 0; }
+.welcome-form-card>p,.visitor-note { color:var(--ink-650); font-size:13px; }
+.auth-mode-tabs { display:flex; gap:6px; margin:20px 0; }
+.auth-mode-tabs button { flex:1; padding:9px; border:1px solid var(--line-300); background:var(--surface-0); cursor:pointer; }
+.auth-mode-tabs button[aria-pressed=true] { color:var(--brand-600); border-color:var(--brand-600); background:var(--brand-050); }
+.welcome-form { display:grid; gap:16px; }
+.welcome-form label { display:grid; gap:7px; font-size:13px; }
+.welcome-form input,.developer-access-card input { min-width:0; width:100%; padding:10px; border:1px solid var(--line-300); background:var(--surface-0); color:var(--ink-950); }
+.welcome-form .primary-button,.visitor-button { justify-content:center; width:100%; }
+.visitor-divider { margin:20px 0 12px; text-align:center; color:var(--ink-500); font-size:12px; }
+.visitor-button { display:flex; align-items:center; gap:8px; padding:10px; border:1px solid var(--line-300); background:var(--surface-0); cursor:pointer; }
+.visitor-note { text-align:center; }
+.welcome-footer { padding:20px 0; border-top:1px solid var(--line-200); display:flex; gap:16px; max-width:960px; margin:auto; color:var(--ink-650); font-size:12px; }
+.session-loading { min-height:100vh; display:grid; place-items:center; }
+.account-card { max-width:600px; padding:24px; }
+.account-role { display:inline-block; padding:4px 8px; border:1px solid var(--line-300); font-size:12px; }
+.account-id { display:grid; gap:8px; margin:24px 0; font-size:12px; }
+.account-id code { overflow-wrap:anywhere; }
+.account-card>.text-link { display:block; margin-top:20px; border:0; background:transparent; cursor:pointer; }
+.developer-access-card { max-width:700px; margin:30px auto; padding:24px; }
+.developer-access-card details { margin-top:24px; }
+.developer-access-card label { display:grid; gap:8px; margin-top:12px; }
+.track-switch { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; }
+.track-switch button { padding:8px 12px; border:1px solid var(--line-300); background:var(--surface-0); cursor:pointer; }
+.track-switch button[aria-pressed=true] { color:var(--brand-600); border-color:var(--brand-600); background:var(--brand-050); }
+.track-switch span { margin-left:8px; }
+.concept-collection { padding:20px; margin-bottom:20px; border:1px solid var(--line-300); background:var(--surface-0); }
+.concept-collection h2 { margin:8px 0; }
+.concept-collection p { font-size:13px; color:var(--ink-650); }
+.concept-pills { display:flex; flex-wrap:wrap; gap:8px; }
+.concept-pills>a,.concept-pills>span { display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border:1px solid var(--line-300); font-size:12px; }
+.concept-pills>.concept-upcoming { border-style:dashed; color:var(--ink-650); }
+.concept-upcoming small { color:var(--ink-500); }
+@media(max-width:600px) { .welcome-page { padding:0 16px; }.welcome-grid { margin:24px auto; }.welcome-form-card { padding:20px; }.developer-access-card { margin:20px; } }

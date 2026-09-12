@@ -10,6 +10,9 @@ vi.mock('../hooks/useContent',()=>({useContent:()=>({questions:[],terms:[]})}));
 vi.mock('../infrastructure/contentHostClient',()=>({contentHostClient:{status:vi.fn().mockResolvedValue({publishing:false}),history:vi.fn().mockResolvedValue([]),importQuestionFiles:vi.fn().mockRejectedValue(new Error('Test rejection')),importTermPackages:vi.fn().mockRejectedValue(new Error('Test rejection'))}}));
 it('allows multiple selection for both kinds and sends every file, including when retrying a selection',async()=>{
   (globalThis as { IS_REACT_ACT_ENVIRONMENT?:boolean }).IS_REACT_ACT_ENVIRONMENT=true;
+  const originalScroll = Object.getOwnPropertyDescriptor(Element.prototype, 'scrollIntoView');
+  const scrollIntoView = vi.fn();
+  Object.defineProperty(Element.prototype, 'scrollIntoView', { configurable: true, value: scrollIntoView });
   const container=document.createElement('div');document.body.append(container);const root=createRoot(container);
   try{
     await act(()=>root.render(<MemoryRouter><DeveloperPage/></MemoryRouter>));
@@ -20,11 +23,12 @@ it('allows multiple selection for both kinds and sends every file, including whe
       await act(()=>input.dispatchEvent(new Event('change',{bubbles:true})));expect(input.value).toBe('');return files;
     }
     const questions=await choose('json');expect(contentHostClient.importQuestionFiles).toHaveBeenLastCalledWith(questions,'');
+    expect(scrollIntoView).toHaveBeenCalledWith({ block: 'nearest', behavior: 'auto' });
     await choose('json');expect(contentHostClient.importQuestionFiles).toHaveBeenCalledTimes(2);
     const termTab=container.querySelectorAll('.kind-tabs button')[0] as HTMLButtonElement;
     // Locate the term tab by text rather than relying on tab order.
     const terms=[...container.querySelectorAll('.kind-tabs button')].find(b=>/词条|Terms/.test(b.textContent??'')) as HTMLButtonElement;
     expect(termTab).toBeTruthy();await act(()=>terms.click());
     const files=await choose('zip');expect(contentHostClient.importTermPackages).toHaveBeenLastCalledWith(files,'');
-  }finally{await act(()=>root.unmount());container.remove();}
+  }finally{await act(()=>root.unmount());container.remove();if(originalScroll)Object.defineProperty(Element.prototype,'scrollIntoView',originalScroll);else Reflect.deleteProperty(Element.prototype,'scrollIntoView');}
 });

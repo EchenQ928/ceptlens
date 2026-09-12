@@ -1,0 +1,55 @@
+/* Content operations use the same optical surface, with a quiet code-editing plane. */
+.developer-layout { gap:24px; padding:24px; grid-template-columns:292px minmax(0,1fr); }
+.developer-list { border:1px solid var(--spectral-edge); border-radius:22px; height:calc(100dvh - var(--topbar-height) - 48px); top:calc(var(--topbar-height) + 24px); }
+.developer-list-head { position:sticky; top:0; z-index:2; padding:20px 16px 14px; background:#101b2bea; backdrop-filter:blur(18px); }
+.developer-list-head h2 { font-size:20px; }
+.kind-tabs { border:1px solid var(--spectral-edge); border-radius:999px; padding:5px; background:#0c152760; }
+.kind-tabs button { height:40px; font-size:14px; border-radius:999px; }
+.kind-tabs button.active { background:transparent; box-shadow:none; color:var(--ink-950); }
+.content-item-list { padding:8px; }
+.content-item-list>button { grid-template-columns:20px minmax(0,1fr); gap:10px; padding:12px 10px; border-radius:10px; min-height:64px; }
+.content-item-list>button.active { border-left-color:var(--spectral-cyan); background:#769ddd25; }
+.content-item-list b { font-size:14px; font-weight:550; }
+.content-item-list small { margin-top:5px; font-size:11px; }
+.content-item-list i { display:none; }
+.developer-main { padding:8px 0 48px; }
+.developer-main .page-heading { gap:24px; align-items:center; margin-bottom:24px; }
+.developer-main .page-heading>div { display:block; min-width:0; }
+.developer-main .page-heading h1 { margin:0 0 10px; font-size:clamp(26px,3vw,36px); }
+.developer-main .page-heading p { margin:0; font-size:15px; }
+.developer-main .page-heading>a { flex-shrink:0; }
+:is(.developer-list,.agent-developer-panel,.host-status-panel,.editor-shell,.term-package-inspector,.term-package-empty) { background:var(--spectral-panel); border:1px solid var(--spectral-edge); border-radius:20px; box-shadow:var(--spectral-relief); backdrop-filter:var(--spectral-frost); }
+.agent-developer-panel { margin-bottom:16px; }
+.agent-developer-panel li { padding:12px 0; border-bottom:1px solid var(--line-200); overflow-wrap:anywhere; }
+.agent-developer-panel li button { margin-left:12px; }
+.host-status-panel { flex-wrap:wrap; gap:16px; }
+.host-status-panel input { border-radius:9px; }
+.developer-toolbar { gap:10px; margin:20px 0 14px; }
+.developer-toolbar :is(button,a) { min-height:44px; font-size:14px; }
+.editor-shell { overflow:hidden; }
+.editor-title { min-height:44px; height:auto; flex-wrap:wrap; padding:12px 18px; font-size:12px; gap:8px; }
+.editor-title span { overflow-wrap:anywhere; min-width:0; }
+.editor-title small { font-size:11px; color:var(--ink-650); }
+.json-editor { background:#07101ed1; color:var(--ink-950); font-size:14px; line-height:1.75; min-height:520px; padding:20px; }
+.editor-shell:focus-within { border-color:var(--spectral-edge-lit); box-shadow:var(--spectral-relief),0 0 0 2px #83d9de30; }
+.validation-result { border-radius:14px; scroll-margin:100px; }
+.validation-result ul,.developer-footer { font-size:13px; line-height:1.8; overflow-wrap:anywhere; }
+.validation-result.error { color:#ffd3d8; border-color:#db879272; background:#3b1c2b; }
+.developer-access-card input { display:block; max-width:100%; border:1px solid var(--spectral-edge); background:var(--spectral-inset); border-radius:10px; padding:10px; margin-top:10px; }
+@media(max-width:1100px) { .developer-layout { grid-template-columns:250px minmax(0,1fr); gap:18px; padding:18px; } }
+@media(max-width:700px) {
+  .developer-layout { grid-template-columns:minmax(0,1fr); padding:14px; }
+  .developer-list { position:static; height:240px; max-height:none; }
+  .developer-main { padding:0 0 30px; }
+  .developer-main .page-heading { align-items:flex-start; flex-direction:column; gap:14px; }
+  .developer-toolbar { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .developer-toolbar :is(button,a) { font-size:13px; padding:10px; }
+  .developer-toolbar .secondary-button { font-size:13px; }
+  .developer-toolbar .primary-button { grid-column:1/-1; }
+  .developer-toolbar .toolbar-spacer { display:none; }
+  .host-status-panel input { width:100%; min-width:0; }
+  .host-status-panel>div:first-child,.host-status-panel label { min-width:0; width:100%; }
+  .editor-title small { display:none; }
+  .term-package-inspector,.term-package-empty { padding:20px; }
+}
+@media(prefers-reduced-transparency:reduce),(prefers-contrast:more) { :is(.developer-list,.agent-developer-panel,.host-status-panel,.editor-shell,.term-package-inspector,.term-package-empty) { background:#101b2b; backdrop-filter:none; } }

@@ -1,0 +1,37 @@
+:root {
+  --brand-600: #1764ed;
+  --brand-700: #104bc3;
+  --brand-050: #edf4ff;
+  --ink-950: #14233e;
+  --ink-900: #1a2d4d;
+  --ink-800: #2c3e59;
+  --ink-650: #52647d;
+  --ink-500: #66778f;
+  --line-300: #cad6e6;
+  --line-200: #e0e7f0;
+  --line-100: #edf1f7;
+  --surface-0: #ffffff;
+  --surface-50: #f8faff;
+  --surface-100: #f5f7fb;
+  --surface-inverse: #142b50;
+  --positive: #16825d;
+  --positive-bg: #edf9f2;
+  --warning: #9a620e;
+  --warning-bg: #fff7e8;
+  --info: #1764ed;
+  --info-bg: #edf4ff;
+  --shadow-1: 0 2px 6px rgb(29 60 110 / 2%), 0 8px 24px rgb(29 60 110 / 3%);
+  --shadow-2: 0 12px 35px rgb(29 60 110 / 10%);
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --topbar-height: 76px;
+  --sidebar-width: 224px;
+  --sidebar-collapsed: 76px;
+  --font-sans: "Noto Sans SC Variable", "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 18px;
+}
