@@ -35,7 +35,7 @@
     "src/hooks/useProgress.ts": "365c612ae2b1d6f1b9af06877a8c5f75543d1759bbcaaa035c60cfad20b85ded",
     "src/infrastructure/progressRepository.ts": "0a82df6ff740d89135b03be5d29a8b7c185779ee8fbd00c8e49a35c484eddafd",
     "src/pages/TermReader.tsx": "34b4c700ea198d274e9d5bc5f6c2e102f9269cd4083d26b12fff7943e60807ac",
-    "src/styles/accounts.css": "3c8d1259159b7659c1b9be0df6c1e66a5d353caebb34a34a50a0ba1e6a4088ad",
+    "src/styles/accounts.css": "19ea76799a7cb4d9b6b11a2199bdab386e2e9735d15e38f82260aaaa474f5e93",
     "src/styles/aura-dark.css": "8723f347d59bb7273495a878fe08c6d2d8bd4faf3e405847af6f8e3967cd7a21",
     "src/styles/aura.css": "85341da5c8ad90bbbe1d5c5f5bc453f9cf3af8e9d7b5ca73737b9da200eb9194",
     "src/styles/components.css": "513558a4dc46e0d7384f3b996cbaa8cb60c187c398602291627850e0d2e02644",
