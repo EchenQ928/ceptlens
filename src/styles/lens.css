@@ -11,7 +11,7 @@ button:active:not(:disabled) { transform:scale(.96); }
 .skip-link { position:fixed; top:-80px; left:20px; z-index:300; padding:12px 18px; border-radius:12px; background:#182746; color:white; }
 .skip-link:focus { top:10px; }
 .app-frame,.app-frame.nav-collapsed { display:block; min-height:100vh; }
-.topbar { display:flex; justify-content:space-between; height:var(--topbar-height); padding:0 max(28px,calc((100vw - 1256px)/2)); gap:28px; background:#ffffffdf; backdrop-filter:blur(24px); border-bottom:1px solid #e5e9f1; }
+.topbar { display:flex; justify-content:space-between; height:var(--topbar-height); padding:0 24px; gap:28px; background:#ffffffdf; backdrop-filter:blur(24px); border-bottom:1px solid #e5e9f1; }
 .brand { flex-shrink:0; padding:0; border:0; gap:9px; }
 .lens-brand-icon { display:block; width:37px; height:39px; flex-shrink:0; }
 .brand-copy { display:flex; }

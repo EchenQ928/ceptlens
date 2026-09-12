@@ -60,6 +60,11 @@ button:active:not(:disabled) { transform:scale(.985); }
 .nav-selection { background:linear-gradient(145deg,#8ca8ff21,#8ca8ff07); border:1px solid #b5c9ff20; box-shadow:inset 0 1px #ffffff06,0 0 20px #769dff07; }
 .avatar,.aura-landing .avatar { background:#1c2438; border-color:#a1bcff30; color:#d5e1ff; }
 .topbar-user:hover { background:#ffffff08; }
+@media(min-width:1101px) {
+  .topbar { display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); }
+  .topbar>.brand { justify-self:start; }
+  .topbar>.topbar-actions { justify-self:end; }
+}
 
 /* Low frequency light, paused by the existing visibility and pause controls. */
 .aura-atmosphere { position:absolute; inset:-12%; filter:blur(55px); opacity:.75;
