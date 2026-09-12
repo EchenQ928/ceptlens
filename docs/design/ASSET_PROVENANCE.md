@@ -1,6 +1,9 @@
 # Optical UI assets
 
-## Hero illustration
+## Earlier Lens hero illustration
+
+Retained as an earlier design asset. The current spectral Home uses an original
+GLSL light field instead; see [Frosted Spectrum](SPECTRAL_DESIGN.md).
 
 - Final file: `public/brand/ceptlens-optic-hero.png` (1254 × 1254, transparent PNG).
 - Created with the built-in image-generation tool, using the owner's original CeptLens logo as an identity reference.

@@ -20,6 +20,11 @@ export function ProductIcon({ kind, className = "", size = 24 }: { kind: Product
   const id = useId().replaceAll(":", "");
   return <svg className={"product-icon " + className} width={size} height={size} viewBox="0 0 32 32" fill="none" stroke={"url(#" + id + "edge)"} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false" data-kind={kind}>
     <defs><linearGradient id={id+"edge"} x1="3" y1="2" x2="29" y2="32" gradientUnits="userSpaceOnUse"><stop stopColor="#eef6ff"/><stop offset=".38" stopColor="currentColor"/><stop offset="1" stopColor="currentColor" stopOpacity=".55"/></linearGradient><linearGradient id={id+"plane"} x1="5" y1="4" x2="27" y2="30" gradientUnits="userSpaceOnUse"><stop stopColor="currentColor" stopOpacity=".36"/><stop offset="1" stopColor="currentColor" stopOpacity=".035"/></linearGradient></defs>
-    <g className="icon-form" style={{ "--icon-plane": "url(#" + id + "plane)" } as CSSProperties}>{forms[kind]}</g>
+    <defs>
+      <linearGradient id={id+"sheen"} x1="0" y1="0" x2="1" y2="0"><stop stopColor="#ddf7ff" stopOpacity="0"/><stop offset=".46" stopColor="#f5fdff" stopOpacity=".9"/><stop offset=".58" stopColor="#bfd0ff" stopOpacity=".4"/><stop offset="1" stopColor="#bfd0ff" stopOpacity="0"/></linearGradient>
+      <mask id={id+"mask"} x="0" y="0" width="32" height="32" maskUnits="userSpaceOnUse" style={{ maskType:"alpha" }}><use href={"#"+id+"form"}/></mask>
+    </defs>
+    <g id={id+"form"} className="icon-form" style={{ "--icon-plane": "url(#" + id + "plane)" } as CSSProperties}>{forms[kind]}</g>
+    <g mask={"url(#"+id+"mask)"} stroke="none"><path className="icon-reflection" d="M-8-4h13l19 40H11Z" fill={"url(#"+id+"sheen)"}/></g>
   </svg>;
 }

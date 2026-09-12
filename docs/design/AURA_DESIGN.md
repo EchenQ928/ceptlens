@@ -1,5 +1,8 @@
 # Aura design direction
 
+This document records the preceding Aura design. On `codex/ui-spectral`, see
+[Frosted Spectrum](SPECTRAL_DESIGN.md) for the current materials, icons and ambient motion.
+
 ## Context and goals
 
 The owner's September 12 references establish atmospheric product presentation, precise typography, subtle glass edges, and fluid controls. The follow-up explicitly requests the same dark visual language throughout the platform: flowing gradients, Gaussian blur, micro-grain, hairline edges, soft glow and restrained motion. Home introduces CeptLens; learning surfaces prioritize reading. This branch is `codex/ui-aura`; the earlier `codex/ui-lens` design is preserved separately.
