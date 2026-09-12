@@ -6,6 +6,7 @@ import { unzipSync, zipSync } from "fflate";
 import { validateSourceImports, normalizeArchivePath, includeInRuntimeTermArchive } from "./term-package-policy.mjs";
 import { createContentStorage, contentStoreDirectory } from "./content-storage.mjs";
 import { createLearningApi } from "./learning-api.mjs";
+import { readUploadFiles } from "./content-upload.mjs";
 
 const root = resolve(import.meta.dirname, "..");
 const { version } = JSON.parse(await readFile(resolve(root, "package.json"), "utf8"));
@@ -99,13 +100,12 @@ function flattenZip(entries) {
   return flattened;
 }
 
-async function stageTermZip(buffer, transactionRoot) {
+async function stageTermZip(buffer, transactionRoot, budget = { bytes: 0, files: 0 }) {
   let entries;
   try {
-    let total = 0; let count = 0;
     entries = unzipSync(new Uint8Array(buffer), { filter(file) {
-      total += file.originalSize;
-      if (++count > 5000 || total > 100 * 1024 * 1024) throw new Error("解压后超过 100 MB 或 5000 个文件");
+      budget.bytes += file.originalSize;
+      if (++budget.files > 5000 || budget.bytes > 100 * 1024 * 1024) throw new Error("解压后超过 100 MB 或 5000 个文件");
       return true;
     } });
   } catch (error) { throw new Error(`无法解压词条教学包：${error.message}`); }
@@ -217,6 +217,50 @@ const server = createServer(async (request, response) => {
       const { revision } = JSON.parse((await readBody(request)).toString("utf8"));
       await storage.restore(revision);
       return json(response, 200, { ok: true, revision: storage.active.revision, message: "Content restored as a new revision. User records were preserved." });
+    }
+    if (url.pathname === "/api/content/questions/import-files" && request.method === "POST") {
+      const files = await readUploadFiles(await readBody(request), request.headers["content-type"], ".json");
+      const questions = [];
+      for (const file of files) {
+        try {
+          const raw = JSON.parse(file.buffer.toString("utf8"));
+          if (!raw || typeof raw !== "object") throw new Error("Expected a question object.");
+          // Keep existing bundle imports compatible without requiring authors to combine files.
+          const items = raw.kind === "question-bundle" ? raw.questions : [raw];
+          if (!Array.isArray(items) || !items.length) throw new Error("No questions found.");
+          for (const question of items) {
+            if (!question || question.schemaVersion !== "3.0" || !safeId(question.id) || !Number.isInteger(question.ordering?.order)) throw new Error("Invalid question package.");
+            questions.push(question);
+          }
+        } catch (error) { throw new Error(`${file.name}: ${error.message}`); }
+      }
+      const transactionRoot = resolve(stageDirectory, `question-files-${Date.now()}`);
+      await mkdir(transactionRoot, { recursive: true });
+      let staged;
+      try {
+        staged = await stageQuestions(Buffer.from(JSON.stringify({ kind: "question-bundle", questions })), transactionRoot);
+        await transaction(staged.changes);
+      } finally { await rm(transactionRoot, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 }).catch(error => console.warn(`Upload staging cleanup deferred: ${error.message}`)); }
+      return json(response, 200, { ok: true, imported: staged.count, ids: staged.ids, message: `已发布 ${staged.count} 道题，所有访问者刷新后生效。` });
+    }
+    if (url.pathname === "/api/content/terms/import-files" && request.method === "POST") {
+      const files = await readUploadFiles(await readBody(request), request.headers["content-type"], ".zip");
+      const transactionRoot = resolve(stageDirectory, `term-files-${Date.now()}`);
+      await mkdir(transactionRoot, { recursive: true });
+      const changes = [], ids = new Set();
+      const budget = { bytes: 0, files: 0 };
+      try {
+        for (const [index, file] of files.entries()) {
+          try {
+            const staged = await stageTermZip(file.buffer, resolve(transactionRoot, String(index)), budget);
+            if (ids.has(staged.id)) throw new Error(`Duplicate term ID: ${staged.id}`);
+            ids.add(staged.id);
+            changes.push({ target: resolve(termDirectory(), staged.id), source: staged.stage });
+          } catch (error) { throw new Error(`${file.name}: ${error.message}`); }
+        }
+        await transaction(changes);
+      } finally { await rm(transactionRoot, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 }).catch(error => console.warn(`Upload staging cleanup deferred: ${error.message}`)); }
+      return json(response, 200, { ok: true, imported: ids.size, ids: [...ids], message: `已发布 ${ids.size} 个词条教学包，所有访问者刷新后生效。` });
     }
     if (url.pathname === "/api/content/questions/import" && request.method === "POST") {
       const buffer = await readBody(request);
