@@ -141,7 +141,7 @@ export function SpectralBackdrop({ preset = "home", paused = false, intensity = 
   }, [running, ready, preset]);
   const workspace = preset !== "home" && preset !== "auth";
   const poster = workspace ? "workspace" : preset;
-  return <div ref={root} className={"spectral-backdrop spectral-" + preset} aria-hidden="true" data-running={running && ready} data-renderer={failed ? "fallback" : ready ? "webgl" : "poster"} style={{ "--spectral-poster": "url('/spectral/" + poster + ".webp')" } as CSSProperties}>
+  return <div ref={root} className={"spectral-backdrop spectral-" + preset} aria-hidden="true" data-running={running && ready} data-renderer={failed ? "fallback" : ready ? "webgl" : "poster"} style={{ "--spectral-poster": "url('" + import.meta.env.BASE_URL + "spectral/" + poster + ".webp')" } as CSSProperties}>
     <div className="spectral-poster"/>
     <div ref={mount} className={"spectral-canvas" + (ready && !failed ? " is-ready" : "")}/>
   </div>;

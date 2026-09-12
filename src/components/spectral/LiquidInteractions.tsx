@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useReducedMotion } from 'motion/react';
 
-const controls = '.primary-button,.secondary-button,.focus-toggle,.flow-link,.top-navigation a,.mode-segment button,.track-switch button,.companion-dock button,.concept-pills a,.favorite-button,.option-row,.term-card,.aura-mode-card,.auth-mode-tabs button';
+const controls = '.primary-button,.secondary-button,.focus-toggle,.flow-link,.top-navigation a,.mode-segment button,.track-switch button,.companion-dock button,.concept-pills a,.favorite-button,.option-row,.term-card,.aura-mode-card,.auth-mode-tabs button,.kind-tabs button,.lab-selector nav a,.lab-preview-controls button';
 /** One delegated controller, no per-card RAF loops or React renders on pointer movement. */
 export function LiquidInteractions() {
   const reduced = useReducedMotion();

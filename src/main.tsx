@@ -15,6 +15,7 @@ import "./styles/aura-dark.css";
 import "./styles/study-catalog.css";
 import "./styles/spectral.css";
 import "./styles/liquid.css";
+import "./styles/developer.css";
 import { App } from "./app/App";
 import { LocaleProvider } from "./i18n";
 

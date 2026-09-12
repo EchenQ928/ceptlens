@@ -8,12 +8,18 @@ import { useLocale } from "../i18n";
 const tokenPattern = /(\[\[term:[a-zA-Z0-9][a-zA-Z0-9._-]*\|[^\]]+\]\]|\$[^$\n]+\$|\*\*[^*]+\*\*)/g;
 const termTokenPattern = /^\[\[term:([a-zA-Z0-9][a-zA-Z0-9._-]*)\|([^\]]+)\]\]$/;
 
+function renderPlainText(text: string, keyPrefix: string): ReactNode[] {
+  return text.split("\n").flatMap((line, index, lines) => index < lines.length - 1
+    ? [<Fragment key={`${keyPrefix}-${index}`}>{line}</Fragment>, <br key={`${keyPrefix}-br-${index}`} />]
+    : [<Fragment key={`${keyPrefix}-${index}`}>{line}</Fragment>]);
+}
+
 function renderTokens(text: string, terms: TermPackage[], trail: TermTrailNode[], sourceNode?: TermTrailNode, keyPrefix = "rich", linkTerms = true, locale: "zh-CN" | "en-US" = "zh-CN"): ReactNode[] {
   const nodes: ReactNode[] = [];
   let cursor = 0;
   [...text.matchAll(tokenPattern)].forEach((match, index) => {
     const start = match.index ?? 0;
-    if (start > cursor) nodes.push(<Fragment key={`${keyPrefix}-plain-${index}`}>{text.slice(cursor, start)}</Fragment>);
+    if (start > cursor) nodes.push(...renderPlainText(text.slice(cursor, start), `${keyPrefix}-plain-${index}`));
     const token = match[0];
     const termToken = token.match(termTokenPattern);
     if (termToken) {
@@ -37,7 +43,7 @@ function renderTokens(text: string, terms: TermPackage[], trail: TermTrailNode[]
     }
     cursor = start + token.length;
   });
-  if (cursor < text.length) nodes.push(<Fragment key={`${keyPrefix}-tail`}>{text.slice(cursor)}</Fragment>);
+  if (cursor < text.length) nodes.push(...renderPlainText(text.slice(cursor), `${keyPrefix}-tail`));
   return nodes;
 }
 

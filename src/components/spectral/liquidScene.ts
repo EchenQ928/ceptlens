@@ -1,6 +1,6 @@
 /** DOM geometry only: the shader refracts our light field, never captures page text. */
 export const LIQUID_LIMIT = 12;
-const surfaces = '.question-panel,.term-article,.filter-panel,.question-table,.assessment-card,.exam-question-card,.term-card,.study-catalog,.study-context .context-section,.assessment-heading,.concept-collection,.welcome-form-card,.aura-mode-card,.page>.panel';
+const surfaces = '.question-panel,.term-article,.filter-panel,.question-table,.assessment-card,.exam-question-card,.term-card,.study-catalog,.study-context .context-section,.assessment-heading,.concept-collection,.welcome-form-card,.aura-mode-card,.page>.panel,.developer-list,.agent-developer-panel,.host-status-panel,.editor-shell,.term-package-inspector,.term-package-empty,.lab-dialog';
 export function emptyLiquidUniforms() {
   return { u_glass: Array.from({ length: LIQUID_LIMIT }, () => [0, 0, 0, 0]), u_glassRadius: Array.from({ length: LIQUID_LIMIT }, () => [0, 0]), u_glassCount: 0, u_viewport: [1, 1], u_scroll: [0, 0] };
 }
