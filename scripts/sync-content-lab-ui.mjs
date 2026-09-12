@@ -16,7 +16,8 @@ for (const name of await readdir(resolve(root, 'public/spectral'))) if (/\.(webp
 const hashes = {};
 const stale = [];
 const normalize = (bytes, name) => /\.(png|webp)$/.test(name) ? bytes : Buffer.from(bytes.toString('utf8').replaceAll('\r\n','\n'));
-for (const [source, destination] of files) {
+// Filesystem enumeration order differs on Windows and Linux. Keep release hashes deterministic.
+for (const [source, destination] of [...files].sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0)) {
   const bytes = normalize(await readFile(resolve(root, source)), source);
   hashes[source] = createHash('sha256').update(bytes).digest('hex');
   const target = resolve(root, 'content-lab', destination);
