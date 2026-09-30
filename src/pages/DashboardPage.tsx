@@ -7,6 +7,7 @@ import { useVisualEnvironment } from "../components/spectral/VisualEnvironment";
 import { ProductIcon, type ProductIconKind } from "../components/ProductIcon";
 import { useContent } from "../hooks/useContent";
 import { useLocale, uiText } from "../i18n";
+import { SiteFooter } from "../components/SiteFooter";
 
 export function DashboardPage() {
   const { questions, terms } = useContent();
@@ -39,6 +40,6 @@ export function DashboardPage() {
         <div className="aura-mode-footer"><span>{meta}</span><span className="mode-open"><ArrowUpRight size={19}/></span></div>
       </Link></motion.div>)}</div>
     </section>
-    <footer className="aura-footer"><span>CeptLens</span><span>Seize understanding.</span></footer>
+    <SiteFooter className="aura-footer"/>
   </div>;
 }
